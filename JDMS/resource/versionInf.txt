@@ -1,0 +1,3 @@
+v0.32403_demo 243 :: 2024-3-18
+>{log} command is usable now.
+>Reconstruct the system, bring new UI system and many other new features.

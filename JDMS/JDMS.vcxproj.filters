@@ -1,0 +1,138 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;c++;cppm;ixx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="Header Files">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hh;hpp;hxx;h++;hm;inl;inc;ipp;xsd</Extensions>
+    </Filter>
+    <Filter Include="Resource Files">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="Header Files\cmd">
+      <UniqueIdentifier>{b687e77f-727b-41a4-ad27-3975865e9faf}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\IO">
+      <UniqueIdentifier>{006e7a9a-1c18-456f-af3e-c5cefb4c16c8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\user">
+      <UniqueIdentifier>{2b9e6f47-fcde-44e5-82b1-f91ec5476f62}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\storage">
+      <UniqueIdentifier>{42220a6c-31fe-48e7-8301-b4d2d575734a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="datasheet">
+      <UniqueIdentifier>{d096a368-29f2-407a-b308-d9e53f6da121}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="logfile">
+      <UniqueIdentifier>{f54fbac7-6a0a-4634-b9bb-9f27681af89b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\cmdDef">
+      <UniqueIdentifier>{3d559913-1115-43d6-8b88-84065db126ae}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\IODef">
+      <UniqueIdentifier>{c655b9e0-b164-47bc-8108-9810f5cf4f3f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\userDef">
+      <UniqueIdentifier>{ba6ef23a-b3d5-4d83-8dda-663a8ffcbf8f}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="source\JCenterDef.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="source\Debug.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="source\debugInforDef.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="source\InputDef.cpp">
+      <Filter>Source Files\IODef</Filter>
+    </ClCompile>
+    <ClCompile Include="source\UiDef.cpp">
+      <Filter>Source Files\IODef</Filter>
+    </ClCompile>
+    <ClCompile Include="source\JCmdDef.cpp">
+      <Filter>Source Files\cmdDef</Filter>
+    </ClCompile>
+    <ClCompile Include="source\JCmdListDef.cpp">
+      <Filter>Source Files\cmdDef</Filter>
+    </ClCompile>
+    <ClCompile Include="source\UserDef.cpp">
+      <Filter>Source Files\userDef</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="source\JCenter.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="source\JMacro.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="source\JCmd.h">
+      <Filter>Header Files\cmd</Filter>
+    </ClInclude>
+    <ClInclude Include="source\JCmdList.h">
+      <Filter>Header Files\cmd</Filter>
+    </ClInclude>
+    <ClInclude Include="source\JUi.h">
+      <Filter>Header Files\IO</Filter>
+    </ClInclude>
+    <ClInclude Include="source\User.h">
+      <Filter>Header Files\user</Filter>
+    </ClInclude>
+    <ClInclude Include="source\Table.h">
+      <Filter>Header Files\storage</Filter>
+    </ClInclude>
+    <ClInclude Include="source\JInput.h">
+      <Filter>Header Files\IO</Filter>
+    </ClInclude>
+    <ClInclude Include="source\debugInfor.h">
+      <Filter>Header Files\IO</Filter>
+    </ClInclude>
+    <ClInclude Include="source\storage\JMacros.h">
+      <Filter>Header Files\storage</Filter>
+    </ClInclude>
+    <ClInclude Include="source\storage\JNLPU.h">
+      <Filter>Header Files\storage</Filter>
+    </ClInclude>
+    <ClInclude Include="source\storage\Jnode.h">
+      <Filter>Header Files\storage</Filter>
+    </ClInclude>
+    <ClInclude Include="source\storage\Jqueue.h">
+      <Filter>Header Files\storage</Filter>
+    </ClInclude>
+    <ClInclude Include="source\storage\Jsort.h">
+      <Filter>Header Files\storage</Filter>
+    </ClInclude>
+    <ClInclude Include="source\storage\LinkList.h">
+      <Filter>Header Files\storage</Filter>
+    </ClInclude>
+    <ClInclude Include="source\storage\ListOpers.h">
+      <Filter>Header Files\storage</Filter>
+    </ClInclude>
+    <ClInclude Include="source\storage\Queue.h">
+      <Filter>Header Files\storage</Filter>
+    </ClInclude>
+    <ClInclude Include="source\storage\Set.h">
+      <Filter>Header Files\storage</Filter>
+    </ClInclude>
+    <ClInclude Include="source\storage\Stack.h">
+      <Filter>Header Files\storage</Filter>
+    </ClInclude>
+    <ClInclude Include="source\storage\JErrorMessage.h">
+      <Filter>Header Files\storage</Filter>
+    </ClInclude>
+    <ClInclude Include="source\storage\JList.h">
+      <Filter>Header Files\storage</Filter>
+    </ClInclude>
+    <ClInclude Include="source\Cmd.h">
+      <Filter>Header Files\cmd</Filter>
+    </ClInclude>
+  </ItemGroup>
+</Project>
