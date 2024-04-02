@@ -1,29 +1,39 @@
 #include"JCenter.h"
 #define CMD_RESERVED 2
 Center::Center()
-	:currentUser(NULL), currentCmd(NULL),Language(sysLan::English)
+	:currentUser(NULL),Language(sysLan::English)
 {
+}
+void Center::InsufficientPara()
+{
+	liao_ui[UiType::message] << "Insufficient Para";
 }
 void Center::border()
 {
-	JUi::borderLine(100);
-	ui_message.end();
-	ui_message[true];
+	UiOperation::borderLine(100);
+	liao_ui.line_change();
 }
-vector<string>& Center::receiveCmd()
+void Center::receiveCmd()
 {
 	JCmdList::cmdlist.clear();
-	currentCmd = JInput::liao_input.input(true);
-	return JInput::liao_input.getParameter();
+	liao_input>> currentCmd;
 }
-vector<string>& Center::receiveInput()
+void Center::receiveInput()
 {
-	JInput::liao_input.input(false);
-	return JInput::liao_input.getParameter();
+	liao_input[MODE_TEXT]>>currentCmd.getPara();
+}
+void iterationUpdate()
+{
+	fstream file("./resource/versionInf.txt", ios::in | ios::out);
+	int temp = 0;
+	file >> temp;
+	file.seekg(0, std::ios::beg);
+	file << temp + 1 << "\n";
+	file << Debug::Timer(false)<<"\n";
+	file.close();
 }
 void Center::help(vector<string>& parameters)
 {
-
 	if (parameters.size() == 0)
 	{
 		char temp[100] = { '\0' };
@@ -31,9 +41,9 @@ void Center::help(vector<string>& parameters)
 		if (Language == sysLan::Chinese)
 			file.open("./resource/helper/helper.txt");
 		else
-			file.open("../resource/helper/helper_en.txt");
+			file.open("./resource/helper/helper_en.txt");
 		if (file.fail())
-			UiNoticeMessage::ui_notice[true] << "Cannot find help file. Please contact developer.";
+			liao_ui[UiType::errorMessage][true] << "Cannot find help file. Please contact developer.";
 		else
 		{
 			while (!file.eof())
@@ -60,21 +70,21 @@ void Center::help(vector<string>& parameters)
 		if (result != NULL)
 		{
 			fstream file, file2;
-			if (result->cmdType == UNIVER_CMD)
+			if (result->usable(UNIVER_CMD))
 			{
 				if (Language == sysLan::Chinese)
 					file.open("./resource/helper/universal.txt");
 				else
 					file.open("./resource/helper/universal_en.txt");
 			}
-			else if (result->cmdType >= MAIN_CMD && result->cmdType <= SHARE_CMD)
+			else if (result->usable( MAIN_CMD) && result->usable(SHARE_CMD))
 			{
 				if (Language == sysLan::Chinese)
 					file.open("./resource/helper/share.txt"), file2.open("./resource/helper/main.txt");
 				else
 					file.open("./resource/helper/share_en.txt"), file2.open("./resource/helper/main_en.txt");
 			}
-			else if (result->cmdType >= SHARE_CMD && result->cmdType <= TABLE_CMD)
+			else if (result->usable(SHARE_CMD) && result->usable(TABLE_CMD))
 			{
 				if (Language == sysLan::Chinese)
 					file.open("./resource/helper/share.txt"), file2.open("./resource/helper/table.txt");
@@ -133,75 +143,65 @@ void Center::help(vector<string>& parameters)
 			cout << "Wrong Command\n";
 	}
 }
-bool Center::command(vector<string>& parameters)
+bool Center::command(string restriction,vector<string>& parameters)
 {
-	if (parameters.size() >= currentCmd->paraNum || currentCmd->paraNum < 0)
+	if (currentCmd.getCmd()->enoughPara(parameters.size()))
 	{
 		if (parameters.size() ==0)
 		{
 			for (int n = 0; n < JCmdList::cmdlist.size(); ++n)
 			{
-				if (JCmdList::cmdlist[n].cmdType <= curStage&& JCmdList::cmdlist[n].cmdType!=HIDDEN)
-					cout << ">>>\t" << JCmdList::cmdlist[n].stdCmd << "\n";
+				if (JCmdList::cmdlist[n].usable(curStage))
+					cout << ">>>\t" << JCmdList::cmdlist[n].print(PRINT_CMD) << "\n";
 			}
 			return true;
 		}
 		else
 		{
-			string requirement = parameters[0];
-			int index = (int)WC Command, para = 0;
-			if (requirement == "a" || requirement == "all")
+			if (restriction == "a" || restriction == "all")
 			{
-				for (int n = 0; n < JCmdList::cmdlist.size() - CMD_RESERVED; ++n)
-					cout << ">>>\t" << JCmdList::cmdlist[n].stdCmd << "\n";
+				for (int n = 0; n < JCmdList::cmdlist.size(); ++n)
+					cout << ">>>\t" << JCmdList::cmdlist[n].print(PRINT_CMD) << "\n";
 			}
-			else if (requirement == "l" || requirement == "ls" || requirement == "list")
+			else if (restriction == "l" || restriction == "ls" || restriction == "list")
 			{
 				cout << "\t" << "command\tshort\tstage\tnumber of para\n";
-				for (int n = 0; n < JCmdList::cmdlist.size() - CMD_RESERVED; ++n)
+				for (int n = 0; n < JCmdList::cmdlist.size(); ++n)
 				{
-					if (JCmdList::cmdlist[n].cmdType <= curStage)
-					{
-						cout << ">>>\t" << JCmdList::cmdlist[n].stdCmd << "\t"
-							<< JCmdList::cmdlist[n].shrCmd << "\t"
-							<< (int)JCmdList::cmdlist[n].cmdType << "\t"
-							<< (int)JCmdList::cmdlist[n].paraNum << "\n";
-					}
+					if (JCmdList::cmdlist[n].usable(curStage))
+						liao_ui[UiType::message] << JCmdList::cmdlist[n].print(PRINT_ALL);
 				}
 			}
-			else if (requirement == "la" || requirement == "listall")
+			else if (restriction == "la" || restriction == "listall")
 			{
 				cout << "\t" << "command\t\tshort\tstage\tnumber of para\n";
-				for (int n = 0; n < JCmdList::cmdlist.size() - CMD_RESERVED; ++n)
+				for (int n = 0; n < JCmdList::cmdlist.size(); ++n)
 				{
-					cout << ">>>\t" << JCmdList::cmdlist[n].stdCmd << "\t\t"
-						<< JCmdList::cmdlist[n].shrCmd << "\t"
-						<< (int)JCmdList::cmdlist[n].cmdType << "\t"
-						<< (int)JCmdList::cmdlist[n].paraNum << "\n";
+					liao_ui[UiType::message] << JCmdList::cmdlist[n].print(PRINT_ALL);
 				}
 			}
-			else if (requirement == "u" || requirement == "universal")
+			else if (restriction == "u" || restriction == "universal")
 			{
-				for (int n = 0; n < JCmdList::cmdlist.size() - CMD_RESERVED; ++n)
+				for (int n = 0; n < JCmdList::cmdlist.size(); ++n)
 				{
-					if (JCmdList::cmdlist[n].cmdType == UNIVER_CMD)
-						cout << ">>>\t" << JCmdList::cmdlist[n].stdCmd << "\n";
+					if (JCmdList::cmdlist[n].usable(UNIVER_CMD))
+						cout << ">>>\t" << JCmdList::cmdlist[n].print(PRINT_CMD) << "\n";
 				}
 			}
-			else if (requirement == "m" || requirement == "main")
+			else if (restriction == "m" || restriction == "main")
 			{
-				for (int n = 0; n < JCmdList::cmdlist.size() - CMD_RESERVED; ++n)
+				for (int n = 0; n < JCmdList::cmdlist.size() ; ++n)
 				{
-					if (JCmdList::cmdlist[n].cmdType >= MAIN_CMD && JCmdList::cmdlist[n].cmdType <= SHARE_CMD)
-						cout << ">>>\t" << JCmdList::cmdlist[n].stdCmd << "\n";
+					if (JCmdList::cmdlist[n].usable(MAIN_CMD) && JCmdList::cmdlist[n].usable(SHARE_CMD))
+						cout << ">>>\t" << JCmdList::cmdlist[n].print(PRINT_CMD)<< "\n";
 				}
 			}
-			else if (requirement == "t" || requirement == "table")
+			else if (restriction == "t" || restriction == "table")
 			{
-				for (int n = 0; n < JCmdList::cmdlist.size() - CMD_RESERVED; ++n)
+				for (int n = 0; n < JCmdList::cmdlist.size(); ++n)
 				{
-					if (JCmdList::cmdlist[n].cmdType >= SHARE_CMD)
-						cout << ">>>\t" << JCmdList::cmdlist[n].stdCmd << "\n";
+					if (JCmdList::cmdlist[n].usable(SHARE_CMD))
+						cout << ">>>\t" << JCmdList::cmdlist[n].print(PRINT_CMD) << "\n";
 				}
 			}
 			else
@@ -214,99 +214,107 @@ bool Center::command(vector<string>& parameters)
 	}
 	else
 	{
-		UiNoticeMessage::ui_notice.error();
-		UiNoticeMessage::ui_notice << "Insufficient parameters for {command}";
+		ui_notice.error();
+		ui_notice << "Insufficient parameters for {command}";
 	}
 }
 void Center::execute()
 {
+	iterationUpdate();
 	userlist.read();
 	if (userlist.empty())
 	{
-		UiDock::ui_dock << "Help";
-		ui_message << "Try to type 'help' command in the terminal, if you are new user\n";
-		ui_message.end();
+		liao_ui[UiType::dock][true] << "Help";
+		liao_ui[UiType::message][true] << "Try to type 'help' command in the terminal, if you are new user\n";
+		liao_ui.line_change();
 	}
-	UiDock::ui_dock << "No user Login";
+	liao_ui[UiType::dock][true] << "No user Login";
 	while (1)
 	{
 		try
 		{
-			auto parameter = receiveCmd();
-			if (currentCmd != NULL && currentCmd->word != WordCmd::Quit)
+			receiveCmd();
+			if (currentCmd.hasCmd() && currentCmd.getCmdWord() != WordCmd::Quit)
 			{
-				if (currentCmd->word == WordCmd::Help)
-					help(parameter);
-				else if (currentCmd->word == WordCmd::Command)
-					command(parameter);
-				else if (currentCmd->word == WordCmd::Version)
+				if (currentCmd.getCmdWord() == WordCmd::Help)
+					help(currentCmd.getPara());
+				else if (currentCmd.getCmdWord() == WordCmd::Command)
+					command(currentCmd.getRestrict(),currentCmd.getPara());
+				else if (currentCmd.getCmdWord() == WordCmd::Version)
 					version();
-				else if (currentCmd->word == WordCmd::Exist)
-					exist(parameter);
-				else if (currentCmd->word == WordCmd::Log)
-					login(parameter);
+				else if (currentCmd.getCmdWord() == WordCmd::Exist)
+					exist(currentCmd.getRestrict(), currentCmd.getPara());
+				else if (currentCmd.getCmdWord() == WordCmd::Log)
+					login(currentCmd.getRestrict(), currentCmd.getPara());
 				border();
 			}
 			else
 			{
-				if (JUi::confirm("Exit the system?"))
-				{
-					userlist.save();
+				if (UiOperation::confirm("Exit the system?"))
 					break;
-				}
-				currentCmd = NULL;
-				UiDock::ui_dock.call();
+				liao_ui.line_change();
 			}
+			currentCmd.clear();
 		}
 		catch (LiaoException* fatalError)
 		{
 			cout << "\n" << fatalError->getErrorMessage();
 			delete fatalError;
 			system("pause");
-			UiDock::ui_dock.call();
+			liao_ui.line_change();
 		}
 		catch (LiaoException fatalError)
 		{
 			cout << "\n" << fatalError.getErrorMessage();
 			system("pause");
-			UiDock::ui_dock.call();
+			liao_ui.line_change();
 		}
 	}
 }
 void Center::version()
 {
-	char temp[500];
-	ifstream file("./resource/versionInf.txt");
+	string version = "v0.32403_demo";
+	fstream file("./resource/versionInf.txt",ios::in|ios::out);
 	if (file.fail())
 		throw new LiaoException("Center", "version", "Target file missing");
+	int temp;
+	string date;
+	file >> temp;
+	file >> date;
+	cout << version + " " + to_string(temp)+"->"+ date;
+	char updateInfor[500];
 	while (!file.eof())
 	{
-		file.getline(temp, 500);
-		cout << temp << "\n";
+		file.getline(updateInfor,500);
+		cout << updateInfor<<"\n";
 	}
 	file.close();
 }
-bool Center::exist(vector<string>& parameter)
+bool Center::exist(string restriction,vector<string>& parameter)
 {
-	if (parameter.size() >= currentCmd->paraNum)
+	if (currentCmd.getCmd()->enoughPara(parameter.size()))
 	{
-		string restriction = parameter[0];
 		if (restriction == "c" || restriction == "command")
 		{
-			if (JCmdList::cmdlist.get(parameter[1]) != NULL)
-				ui_message << "Command Exist\n";
+			if (JCmdList::cmdlist.exist(parameter[1]))
+			{
+				liao_ui[UiType::message] << "Command Exist\n";
+				return true;
+			}
 			else
-				ui_message << "Command Not Exist\n";
-			return JCmdList::cmdlist.get(parameter[1]) != NULL;
+			{
+				liao_ui[UiType::message] << "Command Not Exist\n";
+				return false;
+			}
 		}
 		else if (restriction == "u" || restriction == "user")
 		{
-			bool result = userlist.get(parameter[1]) != -1;
+			bool result = userlist.getIndex(parameter[1]) != -1;
 			if (result)
-				ui_message << "User exist";
+				liao_ui[UiType::message] << "User exist";
 			else
-				ui_message << "User not exist";
-			ui_message.end();
+				liao_ui[UiType::message] << "User not exist";
+			liao_ui[UiType::message].end();
 			return result;
 		}
 		else if (restriction == "t" || restriction == "table")
@@ -315,47 +323,34 @@ bool Center::exist(vector<string>& parameter)
 	}
 	else
 	{
-		UiNoticeMessage::ui_notice.error();
-		UiNoticeMessage::ui_notice << "Insufficient parameters for {exist}";
+		ui_notice.error();
+		ui_notice << "Insufficient parameters for {exist}";
 		return false;
 	}
 }
 bool Center::logInterface(string& userNameT, string& passwordT)
 {
-	ui_message << "Please give your user name:";
-	if (JInput::liao_input.input(false) == NULL && !JInput::liao_input.paraEmpty())
+	liao_ui[UiType::message] << "Please give your user name:";
+	liao_input[MODE_STR] >> userNameT;
+	if (userNameT != "")
 	{
-		userNameT = JInput::liao_input.getParameter()[0];
-		ui_message << "Please give your password:";
-		if (JInput::liao_input.input(false) == NULL && !JInput::liao_input.paraEmpty())
-		{
-			passwordT = JInput::liao_input.getParameter()[0];
-		}
-		else
-		{
-			ui_message.end();
-			return false;
-		}
+		liao_input[MODE_PWD] >> passwordT;
+		if (passwordT != "")
+			return true;
 	}
-	else
-	{
-		ui_message.end();
-		return false;
-	}
-	return true;
+	return false;
 }
 void Center::changeDockInfor()
 {
 	if (currentUser != NULL)
-		UiDock::ui_dock.change( currentUser->getUserName());
+		liao_ui[UiType::dock].update( currentUser->getUserName());
 	else
-		UiDock::ui_dock.change("No user Login");
+		liao_ui[UiType::dock].update("No user Login");
 }
-bool Center::login(vector<string>& parameter)
+bool Center::login(string restriction,vector<string>& parameter)
 {
-	if (parameter.size() >= currentCmd->paraNum)
+	if (currentCmd.getCmd()->enoughPara(parameter.size()) )
 	{
-		string restriction = parameter[0];
 		bool result = false;
 		string userNameT, passwordT;
 		if (restriction == "i" || restriction == "in"&&currentUser == NULL)
@@ -366,7 +361,7 @@ bool Center::login(vector<string>& parameter)
 					break;
 				if (!userlist.login(userNameT, passwordT))
 				{
-					ui_message << "User name or password incorrect";
+					liao_ui[UiType::message] << "User name or password incorrect";
 					if (!JUi::confirm("Do you want to try again?"))
 						break;
 				}
@@ -389,7 +384,7 @@ bool Center::login(vector<string>& parameter)
 					break;
 				if (!userlist.logon(userNameT, passwordT))
 				{
-					ui_message << "User Name already exist!!!";
+					liao_ui[UiType::message] << "User Name already exist!!!";
 					if (!JUi::confirm("Do you wish to choose another user name?"))
 						break;
 				}
@@ -414,15 +409,40 @@ bool Center::login(vector<string>& parameter)
 		}
 		else
 		{
-			UiNoticeMessage::ui_notice.error();
-			UiNoticeMessage::ui_notice << "Parameter incorrect";
+			ui_notice.error();
+			ui_notice << "Parameter incorrect";
 		}
 	}
 	else
 	{
-		UiNoticeMessage::ui_notice.error();
-		UiNoticeMessage::ui_notice << "Infficient paramters for {log}";
+		ui_notice.error();
+		ui_notice << "Infficient paramters for {log}";
 	}
 	return false;
+}
+void Center::change(string restriction, vector<string>& parameter)
+{
+	if (restriction == "ui"||restriction == "userinfor")
+	{
+
+	}
+	else if (restriction == "ul" || restriction == "userlevel"&&parameter.size()>=3)
+	{
+		if (currentUser->capable(UserLevel::Administor))
+		{
+			auto& user = userlist.get(parameter[1]);
+
+		}
+		else
+			ui_notice[true] << "Invalid operation.";
+	}
+	else if (restriction == "un" || restriction == "username")
+	{
+
+	}
+	else if (restriction == "p" || restriction == "password")
+	{
+
+	}
 }
 Center Center::sysCenter;

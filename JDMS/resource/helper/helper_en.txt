@@ -12,7 +12,7 @@ Hence, I designed JeffDDL (Jeff Data Define Language) to execute operations
 Also, JDDL have a subsystem call JDDLHint which will give you suggestion
 about related commands and you can use it like an IDE.
 ~
-The command system have 5 Layers
+The command system have 4 Layers
 They are:
 Universal Command (you can use everywhere)
 Share Command (you can use everywhere after you log into system)

@@ -1,5 +1,6 @@
 #include "debugInfor.h"	
 #pragma region DEBUGDEF
+#define OPERATIONDAT "./resource/operation.dat"
 string Debug::lastInfor;
 string Debug::Timer(bool localTime)
 {
@@ -7,16 +8,38 @@ string Debug::Timer(bool localTime)
 	time_t now = time(NULL);
 	tm* timeStru = new tm;
 	localtime_s(timeStru, &now);
+	string datePart;
 	string timePart;
-	timeMessage = to_string(timeStru->tm_year + 1900) + "-" +
-		to_string(timeStru->tm_mon + 1) + "-" +
-		to_string(timeStru->tm_mday);
+
+	datePart = to_string(timeStru->tm_year + 1900);
+	datePart += "-";
+	if (timeStru->tm_mon < 10)
+		datePart += to_string(0) + to_string(timeStru->tm_mon+1);
+	else
+		datePart += to_string(timeStru->tm_mon);
+	datePart += "-";
+	if(timeStru->tm_mday<10)
+		datePart += to_string(0) + to_string(timeStru->tm_mday);
+	else
+		datePart += to_string(timeStru->tm_mday);
+	timeMessage = datePart;
 	if (localTime)
 	{
-		timeMessage +="-" +
-			to_string(timeStru->tm_hour) + "-" +
-			to_string(timeStru->tm_min) + "-" +
-			to_string(timeStru->tm_sec) + "::";
+		if (timeStru->tm_hour < 10)
+			timePart = to_string(0) + to_string(timeStru->tm_hour);
+		else
+			timePart = to_string(timeStru->tm_hour);
+		timePart += "-";
+		if (timeStru->tm_min < 10)
+			timePart += to_string(0) + to_string(timeStru->tm_min);
+		else
+			timePart += to_string(timeStru->tm_min);
+		timePart += "-";
+		if (timeStru->tm_sec < 10)
+			timePart += to_string(0) + to_string(timeStru->tm_sec);
+		else
+			timePart += to_string(timeStru->tm_sec);
+		timeMessage  += "|" + timePart + "::";
 	}
 	delete timeStru;
 	return timeMessage;
@@ -33,11 +56,11 @@ string Debug::debugInfor(string className, string methodName, string infor)
 	lastInfor = devMessage;
 	return devMessage;
 }
-string Debug::operateInfor(string User, string operation)
+string Debug::operateInfor(string User, string operation,bool success)
 {
 	fstream devFile;
-	devFile.open(DEBUGF, ios::app);
-	devFile << Timer() << User << operation << "\n";
+	devFile.open(OPERATIONDAT, ios::app);
+	devFile << Timer()<<"[Operation] (" << User << "): " << operation << success << "\n";
 	return User + operation;
 }
 string Debug::errorInfor(string className, string methodName, string infor)
@@ -54,7 +77,6 @@ string Debug::errorInfor(string className, string methodName, string infor)
 void Debug::versionInfor(vector<string> versionInfor)
 {
 	fstream file;
-	int iterNum = 0;
 	file.open("./resource/versionInf.txt", ios::in|ios::out);
 	if (file.fail())
 	{
@@ -62,9 +84,9 @@ void Debug::versionInfor(vector<string> versionInfor)
 	}
 	else
 	{
-		while (!file.eof())
+		for (auto& temp : versionInfor)
 		{
-			
+			file << temp<<"\n";
 		}
 	}
 	file.close();

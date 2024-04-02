@@ -1,6 +1,7 @@
 #pragma once
 #ifndef JCENTER_H
 #define JCENTER_H
+#define RESTRICTION 0
 #include "Cmd.h"
 #include"User.h"
 #include"JInput.h"
@@ -12,23 +13,24 @@ enum class sysLan
 class Center
 {
 	User* currentUser;
-	JCmd* currentCmd;
+	CmdPack currentCmd;
 	sysLan Language;
 	void border();
 	bool logInterface(string& userNameT, string& passwordT);
 	void changeDockInfor();
+	void InsufficientPara();
 public:
 	Center();
 	static Center sysCenter;
-	vector<string>& receiveCmd();
-	vector<string>& receiveInput();
+	void receiveCmd();
+	void receiveInput();
 	void help(vector<string>&);
-	bool command(vector<string>&);
+	bool command(string ,vector<string>&);
 	void execute();
 	void version();
-	bool exist(vector<string>&);
-	bool login(vector<string>&);
-
+	bool exist(string,vector<string>&);
+	bool login(string,vector<string>&);
+	void change(string,vector<string>&);
 };
 
 #endif

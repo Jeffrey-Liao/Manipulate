@@ -1,17 +1,24 @@
-#pragma once
-#pragma once
-#ifndef MACRO_H
-#define MACRO_H
-#include <cstdlib>
-#include <iostream>
-#include<fstream>
+#ifndef DEFINES
+#define DEFINES
 #include <string>
 #include <vector>
-#include <typeinfo>
+#include <iostream>
+#include <algorithm>
+#include <ctime>
 #include <conio.h>
-#define PASSWORDLEN 25
-#define USERNAMELEN 50
-#define CONTINUE "(press any key to continue)"
+#include <stdlib.h>
+#include <list>
+using std::list;
+using std::cout;
+using std::string;
+using std::vector;
+using std::pair;
+using std::fstream;
+using std::ios;
+namespace liao
+{
+#define STD std::
+#pragma region Keys
 #define ENTER 13
 #define CTRLA 1
 #define CTRLB 2
@@ -28,24 +35,14 @@
 #define EXCLAM '!'
 #define TAB 9
 #define CONTROL key == -32||key == SPACE || key == ENTER || key == CTRLA||key == CTRLB || key == ESC || key == BACKSPACE || key == CTRLD || key == PLUS || key == DASH || key == LSQUARE||key == RSQUARE||key == QUESTION || key == EXCLAM || key == TAB||key == DOT
-
 #define NUMBER (key >='0'&&key<='9')
 #define LOWERCHAR (key >= 'a' && key <= 'z')
 #define HIGHERCHAR (key >= 'A' && key <= 'Z')
-#define DYNAMIC template<class T>
-#define INT4NAME typeid(int).name()
-#define INT2NAME typeid(short int).name()
-#define INT1NAME typeid(onebyte).name()
-#define INT8NAME typeid(long long).name()
-#define CHARNAME typeid(char).name()
-#define FLOATNAME typeid(float).name()
-#define DOUBLENAME typeid(double).name()
-#define STRINGNAME typeid(std::string).name()
-#define BOOLNAME typeid(bool).name()
-#define CONFIRM key == 'y' || key == 'Y'||key == 13
-#define DENY key == 'n' || key == 'N' || key == 27
-//Keys
-
+#pragma endregion
+#pragma region Notification
+#define CONTINUE "(press any key to continue)"
+#define COMMONFATALERROR 313
+#define ESSENTIALFILEMISSING 300
 #define NOTCONTROL NUMBER || LOWERCHAR || HIGHERCHAR
 #define STDCLEN 15
 #define SHRCLEN 4
@@ -59,8 +56,11 @@
 #define OVERALL_CMD 6
 #define CMD_MAIN stage == SHARE_CMD || stage == MAIN_CMD
 #define CMD_TABLE stage == SHARE_CMD|| stage == TABLE_CMD
-#define DEBUGF "./log/debug.log"
-#define ERRORF "./log/error.log"
+#define PASSWORDLEN 25
+#define USERNAMELEN 50
+#define DYNAMIC template<class T>
+#pragma endregion
+
 using onebyte = char;
-using namespace std;
+}
 #endif

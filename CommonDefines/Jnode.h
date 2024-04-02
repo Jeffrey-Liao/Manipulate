@@ -1,5 +1,5 @@
 #pragma once
-#include "../debugInfor.h"
+#include "../InforUnit/LiaoException.h"
 #include "JMacros.h"
 #ifndef JNODE_H
 #define JNODE_H
@@ -7,7 +7,7 @@
 #define ASDOUBLENODE *(DoubleLinkNode*)
 #define ASNODE *(Node*)
 #define JNULL ZERO.Export()
-namespace jeff
+namespace liao
 {
 	DYNAMIC
 	class NodeOper

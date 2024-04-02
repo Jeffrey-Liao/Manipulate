@@ -1,5 +1,4 @@
-#include"JUi.h"
-#define CONTINUE "(press any key to continue)"
+#include "JUi_history.h"
 #pragma region JUIDEF
 JUi::JUi()
 	:existDock(false)
@@ -13,9 +12,13 @@ void JUi::call()
 {
 	cout << UI_Message;
 }
+bool JUi::existMessage()
+{
+	return this->UI_Message.size() != 0;
+}
 void JUi::dock()
 {
-	if(!existDock)
+	if (!existDock)
 		UiDock::ui_dock.call(), existDock = true;
 }
 void JUi::end()
@@ -36,6 +39,7 @@ void JUi::clear()
 #pragma endregion
 #pragma region DOCKDEF
 UiDock::UiDock()
+	:show(false)
 {}
 void UiDock::change(string newMessage)
 {
@@ -64,9 +68,14 @@ void UiHint::change(string newMessage)
 UiHint& UiHint::operator<<(string message)
 {
 	change(message);
-	this->drawEmpty(20);
+	this->drawEmpty(30);
 	this->call();
 	return *this;
+}
+void UiHint::clear()
+{
+	drawEmpty(UI_Message.size());
+	this->UI_Message.clear();
 }
 void UiHint::call()
 {
@@ -103,8 +112,8 @@ void UiMessage::remove(int charSize)
 UiMessage& UiMessage::operator[](bool showDock)
 {
 
-	if (!existDock&&showDock)
-		dock(),existDock = showDock;
+	if (!existDock && showDock)
+		dock(), existDock = showDock;
 	return *this;
 }
 UiMessage& UiMessage::operator<< (string message)
@@ -135,6 +144,7 @@ void UiNoticeMessage::call()
 	}
 	else
 		end();
+	this->isErrorMessage = false;
 	this->UI_Message.clear();
 }UiNoticeMessage& UiNoticeMessage::operator[](bool newError)
 {
@@ -173,6 +183,7 @@ void UiCharMessage::remove()
 }
 void UiCharMessage::clear()
 {
+	this->strClear(UI_Message.size());
 	this->UI_Message.clear();
 }
 int UiCharMessage::getIndex()
@@ -185,6 +196,7 @@ int UiCharMessage::getIndex()
 UiCharMessage& UiCharMessage::operator<<(string newKey)
 {
 	this->UI_Message = newKey;
+	this->call();
 	return *this;
 }
 #pragma endregion
@@ -193,7 +205,4 @@ UiCharMessage& UiCharMessage::operator<<(char newKey)
 	this->showChar(newKey);
 	return *this;
 }
-UiHint UiHint::ui_hint;
 UiDock UiDock::ui_dock;
-UiNoticeMessage UiNoticeMessage::ui_notice;
-UiCharMessage UiCharMessage::ui_char;

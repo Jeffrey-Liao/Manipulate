@@ -71,13 +71,14 @@ public:
 	void dock();
 	void call();
 	bool isEmpty();
+	bool existMessage();
 };
 class UiHint :public JUi
 {
 public:
-	static UiHint ui_hint;
 	UiHint();
-	void change(string);
+	void change(string); 
+	void clear();
 	void call();
 	UiHint& operator<<(string message);
 };
@@ -91,12 +92,12 @@ public:
 	UiMessage& operator<< (string message);
 	UiMessage& operator[](bool line);
 };
+static UiHint ui_hint;
 static UiMessage ui_message;
 class UiNoticeMessage:public JUi
 {
 	bool isErrorMessage;
 public:
-	static UiNoticeMessage ui_notice;
 	UiNoticeMessage();
 	void change(string);
 	void call();
@@ -104,7 +105,8 @@ public:
 	UiNoticeMessage& operator[](bool error);
 	UiNoticeMessage& operator<<(string message);
 };
-class UiCharMessage :public JUi
+static UiNoticeMessage ui_notice;
+static class UiCharMessage :public JUi
 {
 public:
 	UiCharMessage();
@@ -115,7 +117,7 @@ public:
 	void clear();
 	UiCharMessage& operator<<(string newKey);
 	UiCharMessage& operator<<(char newKey);
-};
+}ui_char;
 static class UiLoading :public JUi
 {
 	bool change = true;
@@ -148,6 +150,10 @@ public:
 			 if (percentage == 0)
 			 {
 				 UI_Message = "[- - - - - - - - - -]" + to_string(percentage) + '%';
+			 }
+			 else if (percentage == 100)
+			 {
+				 this->complete();
 			 }
 			 else
 			 {

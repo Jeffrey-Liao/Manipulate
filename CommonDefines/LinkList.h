@@ -2,7 +2,7 @@
 #ifndef LINK_H
 #define LINK_H
 #include "Jnode.h"
-namespace jeff
+namespace liao
 {
 	DYNAMICS
 	class LinkListOpers
