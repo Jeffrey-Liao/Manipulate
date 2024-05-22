@@ -1,0 +1,12 @@
+change
+syntax:	change+restrict(require)+string(require)
+num of para:	2
+restrict:
+	u=user
+	t=table
+usage:	change user password/name/authority or table name
+~
+undo
+syntax:	undo
+usage:	cancel last operation
+~

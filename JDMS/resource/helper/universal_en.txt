@@ -1,0 +1,47 @@
+help
+syntax:	help+exist command(optional)
+num of para: -1
+usage:	get help page or get the detail information of a command
+~
+exist
+syntax:	exist + restrict(required) + string(required)
+num of para: 2
+restrict:	
+	c=command
+	t=table
+	u=user
+usage:	check a table/user/command is exist or not
+~
+back
+syntax:	back
+usage:back to last layer
+~
+quit
+syntax:	quit
+usage:	leave application
+~
+version
+syntax:	version
+usage:	get version and developer information
+~
+command
+syntax:	command+restrict(required)
+num of para:	1
+restrict:
+	a=all commands
+	l=list detail information for current command list
+	la=list detail information for all command
+	u=all universal commands
+	m=all main commands
+	t=all table operations
+usage:	get command list
+~
+log
+syntax:	log+restrict(required)
+num of para:	1
+restrict:
+	on=log on
+	in=log in
+	out=log out
+	back=use it when you forget your password
+usage:	log into this system

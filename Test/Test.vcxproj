@@ -19,40 +19,18 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="source\JCenterDef.cpp" />
-    <ClCompile Include="source\StorageDef.cpp" />
+    <ClCompile Include="Test.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="source\JCenter.h" />
-    <ClInclude Include="source\Storage.h" />
-    <ClInclude Include="source\storage\JList.h" />
-    <ClInclude Include="source\storage\JMacros.h" />
-    <ClInclude Include="source\storage\JNLPU.h" />
-    <ClInclude Include="source\storage\Jnode.h" />
-    <ClInclude Include="source\storage\Jqueue.h" />
-    <ClInclude Include="source\storage\Jsort.h" />
-    <ClInclude Include="source\storage\LinkList.h" />
-    <ClInclude Include="source\storage\ListOpers.h" />
-    <ClInclude Include="source\storage\Queue.h" />
-    <ClInclude Include="source\storage\Set.h" />
-    <ClInclude Include="source\storage\Stack.h" />
-    <ClInclude Include="source\Table.h" />
-  </ItemGroup>
-  <ItemGroup>
-    <Text Include="resource\commandList.txt" />
-    <Text Include="resource\helper\dev.txt" />
-    <Text Include="resource\helper\devInfor.txt" />
-    <Text Include="resource\helper\helper_en.txt" />
-    <Text Include="resource\helper\share_en.txt" />
-    <Text Include="resource\helper\universal_en.txt" />
-    <Text Include="resource\user.txt" />
-    <Text Include="resource\versionInf.txt" />
+    <Text Include="log\debug.log" />
+    <Text Include="log\error.log" />
+    <Text Include="log\runtime.log" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>17.0</VCProjectVersion>
     <Keyword>Win32Proj</Keyword>
-    <ProjectGuid>{d38408fd-061d-40f8-aead-3ff0d9d03e7b}</ProjectGuid>
-    <RootNamespace>JDMS</RootNamespace>
+    <ProjectGuid>{15cb57ad-df93-448e-adf4-b2f2a1d18e7a}</ProjectGuid>
+    <RootNamespace>Test</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
@@ -70,7 +48,7 @@
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
-    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
     <PlatformToolset>v143</PlatformToolset>
     <CharacterSet>Unicode</CharacterSet>
@@ -100,6 +78,10 @@
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <ExternalIncludePath>E:\program\C_C++Project\program\Manipulate\InforUnit;$(ExternalIncludePath)</ExternalIncludePath>
+    <LibraryPath>$(LibraryPath)</LibraryPath>
+  </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
@@ -135,11 +117,12 @@
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp20</LanguageStandard>
-      <WholeProgramOptimization>false</WholeProgramOptimization>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalLibraryDirectories>E:\program\C_C++Project\program\Manipulate\x64\Debug;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>InforUnit.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">

@@ -9,13 +9,9 @@
 #include <vector>
 #include <typeinfo>
 #include <conio.h>
-#define PASSWORDLEN 20
-#define NAMELEN 30
-
-#define USERFILE "dhxneahsne.jef"
 #define PASSWORDLEN 25
 #define USERNAMELEN 50
-
+#define CONTINUE "(press any key to continue)"
 #define ENTER 13
 #define CTRLA 1
 #define CTRLB 2
@@ -31,7 +27,7 @@
 #define QUESTION '?'
 #define EXCLAM '!'
 #define TAB 9
-#define CONTROL key == SPACE || key == ENTER || key == CTRLA||key == CTRLB || key == ESC || key == BACKSPACE || key == CTRLD || key == PLUS || key == DASH || key == LSQUARE||key == RSQUARE||key == QUESTION || key == EXCLAM || key == TAB||key == DOT
+#define CONTROL key == -32||key == SPACE || key == ENTER || key == CTRLA||key == CTRLB || key == ESC || key == BACKSPACE || key == CTRLD || key == PLUS || key == DASH || key == LSQUARE||key == RSQUARE||key == QUESTION || key == EXCLAM || key == TAB||key == DOT
 
 #define NUMBER (key >='0'&&key<='9')
 #define LOWERCHAR (key >= 'a' && key <= 'z')
@@ -54,15 +50,17 @@
 #define STDCLEN 15
 #define SHRCLEN 4
 #define WC WordCmd::
+#define HIDDEN 0
 #define UNIVER_CMD 1
-#define SHARE_CMD 3
+#define SHARE_CMD 3 
 #define MAIN_CMD 2
 #define TABLE_CMD 4
-#define TABLE 0
+#define TABLE 5
+#define OVERALL_CMD 6
 #define CMD_MAIN stage == SHARE_CMD || stage == MAIN_CMD
 #define CMD_TABLE stage == SHARE_CMD|| stage == TABLE_CMD
-#define DEBUGF "debug.log"
-#define ERRORF "error.log"
+#define DEBUGF "./log/debug.log"
+#define ERRORF "./log/error.log"
 using onebyte = char;
 using namespace std;
 #endif

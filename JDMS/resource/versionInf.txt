@@ -1,0 +1,4 @@
+388
+2024-05-07
+>{log} command is usable now.
+>Reconstruct the system, bring new UI system and many other new features.

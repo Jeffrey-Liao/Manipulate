@@ -1,0 +1,69 @@
+Universal Cmds
+	#help
+	{
+		para limit:	-1
+		syntax:			help+cmd
+	}
+
+
+	#quit
+	{
+		para limit:	-1
+		syntax:			quit+time
+	}
+
+
+	#back
+	{
+		para limit:	0
+		syntax:			back
+	}
+	
+
+	#liao
+	{
+		para limit:	0
+		syntax:			liao
+	}
+	
+
+	#version
+	{
+		para limit:	0
+		syntax:			version
+	}
+
+
+	#command
+	{
+		para limit:	-1
+		restrict:		a= all cmds
+							l=	give detail infor
+							u= universal cmds
+							m= main cmds
+							t=	table operations
+		syntax:			command+restrict
+	}
+	
+
+	#log
+	{
+		para limit:	1
+		restrict:		in= log in (no log only)
+							on= log on (no log only)
+							out= log out (main only)
+		syntax:				log+restrict
+	}
+
+
+	#exist
+	{
+		para limit:	2
+		restrict:		u= user
+							t= table
+		syntax:			exist+restrict+user name/table name
+	}
+----------------------------------------------------------------------
+
+Main cmds
+	

@@ -1,0 +1,34 @@
+Hello, I am the developer and designer of JDBMS (Jeff-LIAO RUNKANG)
+This is the help document to lead you into the world of JDBMS
+You can quit by press 'ESC' when you want to do so.
+You can see the usage of a command by input "help+(command)"
+Also, you can get all commands by use "command"
+
+!!!By the way, this only the demo version. So that, some algorithms are
+!!!not in best efficiency.
+~
+Unfortunately, this system not implement SQL yet but will.
+Hence, I designed JeffDDL (Jeff Data Define Language) to execute operations
+Also, JDDL have a subsystem call JDDLHint which will give you suggestion
+about related commands and you can use it like an IDE.
+~
+The command system have 4 Layers
+They are:
+Universal Command (you can use everywhere)
+Share Command (you can use everywhere after you log into system)
+Main Command (you can use outside of the data table)
+Table Operations (you can use inside of the data table)
+and three types:
+No parameter command (number of parameter is 0)
+Has parameter command (number of parameter is negative number)
+Require parameter command (number of parameter is positive number)
+~
+The UI of system is build up by 3 parts
+
+Dock:: message/command -hints
+
+Dock area will give directory information
+Message/command will show your command and some messages
+Hints will give you information about command and parameter
+Error message will be shown within "!!!",and will appear on a new line
+~

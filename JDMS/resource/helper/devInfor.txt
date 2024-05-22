@@ -1,0 +1,7 @@
+version: 0.2/2402/demo8/stable test edition
+developer: Liao Runkang  >skydream-china@outlook.com<
+Latest Update: 
+	Short command can be use in command system now.
+	Exist command have finished now
+	Log command have finished test version now (might have bugs)
+	The structure of command checking system has been reconstructed.
