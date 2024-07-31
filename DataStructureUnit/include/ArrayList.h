@@ -32,12 +32,15 @@ namespace liaoUtil
 		}
 		void delNode(const T& data) override
 		{
-			std::remove(dataSource.begin(), dataSource.end(), data);
+			if (std::remove(dataSource.begin(), dataSource.end(), data) == dataSource.end())
+				throw new InvalidOperationException("ArrayList","delNode(T&)","Cannot delete an element which not exist at all.");
 		}
 		void delNode(unsigned int pos) override
 		{
 			if (validPos(pos))
 				dataSource.erase(dataSource.begin() + pos);
+			else
+				throw new InvalidOperationException("ArrayList", "delNode(Index)", "The position need to be deleted out of range.");
 		}
 		void inner_find(const T& data)
 		{
@@ -126,6 +129,10 @@ namespace liaoUtil
 			int index = dataSource.size() - number - 1;
 			return dataSource[index];
 		}
+		T& add(int number, T&& value) override
+		{
+			return dataSource.emplace_back(value);
+		}
 		T& add(vector<T>& vec)override
 		{
 			this->stdCopy(vec);
@@ -146,11 +153,14 @@ namespace liaoUtil
 		}
 		T& add(T* arr, int size)override
 		{
-			
 			for (int n = 0; n < size; ++n)
 				newValue(arr[n]);
 			int index = dataSource.size() - size - 1;
 			return dataSource[index];
+		}
+		T& add(const T&& value)
+		{
+			return dataSource.emplace_back(value);
 		}
 		void remove(Index pos)override
 		{
@@ -165,39 +175,48 @@ namespace liaoUtil
 		{
 			delNode(value);
 		}
+		void remove(T&& value)override
+		{
+			dataSource.erase(std::remove(dataSource.begin(), dataSource.end(), value));
+		}
 		void removeAll(T& data)override
 		{
-			while (std::remove(dataSource.begin(), dataSource.end(), data) != dataSource.end());
+			for (auto itor = std::remove(dataSource.begin(), dataSource.end(), data); itor != dataSource.end();dataSource.erase(itor));
 		}
 		void remove(initializer_list<T>& ini)override
 		{
 			for (auto& var : ini)
-				std::remove(dataSource.begin(), dataSource.end(), var);
+				dataSource.erase(std::remove(dataSource.begin(), dataSource.end(), var));
 		}
 		void remove(List& obj)
 		{
 			for (int n = 0; n < obj.size(); ++n)
-				std::remove(dataSource.begin(), dataSource.end(), obj[n]);
+				dataSource.erase(std::remove(dataSource.begin(), dataSource.end(), obj[n]));
 		}
 		void remove(vector<T>& vec)override
 		{
 			for (auto& var : vec)
-				std::remove(dataSource.begin(), dataSource.end(), var);
+				dataSource.erase(std::remove(dataSource.begin(), dataSource.end(), var));
 		}
 		void remove(list<T>& ls)override
 		{
 			for (auto& var : ls)
-				std::remove(dataSource.begin(), dataSource.end(), var);
+				dataSource.erase(std::remove(dataSource.begin(), dataSource.end(), var));
 		}
 		void remove(T* arr, int size)override
 		{
 			for (int n = 0; n < size; ++n)
-				std::remove(dataSource.begin(), dataSource.end(), arr[n]);
+				dataSource.erase(std::remove(dataSource.begin(), dataSource.end(), arr[n]));
 		}
 
 		T& insert(Index pos, T& value)override
 		{
 			newValue(pos, value);
+			return dataSource[pos];
+		}
+		T& insert(Index pos, T&& value)override
+		{
+			dataSource.insert(dataSource.begin() + pos, value);
 			return dataSource[pos];
 		}
 		T& insert(Index pos, List& list)override
@@ -298,12 +317,13 @@ namespace liaoUtil
 		{
 			return dataSource;
 		}
+		bool contains(T&& value)const override
+		{
+			return std::find(dataSource.begin(), dataSource.end(), value) != dataSource.end();
+		}
 		bool contains(T& value)const override
 		{
-			for (auto& var : dataSource)
-				if (var == value)
-					return true;
-			return false;
+			return std::find(dataSource.begin(), dataSource.end(), value) != dataSource.end();
 		}
 		bool contains(List& obj)const override
 		{
@@ -345,15 +365,13 @@ namespace liaoUtil
 			}
 			return true;
 		 }
-		/*
-		* void sort(void(*sortFunc)(List& _this) = NULL)override 
+		void sort(void(*sortFunc)(List& _this) = NULL)override 
 		{
 			if (sortFunc != NULL)
 				sortFunc(*this);
 			else
 				std::sort(dataSource.begin(), dataSource.end());
 		}
-		*/
 		
 		void apply(void(*operation)(T& value)) override
 		{
