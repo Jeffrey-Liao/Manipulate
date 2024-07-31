@@ -44,25 +44,25 @@ namespace liaoUtil
 		/*
 		* 根据给定值引用创建一个新元素
 		*/
-		virtual void newValue(const T& value) = 0;
+		//virtual void newValue(const T& value) = 0;
 		/*
 		* 根据给定值引用和给定位置创建一个新元素
 		*/
-		virtual void newValue(Index pos, const T& value) = 0;
+		//virtual void newValue(Index pos, const T& value) = 0;
 		/*
 		* 根据给定列表引用创建一个新元素
 		*/
-		virtual void newValue(List& obj) = 0;
+		//virtual void newValue(List& obj) = 0;
 		/*
 		* 根据给定位置删除一个已有元素
 		* （如果没有该元素将会抛出InvalidOperationException）
 		*/
-		virtual void delNode(const T& value) = 0;
+		//virtual void delNode(const T& value) = 0;
 		/*
 		* 根据给定位置删除一个已有元素
 		* （如果没有该元素将会抛出InvalidOperationException）
 		*/
-		virtual void delNode(Index pos) = 0;
+		//virtual void delNode(Index pos) = 0;
 		/*
 		* 判断当前索引是否访问超限
 		*/
@@ -71,17 +71,15 @@ namespace liaoUtil
 		* 清空当前容器
 		*/
 		virtual void free() = 0;
-		template<class Container>
+		template<class Receiver, class Container>
 		/*
 		* 拷贝其他std容器内的值到当前容器
 		* （尤其适用于非std内核实现的容器）
 		*/
-		void stdCopy(Container& obj)
+		void StdToStd(Receiver& rcv, Container& obj)
 		{
 			for (auto& var : obj)
-			{
-				newValue(var);
-			}
+				rcv.emplace_back(var);
 		}
 	public:
 		//当前classID

@@ -27,11 +27,11 @@ namespace liaoUtil
 		{}
 		LinkList(vector<T>& obj)
 		{
-			this->stdCopy(obj);
+			this->StdToStd(dataSource,obj);
 		}
 		LinkList(initializer_list<T> ini)
 		{
-			this->stdCopy(ini);
+			this->StdToStd(dataSource, ini);
 		}
 		LinkList(list<T>& obj)
 		{
@@ -42,30 +42,11 @@ namespace liaoUtil
 		{
 			dataSource.resize(dataSource.size() + _size);
 		}
-		void newValue(const T& value)override
-		{
-			dataSource.push_back(value);
-		}
-		void newValue(Index pos, const T& value)override
-		{
-			if (this->validPos(pos))
-			{
-				dataSource.insert(iterate(pos,dataSource.begin()), value);
-			}
-		}
-		void newValue(List& obj)override
+		
+		void newValue(List& obj)
 		{
 			for (int n = 0; n < obj.size(); ++n)
-				newValue(obj[n]);
-		}
-		void delNode(const T& value)override
-		{
-			std::remove(dataSource.begin(),dataSource.end(),value);
-		}
-		void delNode(Index pos)override
-		{
-			if (validPos(pos))
-				dataSource.erase(iterate(pos,dataSource.begin()));
+				dataSource.push_back(obj[n]);
 		}
 		int inner_findIndex(const T& value)const 
 		{
@@ -124,8 +105,8 @@ namespace liaoUtil
 
 		T& add(T& data)override
 		{
-			newValue(data);
-			return *(--dataSource.end());
+			dataSource.push_back(data);
+			return last();
 		}
 		T& add(List& obj) override
 		{
@@ -135,29 +116,29 @@ namespace liaoUtil
 		T& add(int number, T& value)
 		{
 			for (int n = 0; n < number; ++n)
-				newValue(value);
+				dataSource.push_back(value);
 			return *riterate(number,dataSource.end());
 		}
 		T& add(vector<T>& vec)
 		{
-			this->stdCopy(vec);
+			this->StdToStd(dataSource,vec);
 			return *riterate( vec.size(), dataSource.end());
 		}
 		T& add(list<T>& ls)
 		{
-			this->stdCopy(ls);
+			this->StdToStd(dataSource, ls);
 			return *riterate(ls.size(),dataSource.end());
 		}
 		T& add(initializer_list<T>& ini)
 		{
-			this->stdCopy(ini);
+			this->StdToStd(dataSource, ini);
 			return* riterate(ini.size(), dataSource.end());
 		}
 		T& add(T* arr, int size)
 		{
 			for (int n = 0; n < size; ++n)
 			{
-				newValue(arr[n]);
+				dataSource.push_back(arr[n]);
 			}
 			return *riterate(size ,dataSource.end());
 		}
@@ -171,7 +152,7 @@ namespace liaoUtil
 		}
 		void remove(Index pos)
 		{
-			delNode(pos);
+			dataSource.erase(iterate(pos, dataSource.begin()));
 		}
 		void remove(Index start, Index end)
 		{
@@ -193,11 +174,11 @@ namespace liaoUtil
 		}
 		void remove(T& data)
 		{
-			delNode(data);
+			dataSource.remove(data);
 		}
 		void remove(T&& value)override
 		{
-			dataSource.erase(std::remove(dataSource.begin(), dataSource.end(), value));
+			dataSource.remove(value);
 		}
 		void removeAll(T& data)
 		{
@@ -239,7 +220,7 @@ namespace liaoUtil
 		T& insert(Index pos, List& list)
 		{
 			for (int n = 0; n < list.size(); ++n)
-				newValue(n + pos, list[n]);
+				dataSource.insert(iterate(pos, dataSource.begin()), list[n]);
 			return *iterate(pos,dataSource.begin());
 		}
 		T& insert(Index pos, vector<T>& vec)
