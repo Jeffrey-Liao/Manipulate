@@ -92,14 +92,19 @@ namespace liaoUtil
 
 		string toString()
 		{
-			string temp = "[";
-			for (int n =0;n<this->size();++n)
+			if (size() > 0)
 			{
-				temp += std::to_string(get(n));
-				temp += ',';
+				string temp = "[";
+				for (int n = 0; n < this->size(); ++n)
+				{
+					temp += std::to_string(get(n));
+					temp += ',';
+				}
+				temp[temp.size() - 1] = ']';
+				return temp;
 			}
-			temp[temp.size() - 1] = ']';
-			return temp;
+			else
+				return "[]";
 		}
 		virtual vector toVector() const = 0;
 
@@ -109,6 +114,9 @@ namespace liaoUtil
 		virtual bool contains(list& list)const = 0;
 		virtual bool contains(initializer_list& ini)const = 0;
 
+		virtual void assign(vector& vec) = 0;
+		virtual void assign(list& list) = 0;
+		virtual void assign(initializer_list& ini) = 0;
 		//virtual void sort(void(*sortFunc)(List& _this) = NULL) = 0;
 		virtual void apply(void(*operation)(T& value)) = 0;
 		virtual int count(T& data)const = 0;
@@ -148,6 +156,18 @@ namespace liaoUtil
 		void operator=(List& obj)
 		{
 			copyFrom(obj);
+		}
+		void operator=(initializer_list& ini)
+		{
+			assign(ini);
+		}
+		void operator=(list& ls)
+		{
+			assign(ls);
+		}
+		void operator=(vector vec)
+		{
+			assign(vec);
 		}
 	};
 }

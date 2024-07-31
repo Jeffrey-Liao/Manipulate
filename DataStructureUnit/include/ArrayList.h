@@ -9,8 +9,6 @@ namespace liaoUtil
 	class ArrayList:public List<T>
 	{
 		using List = List<T>;
-		using ListNode = ListNode<T>;
-		using ArrayNode = ArrayNode<T>;
 		vector<T> dataSource;
 	private:
 		void allocate(int size) override
@@ -282,6 +280,20 @@ namespace liaoUtil
 				return true;
 			}
 		}
+		void assign(vector<T>& vec)
+		{
+			dataSource = vec;
+		}
+		void assign(list<T>& list)
+		{
+			dataSource.resize(list.size());
+			std::copy(list.begin(), list.end(), dataSource.begin());
+		}
+		void assign(initializer_list<T>& ini)
+		{
+			dataSource.resize(ini.size());
+			std::copy(ini.begin(), ini.end(), dataSource.begin());
+		}
 		vector<T> toVector()const override
 		{
 			return dataSource;
@@ -360,10 +372,10 @@ namespace liaoUtil
 		void copyFrom(List& obj) override
 		{
 			if (obj.size() > size())
-				dataSource.reserve(obj.size() - size());
+				dataSource.resize(obj.size());
 			else
 				dataSource.resize(obj.size());
-			for (int n = 0; n < size(); ++n)
+			for (int n = 0; n < dataSource.capacity(); ++n)
 				dataSource[n] = obj[n];
 		}
 		void copyTo(List& obj) override

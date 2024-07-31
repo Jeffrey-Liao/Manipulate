@@ -4,14 +4,16 @@ int main()
 {
 	List<int>& test = *new LinkList<int>();
 	List<int>& test2 = *new ArrayList<int>();
-	for (int n = 0; n < 10; ++n)
-	{
-		test.add(n);
-		test2.add(n);
-	}
+	test = { 1,2,3,4,5,6 };
 	test.remove(3);
-	test2.remove(4);
-	cout << "test:" << test.toString() << "\n test2:" << test2.toString();
+	test.first() = 3;
+	cout<<std::format("class ID: {}\n", test.classID());
+	test.get(4) = 114514;
+	test2 = test;
+	test.
+	cout << std::format("test: {}\ntest2: {}\n", test.toString(),test2.toString());
+	test2 = 3;
+	cout <<std::format("short test2: {}", test2.toString()) ;
 	delete& test;
 	delete& test2;
 }
