@@ -161,14 +161,6 @@ namespace liaoUtil
 			}
 			return *riterate(size ,dataSource.end());
 		}
-		T& add(const T&& value)
-		{
-			return dataSource.emplace_back(value);
-		}
-		T& add(int number, T&& value) override
-		{
-			return dataSource.emplace_back(value);
-		}
 		void remove(Index pos)
 		{
 			delNode(pos);
@@ -195,44 +187,36 @@ namespace liaoUtil
 		{
 			delNode(data);
 		}
-		void remove(T&& value)override
-		{
-			dataSource.erase(std::remove(dataSource.begin(), dataSource.end(), value));
-		}
 		void removeAll(T& data)
 		{
-			for (auto itor = std::remove(dataSource.begin(), dataSource.end(), data); itor != dataSource.end(); dataSource.erase(itor));
+			while (std::remove(dataSource.begin(), dataSource.end(), data) != dataSource.end());
 		}
 		void remove(initializer_list<T>& ini)
 		{
 			for (auto& var : ini)
-				dataSource.erase(std::remove(dataSource.begin(), dataSource.end(), var));
+				std::remove(dataSource.begin(), dataSource.end(), var);
 		}
 		void remove(List& obj)
 		{
 			for(int n =0;n<obj.size();++n)
-				dataSource.erase(std::remove(dataSource.begin(), dataSource.end(), obj[n]));
+				std::remove(dataSource.begin(), dataSource.end(), obj[n]);
 		}
 		void remove(vector<T>& vec)
 		{
 			for (auto& var : vec)
-				dataSource.erase(std::remove(dataSource.begin(), dataSource.end(), var));
+				std::remove(dataSource.begin(), dataSource.end(), var);
 		}
 		void remove(list<T>& ls) 
 		{
 			for (auto& var : ls)
-				dataSource.erase(std::remove(dataSource.begin(), dataSource.end(), var));
+				std::remove(dataSource.begin(), dataSource.end(), var);
 		}
 		void remove(T* arr, int size)
 		{
 			for (int n = 0; n < size; ++n)
-				dataSource.erase(std::remove(dataSource.begin(), dataSource.end(), arr[n]));
+				std::remove(dataSource.begin(), dataSource.end(), arr[n]);
 		}
 		T& insert(Index pos, T& value)
-		{
-			return *dataSource.insert(iterate(pos,dataSource.begin()), value);
-		}
-		T& insert(Index pos, T&& value)override
 		{
 			return *dataSource.insert(iterate(pos,dataSource.begin()), value);
 		}
@@ -324,10 +308,6 @@ namespace liaoUtil
 			vector temp(dataSource.begin(), dataSource.end());
 			return temp;
 		}
-		bool contains(T&& value)const
-		{
-			return std::find(dataSource.begin(), dataSource.end(), value) != dataSource.end();
-		}
 		bool contains(T& value)const
 		{
 			return std::find(dataSource.begin(), dataSource.end(), value) != dataSource.end();
@@ -372,13 +352,15 @@ namespace liaoUtil
 			}
 			return true;
 		}
-		void sort(void(*sortFunc)(List& _this) = NULL)override
+		/*
+		* 		void sort(void(*sortFunc)(List& _this) = NULL)override
 		{
 			if (sortFunc != NULL)
 				sortFunc(*this);
 			else
-				dataSource.sort();
+				std::sort(dataSource.begin(), dataSource.end());
 		}
+		*/
 
 		void apply(void(*operation)(T& value)) override
 		{
