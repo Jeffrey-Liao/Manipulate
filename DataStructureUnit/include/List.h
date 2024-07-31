@@ -99,7 +99,7 @@ namespace liaoUtil
 		//根据给定的右值新增一个元素，返回新元素的引用
 		virtual T& add(const T&& value) = 0;
 		//根据给定的左值新增一个元素，返回新元素的引用
-		virtual T& add(T& value) = 0;
+		virtual T& add(const T& value) = 0;
 		//根据给定的List抽象对象新增多个元素，返回第一个新元素的引用
 		virtual T& add(List& obj) = 0;
 		//基于给定的右值填充number个新元素，返回第一个新元素的引用

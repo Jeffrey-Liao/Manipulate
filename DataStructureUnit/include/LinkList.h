@@ -102,7 +102,7 @@ namespace liaoUtil
 			return *(--dataSource.end());
 		}
 
-		T& add(T& data)override
+		T& add(const T& data)override
 		{
 			dataSource.push_back(data);
 			return last();
