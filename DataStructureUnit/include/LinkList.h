@@ -22,7 +22,7 @@ namespace liaoUtil
 		LinkList(List& obj)
 			:List(obj)
 		{}
-		LinkList(LinkList& obj)
+		LinkList(List& obj)
 			:List(obj)
 		{}
 		LinkList(vector<T>& obj)
@@ -42,7 +42,6 @@ namespace liaoUtil
 		{
 			dataSource.resize(dataSource.size() + _size);
 		}
-		
 		void newValue(List& obj)
 		{
 			for (int n = 0; n < obj.size(); ++n)

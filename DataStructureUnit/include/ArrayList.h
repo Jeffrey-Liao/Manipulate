@@ -56,7 +56,7 @@ namespace liaoUtil
 			:List(size)
 		{
 		}
-		ArrayList(ArrayList& obj)
+		ArrayList(List& obj)
 			:List(obj)
 		{}
 		ArrayList(vector<T>& obj)
