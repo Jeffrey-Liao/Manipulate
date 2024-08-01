@@ -57,6 +57,9 @@
     <ClInclude Include="include\Algorithm.h">
       <Filter>头文件\List</Filter>
     </ClInclude>
+    <ClInclude Include="include\SortedList.h">
+      <Filter>头文件\List</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="source\def.cpp">

@@ -11,6 +11,7 @@ namespace liaoUtil
 		using ListNode = ListNode<T>;
 		using List = List<T>;
 		using LinkNodeStd = LinkNodeStd<T>;
+	protected:
 		list<T> dataSource;
 	public:
 		LinkList()
@@ -34,15 +35,23 @@ namespace liaoUtil
 		{
 			dataSource = obj;
 		}
-	private:
+	protected:
 		void allocate(int _size) override
 		{
 			dataSource.resize(dataSource.size() + _size);
 		}
+		void newValue(const T& value)override
+		{
+			dataSource.push_back(value);
+		}
+		void newValue(const T&& value)
+		{
+			dataSource.push_back(value);
+		}
 		void newValue(List& obj)
 		{
 			for (int n = 0; n < obj.size(); ++n)
-				dataSource.push_back(obj[n]);
+				newValue(obj[n]);
 		}
 		int inner_findIndex(const T& value)const 
 		{
@@ -57,16 +66,21 @@ namespace liaoUtil
 			}
 			return -1;
 		}
-		list<T>::iterator iterate(int pos, list<T>::iterator itor)
+		list<T>::iterator iterate(int pos)
 		{
-			for (int n = 0; n < pos; ++n)
-				++itor;
-			return itor;
-		}
-		list<T>::iterator riterate(int pos, list<T>::iterator itor)
-		{
-			for (int n = 0; n < pos; ++n)
-				--itor;
+			int end = 0;
+			auto itor = dataSource.begin();
+			if (pos > (dataSource.size()/2))
+				itor = dataSource.end(),end = dataSource.size()-pos;
+			else
+				itor = dataSource.begin(),end = pos;
+			for (int n = 0; n < end; ++n)
+			{
+				if (pos > (dataSource.size() / 2))
+					itor--;
+				else
+					itor++;
+			}
 			return itor;
 		}
 		bool validPos(Index pos)const override
@@ -101,54 +115,54 @@ namespace liaoUtil
 
 		T& add(const T& data)override
 		{
-			dataSource.push_back(data);
+			newValue(data);
 			return last();
 		}
 		T& add(List& obj) override
 		{
 			newValue(obj);
-			return *riterate(obj.size(),dataSource.end());
+			return *iterate(dataSource.size()-obj.size());
 		}
 		T& add(int number, T& value)
 		{
 			for (int n = 0; n < number; ++n)
-				dataSource.push_back(value);
-			return *riterate(number,dataSource.end());
+				newValue(value);
+			return *iterate(dataSource.size()-number);
 		}
 		T& add(vector<T>& vec)
 		{
 			this->StdToStd(dataSource,vec);
-			return *riterate( vec.size(), dataSource.end());
+			return *iterate(dataSource.size() - vec.size());
 		}
 		T& add(list<T>& ls)
 		{
 			this->StdToStd(dataSource, ls);
-			return *riterate(ls.size(),dataSource.end());
+			return *iterate(dataSource.size() - ls.size());
 		}
 		T& add(initializer_list<T>& ini)
 		{
 			this->StdToStd(dataSource, ini);
-			return* riterate(ini.size(), dataSource.end());
+			return* iterate(dataSource.size() - ini.size());
 		}
 		T& add(T* arr, int size)
 		{
 			for (int n = 0; n < size; ++n)
 			{
-				dataSource.push_back(arr[n]);
+				newValue(arr[n]);
 			}
-			return *riterate(size ,dataSource.end());
+			return *iterate(dataSource.size() - size );
 		}
 		T& add(const T&& value)
 		{
-			return dataSource.emplace_back(value);
+			return newValue(value);
 		}
 		T& add(int number, T&& value) override
 		{
-			return dataSource.emplace_back(value);
+			return newValue(value);
 		}
 		void remove(Index pos)
 		{
-			dataSource.erase(iterate(pos, dataSource.begin()));
+			dataSource.erase(iterate(pos));
 		}
 		void remove(Index start, Index end)
 		{
@@ -207,36 +221,36 @@ namespace liaoUtil
 		}
 		T& insert(Index pos, T& value)
 		{
-			return *dataSource.insert(iterate(pos,dataSource.begin()), value);
+			return *dataSource.insert(iterate(pos), value);
 		}
 		T& insert(Index pos, T&& value)override
 		{
-			return *dataSource.insert(iterate(pos,dataSource.begin()), value);
+			return *dataSource.insert(iterate(pos), value);
 		}
 		T& insert(Index pos, List& list)
 		{
 			for (int n = 0; n < list.size(); ++n)
-				dataSource.insert(iterate(pos, dataSource.begin()), list[n]);
-			return *iterate(pos,dataSource.begin());
+				dataSource.insert(iterate(pos+n), list[n]);
+			return *iterate(pos);
 		}
 		T& insert(Index pos, vector<T>& vec)
 		{
-			dataSource.insert(iterate(pos, dataSource.begin()), vec.begin(), vec.end());
-			return *iterate(pos, dataSource.begin());
+			dataSource.insert(iterate(pos), vec.begin(), vec.end());
+			return *iterate(pos);
 		}
 		T& insert(Index pos, list<T>& list)
 		{
-			dataSource.insert(iterate(pos, dataSource.begin()), list.begin(), list.end());
-			return *iterate(pos, dataSource.begin());
+			dataSource.insert(iterate(pos), list.begin(), list.end());
+			return *iterate(pos);
 		}
 		T& insert(Index pos, initializer_list<T>& ini)
 		{
-			dataSource.insert(iterate(pos, dataSource.begin()),ini.begin(), ini.end());
-			return *iterate(pos, dataSource.begin());
+			dataSource.insert(iterate(pos),ini.begin(), ini.end());
+			return *iterate(pos);
 		}
 		T& get(Index index)
 		{
-			return *iterate(index, dataSource.begin());
+			return *iterate(index);
 		}
 		int indexOf(T& data) const override
 		{
@@ -369,27 +383,27 @@ namespace liaoUtil
 		void subList(List& destination, Index start, Index end) override
 		{
 			for (int n = start; n <= end; ++n)
-				destination.add(*iterate(n, dataSource.begin()));
+				destination.add(*iterate(n));
 		}
 		void copyFrom(List& obj) override
 		{
 			dataSource.resize(obj.size());
 			for (int n = 0; n < size(); ++n)
-				*iterate(n, dataSource.begin()) = obj[n];
+				*iterate(n) = obj[n];
 		}
 		void copyTo(List& obj) override
 		{
 			obj.resize(size());
 			for (int n = 0; n < size(); ++n)
-				obj[n] = *iterate(n, dataSource.begin());
+				obj[n] = *iterate(n);
 		}
 		void set(Index pos, T& value)
 		{
-			*iterate(pos, dataSource.begin()) = value;
+			*iterate(pos) = value;
 		}
 		void swap(Index pos1, Index pos2)
 		{
-			std::swap(*iterate(pos1, dataSource.begin()), *iterate(pos2, dataSource.begin()));
+			std::swap(*iterate(pos1), *iterate(pos2));
 		}
 		void reverse()
 		{

@@ -149,6 +149,7 @@
     <ClInclude Include="include\ListNode.h" />
     <ClInclude Include="include\Node.h" />
     <ClInclude Include="include\Set.h" />
+    <ClInclude Include="include\SortedList.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="source\def.cpp" />

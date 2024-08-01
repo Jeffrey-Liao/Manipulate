@@ -44,7 +44,7 @@ namespace liaoUtil
 		/*
 		* 根据给定值引用创建一个新元素
 		*/
-		//virtual void newValue(const T& value) = 0;
+		virtual void newValue(const T& value) = 0;
 		/*
 		* 根据给定值引用和给定位置创建一个新元素
 		*/
@@ -79,7 +79,7 @@ namespace liaoUtil
 		void StdToStd(Receiver& rcv, Container& obj)
 		{
 			for (auto& var : obj)
-				rcv.emplace_back(var);
+				newValue(var);
 		}
 	public:
 		//当前classID

@@ -10,12 +10,15 @@ namespace liaoUtil
 	{
 		using List = List<T>;
 		vector<T> dataSource;
-	private:
+	protected:
 		void allocate(int size) override
 		{
 			dataSource.reserve(size);
 		}
-		
+		void newValue(const T& value)override
+		{ 
+			dataSource.push_back(value);
+		}
 		void newValue(List& obj)
 		{
 			for (int n = 0; n < obj.size(); ++n)

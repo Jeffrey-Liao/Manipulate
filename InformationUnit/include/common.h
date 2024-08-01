@@ -19,5 +19,4 @@
 #define DYNAMICS template<class T,class NodeType>
 #define INTERFACE class
 #define STD std::
-
 #endif
