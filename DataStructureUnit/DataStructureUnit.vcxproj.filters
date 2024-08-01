@@ -60,9 +60,12 @@
     <ClInclude Include="include\SortedList.h">
       <Filter>头文件\List</Filter>
     </ClInclude>
+    <ClInclude Include="include\NullValue.h">
+      <Filter>头文件\Node</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="source\def.cpp">
+    <ClCompile Include="source\NullValueDef.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>

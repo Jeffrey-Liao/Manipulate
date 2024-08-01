@@ -87,11 +87,11 @@ namespace liaoUtil
 		{
 			return dataSource.empty();
 		}
-		T& first()override
+		const T& first()override
 		{
 			return dataSource[0];
 		}
-		T& last() override
+		const T& last() override
 		{
 			return dataSource[dataSource.size() - 1];
 		}

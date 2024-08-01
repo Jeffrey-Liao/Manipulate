@@ -10,7 +10,6 @@ namespace liaoUtil
 	{
 		using ListNode = ListNode<T>;
 		using List = List<T>;
-		using LinkNodeStd = LinkNodeStd<T>;
 	protected:
 		list<T> dataSource;
 	public:
@@ -74,7 +73,7 @@ namespace liaoUtil
 				itor = dataSource.end(),end = dataSource.size()-pos;
 			else
 				itor = dataSource.begin(),end = pos;
-			for (int n = 0; n < end; ++n)
+			for (int n = 0; n < end&&pos>0; ++n)
 			{
 				if (pos > (dataSource.size() / 2))
 					itor--;
@@ -92,7 +91,7 @@ namespace liaoUtil
 			dataSource.clear();
 		}
 	public:
-		string classID() const override
+		virtual string classID() const override
 		{
 			return "LinkList";
 		}
@@ -104,47 +103,47 @@ namespace liaoUtil
 		{
 			return dataSource.empty();
 		}
-		T& first()override
+		const T& first()override
 		{
 			return *dataSource.begin();
 		}
-		T& last()override
+		const T& last()override
 		{
 			return *(--dataSource.end());
 		}
 
-		T& add(const T& data)override
+		virtual T& add(const T& data)override
 		{
 			newValue(data);
-			return last();
+			return *(--dataSource.end());
 		}
-		T& add(List& obj) override
+		virtual T& add(List& obj) override
 		{
 			newValue(obj);
 			return *iterate(dataSource.size()-obj.size());
 		}
-		T& add(int number, T& value)
+		virtual T& add(int number, T& value)
 		{
 			for (int n = 0; n < number; ++n)
 				newValue(value);
 			return *iterate(dataSource.size()-number);
 		}
-		T& add(vector<T>& vec)
+		virtual T& add(vector<T>& vec)
 		{
 			this->StdToStd(dataSource,vec);
 			return *iterate(dataSource.size() - vec.size());
 		}
-		T& add(list<T>& ls)
+		virtual T& add(list<T>& ls)
 		{
 			this->StdToStd(dataSource, ls);
 			return *iterate(dataSource.size() - ls.size());
 		}
-		T& add(initializer_list<T>& ini)
+		virtual T& add(initializer_list<T>& ini)
 		{
 			this->StdToStd(dataSource, ini);
 			return* iterate(dataSource.size() - ini.size());
 		}
-		T& add(T* arr, int size)
+		virtual T& add(T* arr, int size)
 		{
 			for (int n = 0; n < size; ++n)
 			{
@@ -152,13 +151,15 @@ namespace liaoUtil
 			}
 			return *iterate(dataSource.size() - size );
 		}
-		T& add(const T&& value)
+		virtual T& add(const T&& value)
 		{
-			return newValue(value);
+			newValue(value);
+			return *(--dataSource.end());
 		}
-		T& add(int number, T&& value) override
+		virtual T& add(int number, T&& value) override
 		{
-			return newValue(value);
+			newValue(value);
+			return * (--dataSource.end());
 		}
 		void remove(Index pos)
 		{
@@ -219,31 +220,31 @@ namespace liaoUtil
 			for (int n = 0; n < size; ++n)
 				dataSource.erase(std::remove(dataSource.begin(), dataSource.end(), arr[n]));
 		}
-		T& insert(Index pos, T& value)
+		virtual T& insert(Index pos, T& value)
 		{
 			return *dataSource.insert(iterate(pos), value);
 		}
-		T& insert(Index pos, T&& value)override
+		virtual T& insert(Index pos, T&& value)override
 		{
 			return *dataSource.insert(iterate(pos), value);
 		}
-		T& insert(Index pos, List& list)
+		virtual T& insert(Index pos, List& list)
 		{
 			for (int n = 0; n < list.size(); ++n)
 				dataSource.insert(iterate(pos+n), list[n]);
 			return *iterate(pos);
 		}
-		T& insert(Index pos, vector<T>& vec)
+		virtual T& insert(Index pos, vector<T>& vec)
 		{
 			dataSource.insert(iterate(pos), vec.begin(), vec.end());
 			return *iterate(pos);
 		}
-		T& insert(Index pos, list<T>& list)
+		virtual T& insert(Index pos, list<T>& list)
 		{
 			dataSource.insert(iterate(pos), list.begin(), list.end());
 			return *iterate(pos);
 		}
-		T& insert(Index pos, initializer_list<T>& ini)
+		virtual T& insert(Index pos, initializer_list<T>& ini)
 		{
 			dataSource.insert(iterate(pos),ini.begin(), ini.end());
 			return *iterate(pos);
@@ -296,16 +297,16 @@ namespace liaoUtil
 			}
 			return true;
 		}
-		void assign(vector<T>& vec)
+		virtual void assign(vector<T>& vec)
 		{
 			dataSource.resize(vec.size());
 			std::copy(vec.begin(), vec.end(), dataSource.begin());
 		}
-		void assign(list<T>& list)
+		virtual void assign(list<T>& list)
 		{
 			dataSource = list;
 		}
-		void assign(initializer_list<T>& ini)
+		virtual void assign(initializer_list<T>& ini)
 		{
 			dataSource.resize(ini.size());
 			std::copy(ini.begin(), ini.end(), dataSource.begin());
@@ -401,7 +402,7 @@ namespace liaoUtil
 		{
 			*iterate(pos) = value;
 		}
-		void swap(Index pos1, Index pos2)
+		virtual void swap(Index pos1, Index pos2)
 		{
 			std::swap(*iterate(pos1), *iterate(pos2));
 		}

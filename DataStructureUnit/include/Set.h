@@ -98,12 +98,12 @@ namespace liaoUtil
 		{
 			return dataSource.empty();
 		}
-		T& first()
+		const T& first()
 		{
 			value = *dataSource.begin();
 			return value;
 		}
-		T& last()
+		const T& last()
 		{
 			value = *(--dataSource.end());
 			return value;
@@ -229,32 +229,32 @@ namespace liaoUtil
 		//不执行操作，默认返回第一个元素
 		T& insert(Index pos, T&& value)
 		{
-			return first();
+			return value;
 		}
 		//不执行操作，默认返回第一个元素
 		T& insert(Index pos, T& value)
 		{
-			return first();
+			return value;
 		}
 		//不执行操作，默认返回第一个元素
 		T& insert(Index pos, List& list)
 		{
-			return first();
+			return value;
 		}
 		//不执行操作，默认返回第一个元素
 		T& insert(Index pos, vector<T>& vec)
 		{
-			return first();
+			return value;
 		}
 		//不执行操作，默认返回第一个元素
 		T& insert(Index pos, list<T>& list)
 		{
-			return first();
+			return value;
 		}
 		//不执行操作，默认返回第一个元素
 		T& insert(Index pos, initializer_list<T>& ini)
 		{
-			return first();
+			return value;
 		}
 		//获取指定位置的元素引用
 		T& get(Index index)

@@ -92,9 +92,9 @@ namespace liaoUtil
 		//当前容器是否为空
 		virtual bool isEmpty()const = 0;
 		//获取当前容器的第一个元素的引用
-		virtual T& first()= 0;
+		virtual const T& first()= 0;
 		//获取当前容器最后一个元素的引用
-		virtual T& last()= 0;
+		virtual const T& last()= 0;
 
 		//根据给定的右值新增一个元素，返回新元素的引用
 		virtual T& add(const T&& value) = 0;
