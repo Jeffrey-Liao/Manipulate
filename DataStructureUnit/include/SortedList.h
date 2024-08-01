@@ -13,7 +13,7 @@ namespace liaoUtil
 	private:
 		static int upperDivide(int val)
 		{
-			return val % 2 == 0 ? val / 2 : val / 2 + 1;
+			return val  == 1||val == 0 ? val : val / 2;
 		}
 		list::iterator rmove(list::iterator itor, int step)
 		{
@@ -29,20 +29,25 @@ namespace liaoUtil
 		}
 		void newValue(const T& value) override
 		{
-			int pos = this->dataSource.size();
-			auto itor = this->dataSource.end();
+			bool complete = false;
+			auto itor = this->dataSource.begin();
 			if (!this->dataSource.empty())
 			{
-				itor--;
-				while (pos != 0)
+				while (itor != this->dataSource.end())
 				{
-					if (*itor < value)
-						itor=rmove(itor, pos=upperDivide(pos));
-					else
-						itor = lmove(itor, pos = upperDivide(pos));
+					if (*itor > value)
+					{
+						this->dataSource.insert(itor, value);
+						complete = true;
+						break;
+					}
+					itor++;
 				}
+				if(!complete)
+					this->dataSource.insert(itor, value);
 			}
-			this->dataSource.insert(itor, value);
+			else
+				this->dataSource.insert(itor, value);
 		}
 	public:
 		SortedList()

@@ -1,4 +1,5 @@
 #include "DataStructure.h"
+#include "random"
 using namespace liaoUtil;
 using namespace std;
 class UnitTest
@@ -6,17 +7,17 @@ class UnitTest
 public:
 	static bool SortedListTest()
 	{
+		std::default_random_engine generator(std::random_device{}());
+
+		// 创建一个均匀分布，范围为 [0, 99]
+		std::uniform_int_distribution<int> distribution(0, 99);
+
+		
 		List<int>& test = *new SortedList<int>();
 		cout << format("class ID: {}\n", test.classID());
-		test.add(1);
-		test.add(5);
-		test.add(2);
-		test.add(9);
-		test.add(7);
-		test.add(6);
-		test.add(8);
-		test.add(10);
-		test.add(3);
+		for (int n = 0; n < 100; ++n)
+			test.add(distribution(generator));
+		test.remove(30);
 		cout << test.toString();
 		return true;
 	}
