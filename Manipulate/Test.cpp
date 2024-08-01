@@ -8,8 +8,7 @@ int main()
 {
 	List<int>& test = *new LinkList<int>();
 	List<int>& test2 = *new ArrayList<int>();
-	vector<int> testv;
-	testv.push_back(3);
+	List<int>& test3 = *new Set<int>();
 	test = { 1,2,3,4,5,6 };
 	test.add(313);
 	test.remove(3);

@@ -137,6 +137,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="include\Algorithm.h" />
     <ClInclude Include="include\ArrayList.h" />
     <ClInclude Include="include\ArrayNode.h" />
     <ClInclude Include="include\DataStructure.h" />

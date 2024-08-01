@@ -22,9 +22,6 @@ namespace liaoUtil
 		LinkList(List& obj)
 			:List(obj)
 		{}
-		LinkList(List& obj)
-			:List(obj)
-		{}
 		LinkList(vector<T>& obj)
 		{
 			this->StdToStd(dataSource,obj);

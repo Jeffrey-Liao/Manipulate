@@ -14,17 +14,12 @@ namespace liaoUtil
 	class Set:public List<T>
 	{
 		using List = List<T>;
-		using set = set<T>;
-		set dataSource;
+		set<T> dataSource;
 		T value;
 	private:
 		void allocate(int size)
 		{
 			//无法对set执行allocate操作;
-		}
-		bool validPos(Index pos)
-		{
-			return pos < dataSource.size();
 		}
 		template<class Container>
 		void StdToSet(Container& obj)
@@ -32,12 +27,12 @@ namespace liaoUtil
 			for (auto& val : obj)
 				dataSource.insert(val);
 		}
-		set::iterator iterate(int pos)
+		set<T>::iterator iterate(int pos)
 		{
-			set::iterator itor;
+			auto itor = dataSource.begin();
 			int end = 0;
 			bool dir = false;
-			if ((dir = pos > dataSource.size()) / 2)
+			if ((dir = pos > dataSource.size() / 2) )
 			{
 				itor = dataSource.end();
 				end = dataSource.size() - pos+1;
@@ -54,7 +49,15 @@ namespace liaoUtil
 				else
 					--itor;
 			}
-
+			return itor;
+		}
+		bool validPos(Index index)const override
+		{
+			return index < dataSource.size();
+		}
+		void free()override
+		{
+			dataSource.clear();
 		}
 	public:
 		Set()
@@ -78,7 +81,7 @@ namespace liaoUtil
 		{
 			this->StdToSet(ls);
 		}
-		Set(set& obj)
+		Set(set<T>& obj)
 		{
 			dataSource = obj;
 		}
@@ -105,10 +108,10 @@ namespace liaoUtil
 			value = *(--dataSource.end());
 			return value;
 		}
-		T& add(T&& value)
+		T& add(const T&& value)
 		{
 			this->value = *dataSource.insert(value).first;
-			return value;
+			return this->value;
 		}
 		T& add(const T& value)
 		{
@@ -333,7 +336,10 @@ namespace liaoUtil
 				result.push_back(val);
 			return result;
 		}
-
+		bool isEmpty()const override
+		{
+			return dataSource.empty();
+		}
 		//检查当前容器是否包含指定的值
 		bool contains(T&& value)const
 		{
@@ -465,7 +471,7 @@ namespace liaoUtil
 		//不会执行任何操作
 		void resize(Index newSize)
 		{
-
+			allocate(newSize);
 		}
 	};
 }
