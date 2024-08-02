@@ -34,10 +34,22 @@ namespace liaoUtil
 			copyFrom(obj);
 		}
 	protected:
-		void emptyListCheck(string functionName)
+		void emptyListCheck(const char* functionName)
 		{
-			if(isEmpty())
-				throw new 
+			if (isEmpty())
+				throw new EmptyContainerException(classID(), functionName);
+		}
+		void outRangeCheck(Index index, const char* functionName)
+		{
+			if (!validPos(index))
+				throw new OutOfRangeException(classID(), functionName);
+		}
+		void validIntervalCheck(Index start, Index end, const char* functionName)
+		{
+			if (start > end)
+				throw new InvalidOperationException(classID(), functionName, "Given interval is invalid because start index is bigger than end index");
+			outRangeCheck(start);
+			outRangeCheck(end);
 		}
 		using vector = std::vector<T>;
 		using list = std::list<T>;

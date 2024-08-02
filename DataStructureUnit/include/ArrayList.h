@@ -51,8 +51,7 @@ namespace liaoUtil
 		{}
 		ArrayList(int size)
 			:List(size)
-		{
-		}
+		{}
 		ArrayList(List& obj)
 			:List(obj)
 		{}
@@ -142,22 +141,13 @@ namespace liaoUtil
 		}
 		void remove(Index pos) throw() override
 		{
-			if (validPos(pos))
-				dataSource.erase(dataSource.begin() + pos);
-			else
-				throw new OutOfRangeException("ArrayList", "remove(Index)");
+			this->outRangeCheck(pos,"remove(Index)");
+			dataSource.erase(dataSource.begin() + pos);
 		}
 		void remove(Index start, Index end)throw()override
 		{
-			if (start < end)
-			{
-				if (validPos(start) && validPos(end))
-					dataSource.erase(dataSource.begin() + start, dataSource.begin() + end);
-				else
-					throw new OutOfRangeException("ArrayList", "remove(Index,Index)");
-			}
-			else
-				throw new InvalidOperationException("ArrayList", "remove(Index,Index)","Given interval format incorrect. The end index bigger than begin index");
+			this->validIntervalCheck(start, end,"remove(Index,Index)");
+			dataSource.erase(dataSource.begin() + start, dataSource.begin() + end);
 		}
 		void remove(T& value)override
 		{
@@ -199,76 +189,49 @@ namespace liaoUtil
 
 		T& insert(Index pos, T& value) throw()override
 		{
-			if (validPos(pos))
-			{
-				dataSource.insert(dataSource.begin() + pos, value);
-				return dataSource[pos];
-			}
-			else
-				throw new OutOfRangeException(classID(), "insert(Index,T&)");
+			this->outRangeCheck(pos, "insert(Index,T&)");
+			dataSource.insert(dataSource.begin() + pos, value);
+			return dataSource[pos];
 		}
 		T& insert(Index pos, T&& value)throw()override
 		{
-			if (validPos(pos)) 
-			{
-				dataSource.insert(dataSource.begin() + pos, value);
-				return dataSource[pos];
-			}
-			else
-				throw new OutOfRangeException(classID(), "insert(Index,T&&)");
-						
+			this->outRangeCheck(pos, "insert(Index,T&&)");
+			dataSource.insert(dataSource.begin() + pos, value);
+			return dataSource[pos];	
 		}
 		T& insert(Index pos, List& list)throw()override
 		{
-			if (validPos(pos))
-			{
-				dataSource.reserve(list.size());
-				for (int n = 0; n < list.size(); ++n)
-					dataSource.insert(dataSource.begin() + pos, list[n]);
-				return dataSource[pos];
-			}
-			else
-				throw new OutOfRangeException(classID(), "insert(Index,List&)");
+			this->outRangeCheck(pos, "insert(Index,List&)");
+			dataSource.reserve(list.size());
+			for (int n = 0; n < list.size(); ++n)
+				dataSource.insert(dataSource.begin() + pos, list[n]);
+			return dataSource[pos];
 		}
 		T& insert(Index pos, vector<T>& vec)throw()override
 		{
-			if (validPos(pos))
-			{
-				dataSource.reserve(vec.size());
-				dataSource.insert(dataSource.begin() + pos, vec.begin(), vec.end());
-				return dataSource[pos];
-			}
-			else
-				throw new OutOfRangeException(classID(), "insert(Index,vector&)");
+			this->outRangeCheck(pos, "insert(Index,vector&)");
+			dataSource.reserve(vec.size());
+			dataSource.insert(dataSource.begin() + pos, vec.begin(), vec.end());
+			return dataSource[pos];
 		}
 		T& insert(Index pos, list<T>& list)throw()override
 		{
-			if (validPos(pos))
-			{
+				this->outRangeCheck(pos, "insert(Index,list&)");
 				dataSource.reserve(list.size());
 				dataSource.insert(dataSource.begin() + pos, list.begin(), list.end());
 				return dataSource[pos];
-			}
-			else
-				throw new OutOfRangeException(classID(), "insert(Index,list&)");
 		}
 		T& insert(Index pos, initializer_list<T>& ini)throw()override
 		{
-			if (validPos(pos))
-			{
+				this->outRangeCheck(pos, "insert(Index,initializer_list&)");
 				dataSource.reserve(ini.size());
 				dataSource.insert(dataSource.begin() + pos, ini.begin(), ini.end());
 				return dataSource[pos];
-			}
-			else
-				throw new OutOfRangeException(classID(), "insert(Index, initializer_list&)");
 		}
 		T& get(Index index)throw()override
 		{
-			if (validPos(index))
-				return dataSource[index];
-			else
-				throw new OutOfRangeException(classID(), "get(Index)");
+			this->outRangeCheck(index, "get(Index)");
+			return dataSource[index];
 		}
 		int indexOf(T& data)const override
 		{
@@ -387,8 +350,9 @@ namespace liaoUtil
 			}
 			return true;
 		 }
-		void sort(void(*sortFunc)(List& _this) = NULL)override 
+		void sort(void(*sortFunc)(List& _this) = NULL) throw()override 
 		{
+			this->emptyListCheck("sort(sortFunc*)");
 			if (sortFunc != NULL)
 				sortFunc(*this);
 			else
@@ -406,13 +370,9 @@ namespace liaoUtil
 		}
 		void subList(List& destination,Index start, Index end)throw() override
 		{
-			if (start > end)
-				throw new InvalidOperationException(classID(), "subList(List&,Index,Index)", "Given interval format incorrect. The end index bigger than begin index");
-			if (validPos(start) && validPos(end))
-				for (int n = start; n <= end; ++n)
-					destination.add(dataSource[n]);
-			else
-				throw new OutOfRangeException(classID(), "subList");
+			this->validIntervalCheck(start, end, "subList(List&,Index,Index)");
+			for (int n = start; n <= end; ++n)
+				destination.add(dataSource[n]);
 		}
 		void copyFrom(List& obj) override
 		{
@@ -431,20 +391,18 @@ namespace liaoUtil
 		}
 		void set(Index pos, T& value)throw()override
 		{
-			if( validPos(pos))
-				dataSource[pos] = value;
-			else
-				throw new OutOfRangeException(classID(), "subList");
+			this->outRangeCheck(pos, "set(Index,T&)");
+			dataSource[pos] = value;
 		}
 		void swap(Index pos1, Index pos2) throw()override
 		{
-			if (validPos(pos1)&& validPos(pos2))
+			this->outRangeCheck(pos1,"swap");
+			this->outRangeCheck(pos2, "swap");
 				std::swap(dataSource[pos1], dataSource[pos2]);
-			else
-				throw new OutOfRangeException(classID(), "subList");
 		}
-		void reverse()override
+		void reverse() throw()override
 		{
+			this->emptyListCheck("reverse()");
 			std::reverse(dataSource.begin(), dataSource.end());
 		}
 		void resize(Index newSize)override
