@@ -59,6 +59,56 @@ namespace liaoUtil
 		{
 			dataSource.clear();
 		}
+		//不执行操作，默认返回第一个元素
+		T& insert(Index pos, T&& value)
+		{
+			return value;
+		}
+		//不执行操作，默认返回第一个元素
+		T& insert(Index pos, T& value)
+		{
+			return value;
+		}
+		//不执行操作，默认返回第一个元素
+		T& insert(Index pos, List& list)
+		{
+			return value;
+		}
+		//不执行操作，默认返回第一个元素
+		T& insert(Index pos, vector<T>& vec)
+		{
+			return value;
+		}
+		//不执行操作，默认返回第一个元素
+		T& insert(Index pos, list<T>& list)
+		{
+			return value;
+		}
+		//不执行操作，默认返回第一个元素
+		T& insert(Index pos, initializer_list<T>& ini)
+		{
+			return value;
+		}
+		//不执行任何操作，因为set已经是排序好的了
+		void sort(void(*sortFunc)(List& _this) = NULL)
+		{
+
+		}
+		//不会执行任何操作，因为set已经是有序的了
+		void swap(Index pos1, Index pos2)
+		{
+
+		}
+		//不会执行任何操作，因为set已经是有序的了
+		virtual void reverse()
+		{
+
+		}
+		//不会执行任何操作
+		void resize(Index newSize)
+		{
+			allocate(newSize);
+		}
 	public:
 		Set()
 			:List()
@@ -226,36 +276,7 @@ namespace liaoUtil
 			for (int n = 0; n < size; ++n)
 				dataSource.erase(arr[n]);
 		 }
-		//不执行操作，默认返回第一个元素
-		T& insert(Index pos, T&& value)
-		{
-			return value;
-		}
-		//不执行操作，默认返回第一个元素
-		T& insert(Index pos, T& value)
-		{
-			return value;
-		}
-		//不执行操作，默认返回第一个元素
-		T& insert(Index pos, List& list)
-		{
-			return value;
-		}
-		//不执行操作，默认返回第一个元素
-		T& insert(Index pos, vector<T>& vec)
-		{
-			return value;
-		}
-		//不执行操作，默认返回第一个元素
-		T& insert(Index pos, list<T>& list)
-		{
-			return value;
-		}
-		//不执行操作，默认返回第一个元素
-		T& insert(Index pos, initializer_list<T>& ini)
-		{
-			return value;
-		}
+		
 		//获取指定位置的元素引用
 		T& get(Index index)
 		{
@@ -411,11 +432,7 @@ namespace liaoUtil
 			for (auto& val : ini)
 				dataSource.insert(val);
 		}
-		//不执行任何操作，因为set已经是排序好的了
-		void sort(void(*sortFunc)(List& _this) = NULL)
-		{
 
-		}
 		//将set内被选中的已有的元素删除，操作后重新插入
 		virtual void apply(void(*operation)(T& value))
 		{
@@ -458,21 +475,8 @@ namespace liaoUtil
 			dataSource.erase(iterate(pos));
 			dataSource.insert(value);
 		}
-		//不会执行任何操作，因为set已经是有序的了
-		void swap(Index pos1, Index pos2)
-		{
 
-		}
-		//不会执行任何操作，因为set已经是有序的了
-		virtual void reverse()
-		{
 
-		}
-		//不会执行任何操作
-		void resize(Index newSize)
-		{
-			allocate(newSize);
-		}
 	};
 }
 

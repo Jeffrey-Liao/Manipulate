@@ -8,7 +8,6 @@ namespace liaoUtil
 	DYNAMIC
 	class LinkList :public List<T>
 	{
-		using ListNode = ListNode<T>;
 		using List = List<T>;
 	protected:
 		list<T> dataSource;
@@ -398,7 +397,7 @@ namespace liaoUtil
 			for (int n = 0; n < size(); ++n)
 				obj[n] = *iterate(n);
 		}
-		void set(Index pos, T& value)
+		virtual void set(Index pos, T& value)
 		{
 			*iterate(pos) = value;
 		}
@@ -410,7 +409,7 @@ namespace liaoUtil
 		{
 			std::reverse(dataSource.begin(), dataSource.end());
 		}
-		void resize(Index newSize)
+		virtual void resize(Index newSize)
 		{
 			allocate(newSize);
 		}

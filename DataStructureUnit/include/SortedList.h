@@ -80,6 +80,47 @@ namespace liaoUtil
 			else
 				this->dataSource.insert(itor, value);
 		}
+		T& insert(Index pos, T& value)
+		{
+			*this->dataSource.insert(this->iterate(pos), value);
+			return value;
+		}
+		T& insert(Index pos, T&& value)override
+		{
+			*this->dataSource.insert(this->iterate(pos), value);
+			return this->value;
+		}
+		T& insert(Index pos, List& list)
+		{
+			for (int n = 0; n < list.size(); ++n)
+				this->dataSource.insert(this->iterate(pos + n), list[n]);
+			return this->value;
+		}
+		T& insert(Index pos, vector<T>& vec)
+		{
+			this->dataSource.insert(this->iterate(pos), vec.begin(), vec.end());
+			return this->value;
+		}
+		T& insert(Index pos, list& list)
+		{
+			this->dataSource.insert(this->iterate(pos), list.begin(), list.end());
+			return this->value;
+		}
+		T& insert(Index pos, initializer_list<T>& ini)
+		{
+			this->dataSource.insert(this->iterate(pos), ini.begin(), ini.end());
+			return this->value;
+		}
+		void swap(Index pos1, Index pos2)
+		{
+
+		}
+		void set(Index pos, T& value)
+		{
+		}
+		void resize(Index newSize)
+		{
+		}
 	public:
 		SortedList()
 			:LinkList()
@@ -159,42 +200,7 @@ namespace liaoUtil
 			newValue(value);
 			return this->value;
 		}
-		T& insert(Index pos, T& value)
-		{
-			*this->dataSource.insert(this->iterate(pos), value);
-			return value;
-		}
-		T& insert(Index pos, T&& value)override
-		{
-			*this->dataSource.insert(this->iterate(pos), value);
-			return this->value;
-		}
-		T& insert(Index pos, List& list)
-		{
-			for (int n = 0; n < list.size(); ++n)
-				this->dataSource.insert(this->iterate(pos + n), list[n]);
-			return this->value;
-		}
-		T& insert(Index pos, vector<T>& vec)
-		{
-			this->dataSource.insert(this->iterate(pos), vec.begin(), vec.end());
-			return this->value;
-		}
-		T& insert(Index pos, list& list)
-		{
-			this->dataSource.insert(this->iterate(pos), list.begin(), list.end());
-			return this->value;
-		}
-		T& insert(Index pos, initializer_list<T>& ini)
-		{
-			this->dataSource.insert(this->iterate(pos), ini.begin(), ini.end());
-			return this->value;
-		}
-		T& get(Index index)
-		{
-			this->value = *this->iterate(index);
-			return this->value;
-		}
+		
 		void assign(vector<T>& vec)
 		{
 			this->dataSource.clear();
@@ -209,6 +215,11 @@ namespace liaoUtil
 		{
 			this->dataSource.clear();
 			this->StdToStd(this->dataSource, ini);
+		}
+		T& get(Index index)
+		{
+			this->value = *this->iterate(index);
+			return this->value;
 		}
 	};
 }

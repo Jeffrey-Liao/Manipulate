@@ -146,6 +146,7 @@
     <ClInclude Include="include\InvalidArgumentException.h" />
     <ClInclude Include="include\InvalidOperationException.h" />
     <ClInclude Include="include\LiaoException.h" />
+    <ClInclude Include="include\NoOperationException.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="source\InforDef.cpp" />

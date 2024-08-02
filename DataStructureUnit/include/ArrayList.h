@@ -1,8 +1,6 @@
 #ifndef ARRAYLIST_H
 #define ARRAYLIST_H
-#include "ArrayNode.h"
 #include "List.h"
-
 namespace liaoUtil
 {
 	DYNAMIC

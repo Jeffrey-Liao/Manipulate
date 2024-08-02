@@ -1,6 +1,8 @@
 #ifndef NODE_H
 #define NODE_H
 #include"common.h"
+#include"LiaoException.h"
+#include"InvalidOperationException.h"
 namespace liaoUtil
 {
 	DYNAMIC

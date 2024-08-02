@@ -27,9 +27,6 @@
     <ClInclude Include="include\Node.h">
       <Filter>头文件\Node</Filter>
     </ClInclude>
-    <ClInclude Include="include\ListNode.h">
-      <Filter>头文件\Node</Filter>
-    </ClInclude>
     <ClInclude Include="include\LinkNode.h">
       <Filter>头文件\Node</Filter>
     </ClInclude>
@@ -41,9 +38,6 @@
     </ClInclude>
     <ClInclude Include="include\LinkList.h">
       <Filter>头文件\List</Filter>
-    </ClInclude>
-    <ClInclude Include="include\ArrayNode.h">
-      <Filter>头文件\Node</Filter>
     </ClInclude>
     <ClInclude Include="include\ArrayList.h">
       <Filter>头文件\List</Filter>
@@ -62,6 +56,9 @@
     </ClInclude>
     <ClInclude Include="include\NullValue.h">
       <Filter>头文件\Node</Filter>
+    </ClInclude>
+    <ClInclude Include="include\OneList.h">
+      <Filter>头文件\List</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

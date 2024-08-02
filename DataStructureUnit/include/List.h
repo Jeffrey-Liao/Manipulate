@@ -1,6 +1,7 @@
 #ifndef LIST_H
 #define LIST_H
-#include "ListNode.h"
+#include"common.h"
+#include"LiaoException.h"
 using std::list;
 using std::vector;
 using std::initializer_list;

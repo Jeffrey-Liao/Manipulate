@@ -9,6 +9,7 @@
 #include <format>
 #include <array>
 #include<algorithm>
+#include <initializer_list>
 	using std::cout;
 	using std::string;
 	using std::pair;

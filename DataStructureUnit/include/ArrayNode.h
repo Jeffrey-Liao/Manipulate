@@ -1,6 +1,5 @@
 #ifndef ARRAYNODE_H
 #define ARRAYNODE_H
-#include "ListNode.h"
 namespace liaoUtil
 {
 	using std::vector;
