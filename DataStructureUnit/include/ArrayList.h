@@ -82,10 +82,12 @@ namespace liaoUtil
 		}
 		const T& first()override
 		{
+			this->emptyListCheck("first()");
 			return dataSource[0];
 		}
 		const T& last() override
 		{
+			this->emptyListCheck("last()");
 			return dataSource[dataSource.size() - 1];
 		}
 		T& add(const T& data)override

@@ -146,15 +146,18 @@ namespace liaoUtil
 		}
 		bool isEmpty()
 		{
+
 			return dataSource.empty();
 		}
 		const T& first()
 		{
+			this->emptyListCheck("first()");
 			value = *dataSource.begin();
 			return value;
 		}
 		const T& last()
 		{
+			this->emptyListCheck("last()");
 			value = *(--dataSource.end());
 			return value;
 		}
@@ -224,55 +227,67 @@ namespace liaoUtil
 		 //移除指定位置的元素
 		 void remove(Index pos)
 		 {
+			 this->emptyListCheck("remove(Index)");
+			 this->outRangeCheck(pos);
 			 dataSource.erase(iterate(pos));
 		 }
 		 //移除指定区间的元素
 		 void remove(Index start, Index end)
 		 {
+			 this->emptyListCheck("remove(Index,Index)");
+			 this->validIntervalCheck(start, end,"remove(Index,Index)");
 			 dataSource.erase(iterate(start), iterate(end));
 		 }
 		 //移除第一个指定的元素
 		void remove(T& data)
 		 {
+			this->emptyListCheck("remove(T&)");
 			dataSource.erase(data);
 		 }
 		 //移除第一个指定的元素
 		void remove(T&& data)
 		{
+			this->emptyListCheck("remove(T&&)");
 			dataSource.erase(data);
 		 }
 		 //移除所有指定的元素
 		void removeAll(T& data)
 		{
+			this->emptyListCheck("removeAll(T&)");
 			dataSource.erase(data);
 		 }
 		 //移除第一个存在于initializer中的元素
 		void remove(initializer_list<T>& ini)
 		{
+			this->emptyListCheck("remove(initializer_list<T>&)");
 			for (auto& val : ini)
 				dataSource.erase(val);
 		 }
 		 //移除第一个存在于List中的元素
 		void remove(List& obj)
 		{
+			this->emptyListCheck("remove(List&)");
 			for (int n = 0; n < obj.size(); ++n)
 				dataSource.erase(obj[n]);
 		 }
 		 //移除第一个存在于vector中的元素
 		void remove(vector<T>& vec)
 		{
+			this->emptyListCheck("remove(vector<T>&)");
 			for (auto& val : vec)
 				dataSource.erase(val);
 		 }
 		 //移除第一个存在于list中的元素
 		void remove(list<T>& ls)
 		{
+			this->emptyListCheck("remove(list<T>&)");
 			for (auto& val : ls)
 				dataSource.erase(val);
 		 }
 		 //移除第一个存在于数组中的元素
 		void remove(T* arr, int size)
 		{
+			this->emptyListCheck("remove(T*,int)");
 			for (int n = 0; n < size; ++n)
 				dataSource.erase(arr[n]);
 		 }
@@ -280,6 +295,8 @@ namespace liaoUtil
 		//获取指定位置的元素引用
 		T& get(Index index)
 		{
+			this->emptyListCheck("get(int)");
+			this->outRangeCheck(index, "get(int)");
 			return value =*iterate(index);
 		}
 		int indexOf(T& data)const override
@@ -450,6 +467,8 @@ namespace liaoUtil
 		}
 		void subList(List& destination, Index start, Index end)
 		{
+			this->emptyListCheck("subList(List&,Index,Index)");
+			this->validIntervalCheck(start,end,"subList(List&,Index,Index)")
 			auto itor = iterate(start);
 			for (int n = start; n < end; ++n, itor++)
 				destination.add(*itor);
@@ -472,6 +491,7 @@ namespace liaoUtil
 		}
 		void set(Index pos, T& value)
 		{
+			this->emptyListCheck("set(Index,T&)");
 			dataSource.erase(iterate(pos));
 			dataSource.insert(value);
 		}
