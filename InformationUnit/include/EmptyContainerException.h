@@ -5,6 +5,7 @@ namespace liaoInfor
 {
 	class EmptyContainerException : public CommonException
 	{
+	public:
 		EmptyContainerException(string className, string methodName)
 			:CommonException("EmptyContainer",className,methodName,"You cannot do this operation to an empty container")
 		{}

@@ -6,6 +6,18 @@ using namespace std;
 class UnitTest
 {
 public:
+	static void ArrayListTest()
+	{
+		try
+		{
+			ArrayList<int> test;
+			test.remove(5);
+		}
+		catch (LiaoException* e)
+		{
+			delete e;
+		}
+	}
 	static bool SortedListTest()
 	{
 		std::default_random_engine generator(std::random_device{}());
@@ -35,5 +47,5 @@ public:
 };
 int main()
 {
-	UnitTest::Forward_ListTest();
+	UnitTest::ArrayListTest();
 }

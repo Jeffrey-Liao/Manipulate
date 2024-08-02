@@ -31,7 +31,6 @@ namespace liaoInfor
 	{
 		this->display();
 		instance.write("log.log");
-		abort();
 	}
 	FatalException::~FatalException()
 	{}

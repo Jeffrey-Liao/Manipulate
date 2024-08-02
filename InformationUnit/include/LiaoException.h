@@ -14,7 +14,7 @@ namespace liaoInfor
 	* >>display(): print error message to the console
 	* >>error(): export error message to error.log file
 	*/
-	class LiaoException:std::runtime_error
+	class LiaoException:public std::runtime_error
 	{
 	protected:
 		ExceptionInfor instance;

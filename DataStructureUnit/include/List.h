@@ -48,8 +48,8 @@ namespace liaoUtil
 		{
 			if (start > end)
 				throw new InvalidOperationException(classID(), functionName, "Given interval is invalid because start index is bigger than end index");
-			outRangeCheck(start);
-			outRangeCheck(end);
+			outRangeCheck(start,functionName);
+			outRangeCheck(end,functionName);
 		}
 		using vector = std::vector<T>;
 		using list = std::list<T>;

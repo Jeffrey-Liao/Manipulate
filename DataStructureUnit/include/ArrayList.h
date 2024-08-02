@@ -141,48 +141,58 @@ namespace liaoUtil
 		}
 		void remove(Index pos) throw() override
 		{
+			this->emptyListCheck("remove(Index)");
 			this->outRangeCheck(pos,"remove(Index)");
 			dataSource.erase(dataSource.begin() + pos);
 		}
 		void remove(Index start, Index end)throw()override
 		{
+			this->emptyListCheck("remove(Index,Index)");
 			this->validIntervalCheck(start, end,"remove(Index,Index)");
 			dataSource.erase(dataSource.begin() + start, dataSource.begin() + end);
 		}
 		void remove(T& value)override
 		{
+			this->emptyListCheck("remove(T&)");
 			dataSource.erase(std::remove(dataSource.begin(),dataSource.end(),value));
 		}
 		void remove(T&& value)override
 		{
+			this->emptyListCheck("remove(T&&)");
 			dataSource.erase(std::remove(dataSource.begin(), dataSource.end(), value));
 		}
 		void removeAll(T& data)override
 		{
+			this->emptyListCheck("removeAll(T&)");
 			for (auto itor = std::remove(dataSource.begin(), dataSource.end(), data); itor != dataSource.end();dataSource.erase(itor));
 		}
 		void remove(initializer_list<T>& ini)override
 		{
+			this->emptyListCheck("remove(initializer_list<T>&)");
 			for (auto& var : ini)
 				dataSource.erase(std::remove(dataSource.begin(), dataSource.end(), var));
 		}
 		void remove(List& obj)
 		{
+			this->emptyListCheck("remove(List&)");
 			for (int n = 0; n < obj.size(); ++n)
 				dataSource.erase(std::remove(dataSource.begin(), dataSource.end(), obj[n]));
 		}
 		void remove(vector<T>& vec)override
 		{
+			this->emptyListCheck("remove(vector<T>&)");
 			for (auto& var : vec)
 				dataSource.erase(std::remove(dataSource.begin(), dataSource.end(), var));
 		}
 		void remove(list<T>& ls)override
 		{
+			this->emptyListCheck("remove(list<T>&)");
 			for (auto& var : ls)
 				dataSource.erase(std::remove(dataSource.begin(), dataSource.end(), var));
 		}
 		void remove(T* arr, int size)override
 		{
+			this->emptyListCheck("remove(T*,int)");
 			for (int n = 0; n < size; ++n)
 				dataSource.erase(std::remove(dataSource.begin(), dataSource.end(), arr[n]));
 		}
@@ -230,10 +240,11 @@ namespace liaoUtil
 		}
 		T& get(Index index)throw()override
 		{
+			this->emptyListCheck("get(Index)");
 			this->outRangeCheck(index, "get(Index)");
 			return dataSource[index];
 		}
-		int indexOf(T& data)const override
+		int indexOf(T& data) const override
 		{
 			int n = 0;
 			for (auto& var : dataSource)

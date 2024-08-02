@@ -160,96 +160,112 @@ namespace liaoUtil
 			newValue(value);
 			return * (--dataSource.end());
 		}
-		void remove(Index pos)
+		void remove(Index pos)throw()
 		{
+			this->emptyListCheck("remove(Index)");
+			this->outRangeCheck(pos,"remove(Index)");
 			dataSource.erase(iterate(pos));
 		}
-		void remove(Index start, Index end)
+		void remove(Index start, Index end)throw()
 		{
-			if (start < end && validPos(start) && validPos(end))
+			this->emptyListCheck("remove(Index,Index)");
+			this->validIntervalCheck(start, end,"remove(Index,Index)");
+			auto itor1 = dataSource.begin(), itor2 = dataSource.begin(), itor = dataSource.begin();
+			for (int n = 0; n < dataSource.size(); ++n, itor++)
 			{
-				auto itor1 = dataSource.begin(), itor2 = dataSource.begin(),itor = dataSource.begin();
-				for (int n = 0; n < dataSource.size(); ++n,itor++)
+				if (n == start)
+					itor1 = itor;
+				if (n == end)
 				{
-					if (n == start)
-						itor1 = itor;
-					if (n == end)
-					{
-						itor2 = itor;
-						break;
-					}
+					itor2 = itor;
+					break;
 				}
-				dataSource.erase(itor1, itor2);
 			}
+			dataSource.erase(itor1, itor2);
 		}
-		void remove(T& data)
+		void remove(T& data)throw()
 		{
+			this->emptyListCheck("remove(T&)");
 			dataSource.remove(data);
 		}
-		void remove(T&& value)override
+		void remove(T&& value)throw()override
 		{
+			this->emptyListCheck("remove(T&&)");
 			dataSource.remove(value);
 		}
-		void removeAll(T& data)
+		void removeAll(T& data)throw()
 		{
+			this->emptyListCheck("removeAll(T&)");
 			for (auto itor = std::remove(dataSource.begin(), dataSource.end(), data); itor != dataSource.end(); dataSource.erase(itor));
 		}
 		void remove(initializer_list<T>& ini)
 		{
+			this->emptyListCheck("removeAll(initializer_list<T>&)");
 			for (auto& var : ini)
 				dataSource.erase(std::remove(dataSource.begin(), dataSource.end(), var));
 		}
 		void remove(List& obj)
 		{
+			this->emptyListCheck("removeAll(List&)");
 			for(int n =0;n<obj.size();++n)
 				dataSource.erase(std::remove(dataSource.begin(), dataSource.end(), obj[n]));
 		}
 		void remove(vector<T>& vec)
 		{
+			this->emptyListCheck("removeAll(vector<T>&)");
 			for (auto& var : vec)
 				dataSource.erase(std::remove(dataSource.begin(), dataSource.end(), var));
 		}
 		void remove(list<T>& ls) 
 		{
+			this->emptyListCheck("removeAll(list<T>&)");
 			for (auto& var : ls)
 				dataSource.erase(std::remove(dataSource.begin(), dataSource.end(), var));
 		}
 		void remove(T* arr, int size)
 		{
+			this->emptyListCheck("removeAll(T*,int)");
 			for (int n = 0; n < size; ++n)
 				dataSource.erase(std::remove(dataSource.begin(), dataSource.end(), arr[n]));
 		}
 		virtual T& insert(Index pos, T& value)
 		{
+			this->outRangeCheck(pos,"insert(Index,T&)");
 			return *dataSource.insert(iterate(pos), value);
 		}
 		virtual T& insert(Index pos, T&& value)override
 		{
+			this->outRangeCheck(pos, "insert(Index,T&&)");
 			return *dataSource.insert(iterate(pos), value);
 		}
 		virtual T& insert(Index pos, List& list)
 		{
+			this->outRangeCheck(pos, "insert(Index,List&)");
 			for (int n = 0; n < list.size(); ++n)
 				dataSource.insert(iterate(pos+n), list[n]);
 			return *iterate(pos);
 		}
 		virtual T& insert(Index pos, vector<T>& vec)
 		{
+			this->outRangeCheck(pos, "insert(Index,vector<T>&)");
 			dataSource.insert(iterate(pos), vec.begin(), vec.end());
 			return *iterate(pos);
 		}
 		virtual T& insert(Index pos, list<T>& list)
 		{
+			this->outRangeCheck(pos, "insert(Index,vector<T>&)");
 			dataSource.insert(iterate(pos), list.begin(), list.end());
 			return *iterate(pos);
 		}
 		virtual T& insert(Index pos, initializer_list<T>& ini)
 		{
+			this->outRangeCheck(pos, "insert(Index,vector<T>&)");
 			dataSource.insert(iterate(pos),ini.begin(), ini.end());
 			return *iterate(pos);
 		}
 		T& get(Index index)
 		{
+			this->outRangeCheck(index,"get(Index)");
 			return *iterate(index);
 		}
 		int indexOf(T& data) const override
@@ -365,6 +381,7 @@ namespace liaoUtil
 		}
 		void sort(void(*sortFunc)(List& _this) = NULL)override
 		{
+			this->emptyListCheck("sort(sortFunc*)");
 			if (sortFunc != NULL)
 				sortFunc(*this);
 			else
@@ -382,6 +399,8 @@ namespace liaoUtil
 		}
 		void subList(List& destination, Index start, Index end) override
 		{
+			this->emptyListCheck("subList(List&)");
+			this->validIntervalCheck(start, end, "subList(List&)");
 			for (int n = start; n <= end; ++n)
 				destination.add(*iterate(n));
 		}
@@ -399,10 +418,13 @@ namespace liaoUtil
 		}
 		virtual void set(Index pos, T& value)
 		{
+			this->outRangeCheck(pos, "set(Index,T&)");
 			*iterate(pos) = value;
 		}
 		virtual void swap(Index pos1, Index pos2)
 		{
+			this->outRangeCheck(pos1, "swap(Index,Index)");
+			this->outRangeCheck(pos2, "swap(Index,Index)");
 			std::swap(*iterate(pos1), *iterate(pos2));
 		}
 		void reverse()
