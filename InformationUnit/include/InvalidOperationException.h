@@ -3,7 +3,7 @@
 #include"LiaoException.h"
 namespace liaoInfor
 {
-	class InvalidOperationException :FatalException
+	class InvalidOperationException: public FatalException
 	{
 	public:
 		InvalidOperationException(string className,string methodName,string errorMessage)

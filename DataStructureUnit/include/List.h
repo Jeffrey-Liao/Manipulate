@@ -34,6 +34,11 @@ namespace liaoUtil
 			copyFrom(obj);
 		}
 	protected:
+		void emptyListCheck(string functionName)
+		{
+			if(isEmpty())
+				throw new 
+		}
 		using vector = std::vector<T>;
 		using list = std::list<T>;
 		using initializer_list = std::initializer_list<T>;

@@ -26,11 +26,10 @@ public:
 	{
 		try
 		{
-			throw new CommonException("UnitTest", "Forward_ListTest", "Test Case");
+			throw new InvalidOperationException("UnitTest", "Forward_ListTest", "Test Case");
 		}
 		catch(LiaoException* e)
 		{
-
 		}
 	}
 };

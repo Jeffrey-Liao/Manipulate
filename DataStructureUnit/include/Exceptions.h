@@ -4,4 +4,5 @@
 #include "InvalidArgumentException.h"
 #include "OutOfRangeExecption.h"
 #include "NoOperationException.h"
+#include"EmptyContainerException.h"
 #endif

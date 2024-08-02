@@ -3,7 +3,7 @@
 #include"LiaoException.h"
 namespace liaoInfor
 {
-	class OutOfRangeException:FatalException
+	class OutOfRangeException:public FatalException
 	{
 	public:
 		OutOfRangeException(string className, string methodName)

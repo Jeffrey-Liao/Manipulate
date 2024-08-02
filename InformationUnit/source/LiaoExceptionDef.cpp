@@ -25,7 +25,6 @@ namespace liaoInfor
 	{
 		this->display();
 		instance.write("log.log");
-		abort();
 	}
 	FatalException::FatalException(string exceptionName, string className, string methodName, string message)
 		:LiaoException(exceptionName,className,methodName,message)

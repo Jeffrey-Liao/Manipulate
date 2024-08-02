@@ -142,6 +142,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="include\common.h" />
+    <ClInclude Include="include\EmptyContainerException.h" />
     <ClInclude Include="include\Infor.h" />
     <ClInclude Include="include\InvalidArgumentException.h" />
     <ClInclude Include="include\InvalidOperationException.h" />

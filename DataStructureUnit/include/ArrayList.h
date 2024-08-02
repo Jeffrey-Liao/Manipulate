@@ -197,44 +197,78 @@ namespace liaoUtil
 				dataSource.erase(std::remove(dataSource.begin(), dataSource.end(), arr[n]));
 		}
 
-		T& insert(Index pos, T& value)override
+		T& insert(Index pos, T& value) throw()override
 		{
-			dataSource.insert(dataSource.begin() + pos, value);
-			return dataSource[pos];
+			if (validPos(pos))
+			{
+				dataSource.insert(dataSource.begin() + pos, value);
+				return dataSource[pos];
+			}
+			else
+				throw new OutOfRangeException(classID(), "insert(Index,T&)");
 		}
-		T& insert(Index pos, T&& value)override
+		T& insert(Index pos, T&& value)throw()override
 		{
-			dataSource.insert(dataSource.begin() + pos, value);
-			return dataSource[pos];
+			if (validPos(pos)) 
+			{
+				dataSource.insert(dataSource.begin() + pos, value);
+				return dataSource[pos];
+			}
+			else
+				throw new OutOfRangeException(classID(), "insert(Index,T&&)");
+						
 		}
-		T& insert(Index pos, List& list)override
+		T& insert(Index pos, List& list)throw()override
 		{
-			dataSource.reserve(list.size());
-			for (int n = 0; n < list.size(); ++n)
-				dataSource.insert(dataSource.begin() + pos, list[n]);
-			return dataSource[pos];
+			if (validPos(pos))
+			{
+				dataSource.reserve(list.size());
+				for (int n = 0; n < list.size(); ++n)
+					dataSource.insert(dataSource.begin() + pos, list[n]);
+				return dataSource[pos];
+			}
+			else
+				throw new OutOfRangeException(classID(), "insert(Index,List&)");
 		}
-		T& insert(Index pos, vector<T>& vec)override
+		T& insert(Index pos, vector<T>& vec)throw()override
 		{
-			dataSource.reserve(vec.size());
-			dataSource.insert(dataSource.begin() + pos, vec.begin(), vec.end());
-			return dataSource[pos];
+			if (validPos(pos))
+			{
+				dataSource.reserve(vec.size());
+				dataSource.insert(dataSource.begin() + pos, vec.begin(), vec.end());
+				return dataSource[pos];
+			}
+			else
+				throw new OutOfRangeException(classID(), "insert(Index,vector&)");
 		}
-		T& insert(Index pos, list<T>& list)override
+		T& insert(Index pos, list<T>& list)throw()override
 		{
-			dataSource.reserve(list.size());
-			dataSource.insert(dataSource.begin() + pos, list.begin(), list.end());
-			return dataSource[pos];
+			if (validPos(pos))
+			{
+				dataSource.reserve(list.size());
+				dataSource.insert(dataSource.begin() + pos, list.begin(), list.end());
+				return dataSource[pos];
+			}
+			else
+				throw new OutOfRangeException(classID(), "insert(Index,list&)");
 		}
-		T& insert(Index pos, initializer_list<T>& ini)override
+		T& insert(Index pos, initializer_list<T>& ini)throw()override
 		{
-			dataSource.reserve(ini.size());
-			dataSource.insert(dataSource.begin() + pos, ini.begin(), ini.end());
-			return dataSource[pos];
+			if (validPos(pos))
+			{
+				dataSource.reserve(ini.size());
+				dataSource.insert(dataSource.begin() + pos, ini.begin(), ini.end());
+				return dataSource[pos];
+			}
+			else
+				throw new OutOfRangeException(classID(), "insert(Index, initializer_list&)");
 		}
-		T& get(Index index)override
+		T& get(Index index)throw()override
 		{
-			return dataSource[index];
+			if (validPos(index))
+				return dataSource[index];
+			else
+				throw new OutOfRangeException(classID(), "get(Index)");
 		}
 		int indexOf(T& data)const override
 		{
@@ -370,10 +404,15 @@ namespace liaoUtil
 		{
 			return std::count(dataSource.begin(), dataSource.end(), data);
 		}
-		void subList(List& destination,Index start, Index end) override
+		void subList(List& destination,Index start, Index end)throw() override
 		{
-			for (int n = start; n <= end; ++n)
-				destination.add(dataSource[n]);
+			if (start > end)
+				throw new InvalidOperationException(classID(), "subList(List&,Index,Index)", "Given interval format incorrect. The end index bigger than begin index");
+			if (validPos(start) && validPos(end))
+				for (int n = start; n <= end; ++n)
+					destination.add(dataSource[n]);
+			else
+				throw new OutOfRangeException(classID(), "subList");
 		}
 		void copyFrom(List& obj) override
 		{
@@ -390,13 +429,19 @@ namespace liaoUtil
 			for (int n = 0; n < size(); ++n)
 				obj[n] = dataSource[n];
 		}
-		void set(Index pos, T& value)override
+		void set(Index pos, T& value)throw()override
 		{
-			dataSource[pos] = value;
+			if( validPos(pos))
+				dataSource[pos] = value;
+			else
+				throw new OutOfRangeException(classID(), "subList");
 		}
-		void swap(Index pos1, Index pos2)override
+		void swap(Index pos1, Index pos2) throw()override
 		{
-			std::swap(dataSource[pos1], dataSource[pos2]);
+			if (validPos(pos1)&& validPos(pos2))
+				std::swap(dataSource[pos1], dataSource[pos2]);
+			else
+				throw new OutOfRangeException(classID(), "subList");
 		}
 		void reverse()override
 		{
