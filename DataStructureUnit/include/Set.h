@@ -495,7 +495,10 @@ namespace liaoUtil
 			dataSource.erase(iterate(pos));
 			dataSource.insert(value);
 		}
-
+		~Set()
+		{
+			dataSource.clear();
+		}
 
 	};
 }

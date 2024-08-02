@@ -422,6 +422,10 @@ namespace liaoUtil
 		{
 			dataSource.resize(newSize);
 		}
+		~ArrayList()override
+		{
+			dataSource.clear();
+		}
 	};
 }
 #endif

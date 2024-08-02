@@ -437,6 +437,10 @@ namespace liaoUtil
 		{
 			allocate(newSize);
 		}
+		virtual ~LinkList() override
+		{
+			dataSource.clear();
+		}
 	};
 	class LiaoLinkList
 	{

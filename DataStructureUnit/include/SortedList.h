@@ -221,6 +221,10 @@ namespace liaoUtil
 			this->value = *this->iterate(index);
 			return this->value;
 		}
+		~SortedList()
+		{
+			this->dataSource.clear();
+		}
 	};
 }
 

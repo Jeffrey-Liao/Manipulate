@@ -276,6 +276,7 @@ namespace liaoUtil
 		{
 			assign(vec);
 		}
+		virtual ~List() = 0;
 	};
 }
 
