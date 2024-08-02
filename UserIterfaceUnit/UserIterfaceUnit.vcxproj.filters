@@ -18,5 +18,8 @@
     <ClInclude Include="include\ConsoleUI.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="include\UIBase.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

@@ -7,7 +7,7 @@ namespace liaoInfor
 	{
 	public:
 		InvalidOperationException(string className,string methodName,string errorMessage)
-			:FatalException(className,methodName,errorMessage)
+			:FatalException("InvalidOperation", className, methodName, errorMessage)
 		{}
 	};
 }

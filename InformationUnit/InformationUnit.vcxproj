@@ -147,6 +147,7 @@
     <ClInclude Include="include\InvalidOperationException.h" />
     <ClInclude Include="include\LiaoException.h" />
     <ClInclude Include="include\NoOperationException.h" />
+    <ClInclude Include="include\OutOfRangeExecption.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="source\InforDef.cpp" />

@@ -24,10 +24,6 @@ namespace liaoUtil
 				dataSource.push_back(obj[n]);
 			}
 		}
-		void inner_find(const T& data)
-		{
-			std::find(dataSource.begin(), dataSource.end(), data);
-		}
 		int inner_findIndex(const T& data)
 		{
 			auto var = dataSource.begin();
@@ -96,7 +92,7 @@ namespace liaoUtil
 		T& add(const T& data)override
 		{
 			dataSource.push_back(data);
-			return last();
+			return dataSource[dataSource.size() - 1];
 		}
 		T& add(List& obj)override
 		{
@@ -144,14 +140,24 @@ namespace liaoUtil
 		{
 			return dataSource.emplace_back(value);
 		}
-		void remove(Index pos)override
+		void remove(Index pos) throw() override
 		{
-			dataSource.erase(dataSource.begin() + pos);
+			if (validPos(pos))
+				dataSource.erase(dataSource.begin() + pos);
+			else
+				throw new OutOfRangeException("ArrayList", "remove(Index)");
 		}
-		void remove(Index start, Index end)override
+		void remove(Index start, Index end)throw()override
 		{
-			if(start<end)
-				dataSource.erase(dataSource.begin() + start, dataSource.begin() + end);
+			if (start < end)
+			{
+				if (validPos(start) && validPos(end))
+					dataSource.erase(dataSource.begin() + start, dataSource.begin() + end);
+				else
+					throw new OutOfRangeException("ArrayList", "remove(Index,Index)");
+			}
+			else
+				throw new InvalidOperationException("ArrayList", "remove(Index,Index)","Given interval format incorrect. The end index bigger than begin index");
 		}
 		void remove(T& value)override
 		{

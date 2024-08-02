@@ -36,6 +36,9 @@
     <ClInclude Include="include\NoOperationException.h">
       <Filter>头文件\Exception</Filter>
     </ClInclude>
+    <ClInclude Include="include\OutOfRangeExecption.h">
+      <Filter>头文件\Exception</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="source\InforDef.cpp">

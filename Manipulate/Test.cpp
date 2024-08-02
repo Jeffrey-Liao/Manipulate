@@ -1,5 +1,6 @@
 #include "DataStructure.h"
 #include "random"
+#include <forward_list>
 using namespace liaoUtil;
 using namespace std;
 class UnitTest
@@ -21,8 +22,19 @@ public:
 		cout << test.toString();
 		return true;
 	}
+	static void Forward_ListTest()
+	{
+		try
+		{
+			throw new CommonException("UnitTest", "Forward_ListTest", "Test Case");
+		}
+		catch(LiaoException* e)
+		{
+
+		}
+	}
 };
 int main()
 {
-	UnitTest::SortedListTest();
+	UnitTest::Forward_ListTest();
 }

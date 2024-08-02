@@ -3,21 +3,18 @@
 namespace liaoInfor
 {
 #pragma region LiaoException
-	LiaoException::LiaoException(string type, string className, string methodName, string message)
+	LiaoException::LiaoException(string exceptionName, string className, string methodName, string message)
+		:runtime_error(message)
 	{
-		errorMessage = "[" + type + " :: Exception]" + "(Thrown by : " + className + ")'s function: " + "{" + methodName + "}:  " + message;
-	}
-	void LiaoException::debug()
-	{
-		DebugInfor::instance.write(errorMessage);
+		instance.update(exceptionName, className, methodName, message);
 	}
 	void LiaoException::display()
 	{
-		ErrorInfor::instance.display(this->errorMessage);
+		instance.display();
 	}
-	void LiaoException::error()
+	void LiaoException::toFile(const char* fileName)
 	{
-		ErrorInfor::instance.write(this->errorMessage);
+		instance.write(fileName);
 	}
 	LiaoException::~LiaoException()
 	{}
@@ -26,14 +23,19 @@ namespace liaoInfor
 	FatalException::FatalException(string className, string methodName, string message)
 		:LiaoException("Fatal", className, methodName, message)
 	{
-		this->error();
 		this->display();
+		instance.write("log.log");
+		abort();
+	}
+	FatalException::FatalException(string exceptionName, string className, string methodName, string message)
+		:LiaoException(exceptionName,className,methodName,message)
+	{
+		this->display();
+		instance.write("log.log");
 		abort();
 	}
 	FatalException::~FatalException()
-	{
-
-	}
+	{}
 #pragma endregion
 #pragma region CommonException
 	CommonException::CommonException(string className, string methodName, string message)
@@ -41,16 +43,12 @@ namespace liaoInfor
 	{
 		this->display();
 	}
-	CommonException::~CommonException()
-	{}
-#pragma endregion
-#pragma region DebugException
-	DebugException::DebugException(string className, string methodName, string message)
-		:LiaoException("Debug",className,methodName,message)
+	CommonException::CommonException(string exceptionName,string className, string methodName, string message)
+		:LiaoException(exceptionName, className, methodName, message)
 	{
-		this->debug();
+		this->display();
 	}
-	DebugException::~DebugException()
+	CommonException::~CommonException()
 	{}
 #pragma endregion
 

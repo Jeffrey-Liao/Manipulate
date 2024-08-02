@@ -1,7 +1,7 @@
 #ifndef LIST_H
 #define LIST_H
 #include"common.h"
-#include"LiaoException.h"
+#include"Exceptions.h"
 using std::list;
 using std::vector;
 using std::initializer_list;
@@ -15,13 +15,13 @@ namespace liaoUtil
 	{
 	protected:
 		//基础构造函数，什么都不做
-		List()
+		explicit List()
 		{}
 		/*
 		* 基于初始大小的构造函数
 		* 调用各实际容器实现的allocate以分配初始大小的内存
 		*/
-		List(int _size)
+		explicit List(int _size)
 		{
 			allocate(_size);
 		}
@@ -29,7 +29,7 @@ namespace liaoUtil
 		* 拷贝构造函数
 		* 调用各实际容器实现的copyFrom实现拷贝操作
 		*/
-		List(List& obj)
+		explicit List(List& obj)
 		{
 			copyFrom(obj);
 		}

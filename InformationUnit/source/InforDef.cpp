@@ -58,112 +58,67 @@ namespace liaoInfor
 		file << outMessage<<"\n";
 		file.close();
 	}
-	string Infor::messageGener(const char* label, string errorClass, string errorFunc, string errorMessage)
+	void Infor::update(const char* label, const  string errorClass, const string errorFunc, const string errorMessage, bool timer)
 	{
-		string mes = "There is an";
-		mes += label;
-		mes += "message from {" + errorClass + "} class in method [" + errorFunc + "]: " + errorMessage;
-		return mes;
+
+		message.clear();
+		if (timer)
+		{
+			const string time = Timer();
+			message = std::format("[{}] :: There is a(n) {} detected in class:({}) function:[{}]: {}", time, label, errorClass, errorFunc, errorMessage);
+		}
+			
+		else
+			message = std::format("There is a(n) {} detected in class: ({}) function: [{}]: {}", label, errorClass, errorFunc, errorMessage);
 	}
-	void Infor::showTime()
+	void  Infor::update(string message)
 	{
-		timeDisplay = true;
+		this->message = message;
 	}
-	void Infor::noTime()
+	void Infor::write(const char* dir = "log.log")
 	{
-		timeDisplay = false;
+		writeToFile(message, dir);
+	}
+	void Infor::display()
+	{
+		cout << message;
 	}
 #pragma endregion
 #pragma region DebugInfor
 	DebugInfor::DebugInfor()
+		:Infor()
 	{}
-	void DebugInfor::write(string errorClass, string errorFunc, string errorMessage)
+	void DebugInfor::update(const string errorClass, const string errorFunc, const string errorMessage, bool timer)
 	{
-		message = messageGener(DEBUGLABEL, errorClass, errorFunc, errorMessage);
-		Infor::writeToFile(message, DEBUGFILE);
-	}
-	void DebugInfor::write(string message)
-	{
-		Infor::writeToFile(message, DEBUGFILE);
-	}
-	void DebugInfor::write()
-	{
-		Infor::writeToFile(message, DEBUGFILE);
-	}
-	void DebugInfor::display(string message)
-	{
-		this->message = message;
-		cout << DEBUGLABEL << " Message :" << message << "\n";
-	}
-	void DebugInfor::display(string errorClass, string errorFunc, string errorMessage)
-	{
-		message = messageGener(ERRORLABEL, errorClass, errorFunc, errorMessage);
-		cout << message<<"\n";
-	}
-	void DebugInfor::display()
-	{
-		cout << message<<"\n";
+		Infor::update(DEBUGLABEL, errorClass, errorFunc, errorMessage, timer);
 	}
 #pragma endregion
 #pragma region ErrorInfor
 	ErrorInfor::ErrorInfor()
+		:Infor()
 	{}
-	void ErrorInfor::write(string errorClass, string errorFunc, string errorMessage)
+	void ErrorInfor::update(const string errorClass, const  string errorFunc, const string errorMessage, bool timer)
 	{
-		message = messageGener(ERRORLABEL, errorClass, errorFunc, errorMessage);
-		Infor::writeToFile(message, ERRORFILE);
-	}
-	void ErrorInfor::write(string message)
-	{
-		this->message = message;
-		Infor::writeToFile(message, ERRORFILE);
-	}
-	void ErrorInfor::write()
-	{
-		Infor::writeToFile(message, ERRORFILE);
-	}
-	void ErrorInfor::display(string message)
-	{
-		cout << ERRORLABEL << " Message :" << message << "\n";
-	}
-	void ErrorInfor::display(string errorClass, string errorFunc, string errorMessage)
-	{
-		message = messageGener(ERRORLABEL, errorClass, errorFunc, errorMessage);
-		cout << message<<"\n";
-	}
-	void ErrorInfor::display()
-	{
-		cout << message<<"\n";
+		Infor::update(ERRORLABEL, errorClass, errorFunc, errorMessage);
 	}
 #pragma endregion
+#pragma region ExceptionInfor
+	ExceptionInfor::ExceptionInfor()
+		:Infor()
+	{}
+	void ExceptionInfor::update(const string exception, const string errorClass, const string errorFunc, const string errorMessage, bool timer)
+	{
+		Infor::update(std::format("|>{}:Exception<|",exception).c_str(), errorClass, errorFunc, errorMessage);
+	}
+#pragma endregion
+
 #pragma region RuntimeInfor
 	RuntimeInfor::RuntimeInfor()
+		:Infor()
 	{}
-	void RuntimeInfor::write(string message)
+	void RuntimeInfor::update(const string errorClass, const  string errorFunc, const string errorMessage, bool timer)
 	{
-		Infor::writeToFile(message, RUNTIMEFILE);
-	}
-	void RuntimeInfor::write(string errorClass, string errorFunc, string errorMessage)
-	{
-		message = messageGener(ERRORLABEL, errorClass, errorFunc, errorMessage);
-		Infor::writeToFile(message, ERRORFILE);
-	}
-	void RuntimeInfor :: write()
-	{
-		Infor::writeToFile(message, ERRORFILE);
-	}
-	void RuntimeInfor::display(string message)
-	{
-		cout << RUNTIMELABEL << " Message: " << message << "\n";
-	}
-	void RuntimeInfor::display(string errorClass, string errorFunc, string errorMessage)
-	{
-		message = messageGener(ERRORLABEL, errorClass, errorFunc, errorMessage);
-		cout << message << "\n";
-	}
-	void RuntimeInfor::display()
-	{
-		cout << message<<"\n";
+		Infor::update(RUNTIMELABEL, errorClass, errorFunc, errorMessage);
 	}
 #pragma endregion
 #pragma region InforReader

@@ -2,6 +2,7 @@
 #ifndef ERRORS_H
 #define ERRORS_H
 #include "Infor.h"
+#include<exception>
 namespace liaoInfor
 {
 	/*
@@ -13,36 +14,30 @@ namespace liaoInfor
 	* >>display(): print error message to the console
 	* >>error(): export error message to error.log file
 	*/
-	class LiaoException
+	class LiaoException:std::runtime_error
 	{
-		string ExceptionType;
-		string errorMessage;
 	protected:
-		LiaoException(string type, string className,string methodName,string message);
+		ExceptionInfor instance;
+		LiaoException(string exceptionName, string className,string methodName,string message);
 		//输出错误信息到控制台
 	public:
 		void display();
-		void error();
-		void debug();
+		void toFile(const char* fileName);
 		~LiaoException();
 	};
 	class FatalException :public LiaoException
 	{
 	public: 
 		FatalException(string className, string methodName, string message);
+		FatalException(string exceptionName, string className, string methodName, string message);
 		~FatalException();
 	};
 	class CommonException :public LiaoException
 	{
 	public:
 		CommonException(string className, string methodName, string message);
+		CommonException(string exceptionName, string className, string methodName, string message);
 		~CommonException();
-	};
-	class DebugException :public LiaoException
-	{
-	public:
-		DebugException(string className, string methodName, string message);
-		~DebugException();
 	};
 }
 #endif

@@ -7,7 +7,7 @@ namespace liaoInfor
 	{
 	public:
 		NoOperationException(string className, string methodName)
-			:CommonException(className,methodName,"The class do not support this operation and program not run any operation to current container.")
+			:CommonException("NoOperation", className, methodName, "The class do not support this operation and program not run any operation to current container.")
 		{}
 	};
 }

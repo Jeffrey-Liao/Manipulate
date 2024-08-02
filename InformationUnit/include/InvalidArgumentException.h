@@ -7,7 +7,7 @@ namespace liaoInfor
 	{
 	public:
 		InvalidArgumentException(string className, string methodName, string message)
-			:CommonException(className, methodName, message + " and no operation executed")
+			:CommonException("InvalidArgument",className, methodName, message + " and no operation executed")
 		{}
 	};
 }
