@@ -29,6 +29,37 @@ namespace liaoUtil
 		}
 		void newValue(const T& value) override
 		{
+			if (!this->dataSource.empty())
+			{
+				if (value < *this->dataSource.begin())
+					this->dataSource.push_front(value);
+				else if (value > *(--this->dataSource.end()))
+					this->dataSource.push_back(value);
+				else
+				{
+					int pos = this->dataSource.size() / 2;
+					auto itor = this->iterate(pos);
+					while (itor != this->dataSource.end())
+					{
+						if (*itor <= value)
+							itor = rmove(itor, pos == 0? 1 : pos / 2);
+						else
+							itor = lmove(itor, pos == 0 ? 1 : pos / 2);
+						if (*itor > value && *(--itor) <= value)
+						{
+							++itor;
+							this->dataSource.insert(itor, value);
+							break;
+						}
+						pos /= 2;
+					}
+				}
+			}
+			else
+				this->dataSource.push_back(value);
+		}
+		void newValueStable(const T& value)
+		{
 			bool complete = false;
 			auto itor = this->dataSource.begin();
 			if (!this->dataSource.empty())
@@ -74,7 +105,10 @@ namespace liaoUtil
 			for (auto& var : obj)
 				newValue(var);
 		}
-
+		string classID() const override
+		{
+			return "SortedList";
+		}
 
 		T& add(const T& data)override
 		{
