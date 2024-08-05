@@ -10,7 +10,8 @@ public:
 	{
 		try
 		{
-			ArrayList<int> test;
+			List<int>& test = *new ArrayList<int>();
+			List<int>& SetC = *new Set<int>();
 			test.remove(5);
 		}
 		catch (LiaoException* e)
@@ -24,28 +25,25 @@ public:
 
 		// 创建一个均匀分布，范围为 [0, 99]
 		std::uniform_int_distribution<int> distribution(0, 99);
-
-		
 		List<int>& test = *new SortedList<int>();
 		cout << format("class ID: {}\n", test.classID());
 		for (int n = 0; n < 100; ++n)
 			test.add(distribution(generator));
 		test.remove(30);
 		cout << test.toString();
+		test.clear();
+		vector<int> data = { 5,5,6,8,4,1,2,8,4,3,4,8,97,1,1,2,4,54,7 };
+		test = data;
+		cout << test.toString();
 		return true;
 	}
 	static void Forward_ListTest()
 	{
-		try
-		{
-			throw new InvalidOperationException("UnitTest", "Forward_ListTest", "Test Case");
-		}
-		catch(LiaoException* e)
-		{
-		}
+		
 	}
 };
+
 int main()
 {
-	UnitTest::ArrayListTest();
+	UnitTest::SortedListTest();
 }

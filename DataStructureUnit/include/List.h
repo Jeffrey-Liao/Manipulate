@@ -34,17 +34,17 @@ namespace liaoUtil
 			copyFrom(obj);
 		}
 	protected:
-		void emptyListCheck(const char* functionName)
+		constexpr void emptyListCheck(const char* functionName)
 		{
 			if (isEmpty())
 				throw new EmptyContainerException(classID(), functionName);
 		}
-		void outRangeCheck(Index index, const char* functionName)
+		constexpr void outRangeCheck(Index index, const char* functionName)
 		{
 			if (!validPos(index))
 				throw new OutOfRangeException(classID(), functionName);
 		}
-		void validIntervalCheck(Index start, Index end, const char* functionName)
+		constexpr void validIntervalCheck(Index start, Index end, const char* functionName)
 		{
 			if (start > end)
 				throw new InvalidOperationException(classID(), functionName, "Given interval is invalid because start index is bigger than end index");
@@ -89,12 +89,12 @@ namespace liaoUtil
 		* 清空当前容器
 		*/
 		virtual void free() = 0;
-		template<class Receiver, class Container>
+		template<class Container>
 		/*
 		* 拷贝其他std容器内的值到当前容器
 		* （尤其适用于非std内核实现的容器）
 		*/
-		void StdToStd(Receiver& rcv, Container& obj)
+		void StdToStd( Container& obj)
 		{
 			for (auto& var : obj)
 				newValue(var);
@@ -276,7 +276,9 @@ namespace liaoUtil
 		{
 			assign(vec);
 		}
-		virtual ~List() = 0;
+		virtual ~List()
+		{
+		}
 	};
 }
 

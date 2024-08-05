@@ -21,6 +21,10 @@ namespace liaoUtil
 		{
 			//无法对set执行allocate操作;
 		}
+		void newValue(const T& value) override
+		{
+			dataSource.insert(value);
+		}
 		template<class Container>
 		void StdToSet(Container& obj)
 		{
@@ -228,7 +232,7 @@ namespace liaoUtil
 		 void remove(Index pos)
 		 {
 			 this->emptyListCheck("remove(Index)");
-			 this->outRangeCheck(pos);
+			 this->outRangeCheck(pos, "remove(Index)");
 			 dataSource.erase(iterate(pos));
 		 }
 		 //移除指定区间的元素
@@ -468,7 +472,7 @@ namespace liaoUtil
 		void subList(List& destination, Index start, Index end)
 		{
 			this->emptyListCheck("subList(List&,Index,Index)");
-			this->validIntervalCheck(start,end,"subList(List&,Index,Index)")
+			this->validIntervalCheck(start, end, "subList(List&,Index,Index)");
 			auto itor = iterate(start);
 			for (int n = start; n < end; ++n, itor++)
 				destination.add(*itor);

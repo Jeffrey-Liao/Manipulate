@@ -11,6 +11,7 @@ namespace liaoUtil
 		TYPE data;
 	protected:
 		Node()
+			:data{}
 		{ }
 		Node(const T& newData) : data(newData)
 		{}

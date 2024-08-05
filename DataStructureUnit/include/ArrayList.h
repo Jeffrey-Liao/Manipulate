@@ -61,31 +61,31 @@ namespace liaoUtil
 		}
 		ArrayList(initializer_list<T> ini)
 		{
-			this->StdToStd(dataSource,ini);
+			this->StdToStd(ini);
 		}
 		ArrayList(list<T>& obj)
 		{
-			this->StdToStd(dataSource, obj);
+			this->StdToStd(obj);
 		}
 	public:
-		string classID() const override
+		constexpr string classID() const override
 		{
 			return "ArrayList";
 		}
-		int size()const override
+		constexpr int size()const override
 		{
 			return dataSource.size();
 		}
-		bool isEmpty() const override
+		constexpr bool isEmpty() const override
 		{
 			return dataSource.empty();
 		}
-		const T& first()override
+		constexpr const T& first()override
 		{
 			this->emptyListCheck("first()");
 			return dataSource[0];
 		}
-		const T& last() override
+		constexpr const T& last() override
 		{
 			this->emptyListCheck("last()");
 			return dataSource[dataSource.size() - 1];
@@ -114,19 +114,19 @@ namespace liaoUtil
 		}
 		T& add(vector<T>& vec)override
 		{
-			this->StdToStd(dataSource, vec);
+			this->StdToStd( vec);
 			int index = dataSource.size() - vec.size() - 1;
 			return dataSource[index];
 		}
 		T& add(list<T>& ls)override
 		{
-			this->StdToStd(dataSource, ls);
+			this->StdToStd( ls);
 			int index = dataSource.size() - ls.size() - 1;
 			return dataSource[index];
 		}
 		T& add(initializer_list<T>& ini)override
 		{
-			this->StdToStd(dataSource, ini);
+			this->StdToStd( ini);
 			int index = dataSource.size() - ini.size() - 1;
 			return dataSource[index];
 		}
@@ -240,13 +240,13 @@ namespace liaoUtil
 				dataSource.insert(dataSource.begin() + pos, ini.begin(), ini.end());
 				return dataSource[pos];
 		}
-		T& get(Index index)throw()override
+		constexpr T& get(Index index)throw()override
 		{
 			this->emptyListCheck("get(Index)");
 			this->outRangeCheck(index, "get(Index)");
 			return dataSource[index];
 		}
-		int indexOf(T& data) const override
+		constexpr int indexOf(T& data) const override
 		{
 			int n = 0;
 			for (auto& var : dataSource)
@@ -257,11 +257,11 @@ namespace liaoUtil
 			}
 			return -1;
 		}
-		void clear()override
+		constexpr void clear()override
 		{
 			dataSource.clear();
 		}
-		bool equals(List& obj) const override
+		constexpr bool equals(List& obj) const override
 		{
 			if (dataSource.size() != obj.size())
 				return false;
@@ -273,19 +273,19 @@ namespace liaoUtil
 				return true;
 			}
 		}
-		bool equals(vector<T>& vec) const override
+		constexpr bool equals(vector<T>& vec) const override
 		{
 			return dataSource == vec;
 		}
-		bool equals(list<T>& list)const override
+		constexpr bool equals(list<T>& list)const override
 		{
 			return std::equal(dataSource.begin(),dataSource.end(), list.begin());
 		}
-		bool equals(initializer_list<T>& ini)const override
+		constexpr bool equals(initializer_list<T>& ini)const override
 		{
 			return std::equal(dataSource.begin(), dataSource.end(), ini.begin());
 		}
-		bool equals(T* arr, int size)const override
+		constexpr bool equals(T* arr, int size)const override
 		{
 			if (dataSource.size() != size)
 				return false;
@@ -297,33 +297,33 @@ namespace liaoUtil
 				return true;
 			}
 		}
-		void assign(vector<T>& vec)
+		constexpr void assign(vector<T>& vec)
 		{
 			dataSource = vec;
 		}
-		void assign(list<T>& list)
+		constexpr void assign(list<T>& list)
 		{
 			dataSource.resize(list.size());
 			std::copy(list.begin(), list.end(), dataSource.begin());
 		}
-		void assign(initializer_list<T>& ini)
+		constexpr void assign(initializer_list<T>& ini)
 		{
 			dataSource.resize(ini.size());
 			std::copy(ini.begin(), ini.end(), dataSource.begin());
 		}
-		vector<T> toVector()const override
+		constexpr vector<T> toVector()const override
 		{
 			return dataSource;
 		}
-		bool contains(T&& value)const override
+		constexpr bool contains(T&& value)const override
 		{
 			return std::find(dataSource.begin(), dataSource.end(), value) != dataSource.end();
 		}
-		bool contains(T& value)const override
+		constexpr bool contains(T& value)const override
 		{
 			return std::find(dataSource.begin(), dataSource.end(), value) != dataSource.end();
 		}
-		bool contains(List& obj)const override
+		constexpr bool contains(List& obj)const override
 		{
 			for (int n = 0; n < obj.size(); ++n)
 			{
@@ -333,7 +333,7 @@ namespace liaoUtil
 			}
 			return true;
 		}
-		bool contains(vector<T>& vec)const override
+		constexpr bool contains(vector<T>& vec)const override
 		{
 			for (int n = 0; n < vec.size(); ++n)
 			{
@@ -343,7 +343,7 @@ namespace liaoUtil
 			}
 			return true;
 		}
-		bool contains(list<T>& list)const override
+		constexpr bool contains(list<T>& list)const override
 		{
 			for (auto& var2: list)
 			{
@@ -353,7 +353,7 @@ namespace liaoUtil
 			}
 			return true;
 		}
-		bool contains(initializer_list<T>& ini)const override
+		constexpr bool contains(initializer_list<T>& ini)const override
 		{
 			for (auto& var2 : ini)
 			{
@@ -377,7 +377,7 @@ namespace liaoUtil
 			for (auto& var : dataSource)
 				operation(var);
 		}
-		int count(T& data)const override
+		constexpr int count(T& data)const override
 		{
 			return std::count(dataSource.begin(), dataSource.end(), data);
 		}
@@ -387,7 +387,7 @@ namespace liaoUtil
 			for (int n = start; n <= end; ++n)
 				destination.add(dataSource[n]);
 		}
-		void copyFrom(List& obj) override
+		constexpr void copyFrom(List& obj) override
 		{
 			if (obj.size() > size())
 				dataSource.resize(obj.size());
@@ -396,33 +396,33 @@ namespace liaoUtil
 			for (int n = 0; n < dataSource.capacity(); ++n)
 				dataSource[n] = obj[n];
 		}
-		void copyTo(List& obj) override
+		constexpr void copyTo(List& obj) override
 		{
 			obj.resize(size());
 			for (int n = 0; n < size(); ++n)
 				obj[n] = dataSource[n];
 		}
-		void set(Index pos, T& value)throw()override
+		constexpr void set(Index pos, T& value)throw()override
 		{
 			this->outRangeCheck(pos, "set(Index,T&)");
 			dataSource[pos] = value;
 		}
-		void swap(Index pos1, Index pos2) throw()override
+		constexpr void swap(Index pos1, Index pos2) throw()override
 		{
 			this->outRangeCheck(pos1,"swap");
 			this->outRangeCheck(pos2, "swap");
 				std::swap(dataSource[pos1], dataSource[pos2]);
 		}
-		void reverse() throw()override
+		constexpr void reverse() throw()override
 		{
 			this->emptyListCheck("reverse()");
 			std::reverse(dataSource.begin(), dataSource.end());
 		}
-		void resize(Index newSize)override
+		constexpr void resize(Index newSize)override
 		{
 			dataSource.resize(newSize);
 		}
-		~ArrayList()override
+		~ArrayList() override
 		{
 			dataSource.clear();
 		}

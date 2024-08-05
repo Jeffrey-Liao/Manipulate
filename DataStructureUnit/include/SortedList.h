@@ -45,7 +45,12 @@ namespace liaoUtil
 							itor = rmove(itor, pos == 0? 1 : pos / 2);
 						else
 							itor = lmove(itor, pos == 0 ? 1 : pos / 2);
-						if (*itor > value && *(--itor) <= value)
+						if (itor == this->dataSource.end())
+						{
+							this->dataSource.insert(itor, value);
+							break;
+						}
+						else if( *itor > value && *(--itor) <= value)
 						{
 							++itor;
 							this->dataSource.insert(itor, value);
@@ -146,7 +151,7 @@ namespace liaoUtil
 			for (auto& var : obj)
 				newValue(var);
 		}
-		string classID() const override
+		constexpr string classID() const override
 		{
 			return "SortedList";
 		}
@@ -169,17 +174,17 @@ namespace liaoUtil
 		}
 		T& add(vector<T>& vec)
 		{
-			this->StdToStd(this->dataSource, vec);
+			this->StdToStd( vec);
 			return value;
 		}
 		T& add(list& ls)
 		{
-			this->StdToStd(this->dataSource, ls);
+			this->StdToStd( ls);
 			return value;
 		}
 		T& add(initializer_list<T>& ini)
 		{
-			this->StdToStd(this->dataSource, ini);
+			this->StdToStd(ini);
 			return value;
 		}
 		T& add(T* arr, int size)
@@ -204,20 +209,21 @@ namespace liaoUtil
 		void assign(vector<T>& vec)
 		{
 			this->dataSource.clear();
-			this->StdToStd(this->dataSource, vec);
+			this->StdToStd(vec);
 		}
 		void assign(list& list)
 		{
 			this->dataSource.clear();
-			this->StdToStd(this->dataSource, list);
+			this->StdToStd( list);
 		}
 		void assign(initializer_list<T>& ini)
 		{
 			this->dataSource.clear();
-			this->StdToStd(this->dataSource, ini);
+			this->StdToStd( ini);
 		}
-		T& get(Index index)
+		constexpr T& get(Index index)
 		{
+			this->emptyListCheck("get(Index)");
 			this->value = *this->iterate(index);
 			return this->value;
 		}
