@@ -63,7 +63,9 @@ namespace liaoUtil
 		{
 			dataSource.clear();
 		}
+
 		//不执行操作，默认返回第一个元素
+		__declspec(deprecated("Please use add if you want to make a new element into a set.")) 
 		T& insert(Index pos, T&& value)
 		{
 			return value;
@@ -94,30 +96,34 @@ namespace liaoUtil
 			return value;
 		}
 		//不执行任何操作，因为set已经是排序好的了
+		__declspec(deprecated("There is no need to sort a set.")) 
 		void sort(void(*sortFunc)(List& _this) = NULL)
 		{
 
 		}
 		//不会执行任何操作，因为set已经是有序的了
-		void swap(Index pos1, Index pos2)
+		__declspec(deprecated("You cannot swap data inside a set.")) 
+			void swap(Index pos1, Index pos2)
 		{
 
 		}
 		//不会执行任何操作，因为set已经是有序的了
+		__declspec(deprecated("You cannot reverse this set"))
 		virtual void reverse()
 		{
 
 		}
 		//不会执行任何操作
+		__declspec(deprecated("You cannot resize a set"))
 		void resize(Index newSize)
 		{
 			allocate(newSize);
 		}
 	public:
 		Set()
-			:List()
+			:List(), value{}
 		{}
-		Set(int size)
+		Set(size_t size)
 			:List(size)
 		{}
 		Set(List& obj)
@@ -144,7 +150,7 @@ namespace liaoUtil
 		{
 			return "Set";
 		}
-		int size() const override
+		size_t size() const override
 		{
 			return dataSource.size();
 		}
@@ -303,7 +309,7 @@ namespace liaoUtil
 			this->outRangeCheck(index, "get(int)");
 			return value =*iterate(index);
 		}
-		int indexOf(T& data)const override
+		size_t indexOf(T& data)const override
 		{
 			int n = 0;
 			for (auto& var : dataSource)
@@ -465,7 +471,7 @@ namespace liaoUtil
 				dataSource.insert(value);
 			}
 		}
-		int count(T& data)const
+		size_t count(T& data)const
 		{
 			return dataSource.count(data);
 		}

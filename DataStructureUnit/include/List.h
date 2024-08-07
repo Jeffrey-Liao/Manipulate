@@ -9,7 +9,7 @@ using std::array;
 namespace liaoUtil
 {
 	using namespace liaoInfor;
-	using Index = unsigned int;
+	using Index = size_t;
 	DYNAMIC
 	class List
 	{
@@ -21,7 +21,7 @@ namespace liaoUtil
 		* 基于初始大小的构造函数
 		* 调用各实际容器实现的allocate以分配初始大小的内存
 		*/
-		explicit List(int _size)
+		explicit List(size_t _size)
 		{
 			allocate(_size);
 		}
@@ -58,7 +58,7 @@ namespace liaoUtil
 		* 容器自定义的分配方法
 		* 可以指导基类基于初始值初始化的构造方法
 		*/
-		virtual void allocate(int _size) = 0;
+		virtual void allocate(size_t _size) = 0;
 		/*
 		* 根据给定值引用创建一个新元素
 		*/
@@ -106,7 +106,7 @@ namespace liaoUtil
 			return "List";
 		}
 		//当前容器大小
-		virtual int size() const = 0;
+		virtual size_t size() const = 0;
 		//当前容器是否为空
 		virtual bool isEmpty()const = 0;
 		//获取当前容器的第一个元素的引用
@@ -170,7 +170,7 @@ namespace liaoUtil
 		//获取指定位置的元素引用
 		virtual T& get(Index index) = 0;
 		//获取指定元素的索引
-		virtual int indexOf(T& data) const = 0;
+		virtual size_t indexOf(T& data) const = 0;
 		//清空容器
 		virtual void clear() = 0;
 
@@ -226,7 +226,7 @@ namespace liaoUtil
 		virtual void assign(initializer_list& ini) = 0;
 		virtual void sort(void(*sortFunc)(List& _this) = NULL) = 0;
 		virtual void apply(void(*operation)(T& value)) = 0;
-		virtual int count(T& data)const = 0;
+		virtual size_t count(T& data)const = 0;
 
 		virtual void subList(List& destination, Index start, Index end) = 0;
 		virtual void copyFrom(List& obj) = 0;

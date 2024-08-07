@@ -74,15 +74,15 @@ namespace liaoUtil
 		{
 			return *this->_prev;
 		}
-		bool isFirst()
+		constexpr bool isFirst()const
 		{
 			return _prev == NULL;
 		}
-		bool isLast()
+		constexpr bool isLast()const
 		{
 			return _next == NULL;
 		}
-		bool isSingle()
+		constexpr bool isSingle()const
 		{
 			return isFirst() && isLast();
 		}
@@ -92,35 +92,72 @@ namespace liaoUtil
 			if (_next)
 				delete _next;
 		}
-		LinkNode& link(LinkNode& node)
+		void unlinkAll()
+		{
+			LinkNode* temp = this->_next,* del;
+			this->_next = NULL;
+			while (temp != NULL)
+			{
+				del = temp;
+				temp = &temp->next();
+				delete del;
+			}
+		}
+		constexpr LinkNode& link(LinkNode& node)
 		{
 			if (!isSingle())
 			{
 				node._prev->_next = node._next;
 				node._next->_prev = node._prev;
 			}
+			if (_next)
+			{
+				this->_next->_prev = &node;
+			}
+			node._next = _next;
 			this->_next = &node;
 			node._prev = this;
 			return *this->_next;
 		}
-		LinkNode& link(T& value)
+		constexpr LinkNode& link(T& value)
 		{
-			this->_next = new LinkNode(this, value);
+			this->_next = new LinkNode(this, this->_next,value);
 			return *this->_next;
 		}
-		bool isPrev(LinkNode& node)
+		constexpr LinkNode& linkPrev(LinkNode& node)
+		{
+			if (!isSingle())
+			{
+				node._prev->_next = node._next;
+				node._next->_prev = node._prev;
+			}
+			if (_prev)
+			{
+				_prev->_next = &node;
+			}
+			node._prev = _prev;
+			this->_prev = &node;
+			node._next = this;
+			return *this->_prev;
+		}
+		constexpr LinkNode& linkPrev(T& value)
+		{
+			this->_prev = new LinkNode(this->_prev, this, value);
+			return *this->_prev;
+		}
+		constexpr bool isPrev(LinkNode& node)const
 		{
 			return this->_prev == &node;
 		}
-		bool isPrev(T& value)
+		constexpr bool isPrev(T& value)const
 		{
 			return this->_prev->value() == value;
 		}
-		bool isNext(LinkNode& node)
+		constexpr bool isNext(LinkNode& node)const
 		{
 			return this->_next == &node;
 		}
-		bool isNext(T& value)
+		constexpr bool isNext(T& value)const
 		{
 			return this->_next->value() == value;
 		}

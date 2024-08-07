@@ -15,7 +15,7 @@ namespace liaoUtil
 		LinkList()
 			:List()
 		{}
-		LinkList(int _size)
+		LinkList(size_t _size)
 			:List(_size)
 		{}
 		LinkList(List& obj)
@@ -34,7 +34,7 @@ namespace liaoUtil
 			dataSource = obj;
 		}
 	protected:
-		void allocate(int _size) override
+		void allocate(size_t _size) override
 		{
 			dataSource.resize(dataSource.size() + _size);
 		}
@@ -51,7 +51,7 @@ namespace liaoUtil
 			for (int n = 0; n < obj.size(); ++n)
 				newValue(obj[n]);
 		}
-		int inner_findIndex(const T& value)const 
+		size_t inner_findIndex(const T& value)const 
 		{
 			auto itor = dataSource.begin();
 			int n = 0;
@@ -64,7 +64,7 @@ namespace liaoUtil
 			}
 			return -1;
 		}
-		list<T>::iterator iterate(int pos)
+		list<T>::iterator iterate(size_t pos)
 		{
 			int end = 0;
 			auto itor = dataSource.begin();
@@ -94,7 +94,7 @@ namespace liaoUtil
 		{
 			return "LinkList";
 		}
-		constexpr int size() const override
+		constexpr size_t size() const override
 		{
 			return dataSource.size();
 		}
@@ -270,7 +270,7 @@ namespace liaoUtil
 			this->outRangeCheck(index,"get(Index)");
 			return *iterate(index);
 		}
-		int indexOf(T& data) const override
+		size_t indexOf(T& data) const override
 		{
 			return inner_findIndex(data);
 		}
@@ -395,7 +395,7 @@ namespace liaoUtil
 			for (auto& var : dataSource)
 				operation(var);
 		}
-		constexpr int count(T& data)const override
+		constexpr size_t count(T& data)const override
 		{
 			return std::count(dataSource.begin(), dataSource.end(), data);
 		}
@@ -449,9 +449,10 @@ namespace liaoUtil
 		using LinkNode = LinkNode<T>;
 		using List = List<T>;
 		LinkNode* head;
-		int _size;
+		LinkNode* temp;
+		size_t _size;
 	private:
-		LinkNode* end()
+		constexpr LinkNode* end()
 		{
 			if (head == NULL)
 				return NULL;
@@ -462,32 +463,68 @@ namespace liaoUtil
 		}
 		void newValue(const T& value)
 		{
-			LinkNode* ptr = end();
-			if (ptr)
-				ptr->link(*new LinkNode(ptr,head,value));
-		}
-		void newValue(const T&& value)
-		{
+			++_size;
 			LinkNode* ptr = end();
 			if (ptr)
 				ptr->link(*new LinkNode(ptr, head, value));
+			else
+				head = new LinkNode(value),head->link(*head);
+		}
+		void newValue(const T&& value)
+		{
+			++_size;
+			LinkNode* ptr = end();
+			if (ptr)
+				ptr->link(*new LinkNode(ptr, head, value));
+			else
+				head = new LinkNode(value);
 		}
 		void newValue()
 		{
+			++_size;
 			LinkNode* ptr = end();
 			if (ptr)
 				ptr->link(*new LinkNode(ptr, head));
+			else
+				head = new LinkNode();
 		}
-		void allocate(int size)
+		constexpr void allocate(int size)
 		{
 			for (int n = 0; n < size; ++n)
 				newValue();
 		}
-		bool validPos(Index pos)
+		constexpr bool validPos(Index pos)const
 		{
 			return pos<_size && pos >0;
 		}
-		void free()
+		LinkNode* iterate(int pos)
+		{
+			static int lastPos = 0;
+			char offset = 0;
+			if (temp || pos < lastPos - pos)
+				temp = head, lastPos = 0;
+			else if (_size - pos < pos - lastPos)
+				temp = end(), lastPos = _size-1;
+			offset = pos > lastPos ? 1 : -1;
+			while(lastPos!=pos)
+			{
+				temp = offset>0? &temp->next():&temp->prev();
+				lastPos += offset;
+			}
+			return temp;
+		}
+		LinkNode* inner_find(T& value)
+		{
+			LinkNode* stop = head;
+			do
+			{
+				if (stop->value() == value)
+					return stop;
+				stop = &stop->next();
+			} while (stop != head);
+			return NULL;
+		}
+		constexpr void free()
 		{
 			LinkNode* del = head;
 			for (int n = 0; n < _size; ++n)
@@ -499,17 +536,38 @@ namespace liaoUtil
 			head = NULL;
 			_size = 0;
 		}
+		template<class Container>
+		LinkNode* addContainer(LinkNode* pos, Container& obj)
+		{
+			LinkNode* temp;
+			for (int n = 0; n < obj.size(); ++n)
+			{
+				newValue(obj[n]);
+				if (n == 0)
+					temp = end();
+			}
+			return temp;
+		}
+		template<class Container>
+		void removeStd(Container& obj)
+		{
+			for (auto& var : obj)
+			{
+				remove(var);
+			}
+		}
 	public:
 		LiaoLinkList()
-			:List(), head(NULL), _size{}
+			:List(), head(NULL), _size{},temp(NULL)
 		{}
-		LiaoLinkList(int size)
-			:List(size),head(NULL), _size{size}
+		LiaoLinkList(size_t size)
+			:List(size),head(NULL), _size{size}, temp(NULL)
 		{}
 		LiaoLinkList(List& obj)
-			:List(obj),head(NULL), _size{}
+			:List(obj),head(NULL), _size{}, temp(NULL)
 		{}
 		LiaoLinkList(vector<T>& vec)
+			:temp(NULL)
 		{
 			this->StdToStd(vec);
 		}
@@ -518,6 +576,7 @@ namespace liaoUtil
 			this->StdToStd(ls);
 		}
 		LiaoLinkList(initializer_list<T>& ini)
+			:temp(NULL)
 		{
 			this->StdToStd(ini);
 		}
@@ -525,13 +584,133 @@ namespace liaoUtil
 		{
 			return "LiaoLinkList";
 		}
-		constexpr int size()
+		constexpr size_t size()const
 		{
 			return _size;
 		}
-		constexpr bool isEmpty()
+		constexpr bool isEmpty()const 
 		{
 			return _size == 0 || head == NULL;
+		}
+		constexpr const T& first()
+		{
+			return head->value();
+		}
+		constexpr const T& last()
+		{
+			return end()->value();
+		}
+		T& add(const T&& value)
+		{
+			newValue(value);
+			return end()->value();
+		}
+		T& add(const T& value)
+		{
+			newValue(value);
+			return end()->value();
+		}
+		T& add(List& obj)
+		{
+			return addContainer(end(), obj)->value();
+		}
+		T& add(int number, T&& value)
+		{
+			LinkNode* temp;
+			for (int n = 0; n < number; ++n)
+			{
+				newValue(value);
+				if (n == 0)
+					temp = end();
+			}
+			return temp->value();
+		}
+		T& add(int number, T& value)
+		{
+			LinkNode* temp;
+			for (int n = 0; n < number; ++n)
+			{
+				newValue(value);
+				if (n == 0)
+					temp = end();
+			}
+			return temp->value();
+		}
+		T& add(vector<T>& vec)
+		{
+			return addContainer(end(), vec)->value();
+		}
+		T& add(list<T>& ls)
+		{
+			return addContainer(end(), ls)->value();
+		}
+		T& add(initializer_list<T>& ini)
+		{
+			return addContainer(end(), ini)->value();
+		}
+		T& add(T* arr, int size)
+		{
+			LinkNode* temp;
+			for (int n = 0; n < size; ++n)
+			{
+				newValue(arr[n]);
+				if (n == 0)
+					temp = end();
+			}
+			return temp->value();
+		}
+		void remove(Index pos)
+		{
+			this->emptyListCheck("remove(Index)");
+			this->outRangeCheck(pos, "remove(Index)");
+			delete iterate(pos);
+		}
+		void remove(Index start, Index end)
+		{
+			this->emptyListCheck("remove(Index,Index)");
+			this->validIntervalCheck(start, end, "remove(Index,Index)");
+			for (Index n = start; n <= end; n++)
+				remove(n);
+		}
+		void remove(T& data)
+		{
+			this->emptyListCheck("remove(Index,Index)");
+			LinkNode* local = inner_find(data);
+			if (local)
+				delete local;
+		}
+		void remove(List& obj)
+		{
+			this->emptyListCheck("remove(List&)");
+			for (int n = 0; n < obj.size(); ++n)
+				remove(obj[n]);
+		}
+		void remove(initializer_list<T>& ini)
+		{
+			this->emptyListCheck("remove(initializer_list<T>&)");
+			removeStd(ini);
+		}
+		void remove(vector<T>& ini)
+		{
+			this->emptyListCheck("remove(vector<T>&)");
+			removeStd(ini);
+		}
+		void remove(list<T>& ini)
+		{
+			this->emptyListCheck("remove(list<T>&)");
+			removeStd(ini);
+		}
+		void remove(T* arr, int size)
+		{
+			this->emptyListCheck("remove(T*,int)");
+			for (int n = 0; n < size; ++n)
+				remove(arr[n]);
+		}
+		T& insert(Index pos, T&& value)
+		{
+			this->outRangeCheck(pos, "insert(Index)");
+			LinkNode* newNode = iterate(pos);
+			newNode->linkPrev(value);
 		}
 	};
 }

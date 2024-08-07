@@ -9,7 +9,7 @@ namespace liaoUtil
 		using List = List<T>;
 		vector<T> dataSource;
 	protected:
-		void allocate(int size) override
+		void allocate(size_t size) override
 		{
 			dataSource.reserve(size);
 		}
@@ -49,7 +49,7 @@ namespace liaoUtil
 		ArrayList()
 			:List()
 		{}
-		ArrayList(int size)
+		ArrayList(size_t size)
 			:List(size)
 		{}
 		ArrayList(List& obj)
@@ -72,7 +72,7 @@ namespace liaoUtil
 		{
 			return "ArrayList";
 		}
-		constexpr int size()const override
+		constexpr size_t size()const override
 		{
 			return dataSource.size();
 		}
@@ -246,7 +246,7 @@ namespace liaoUtil
 			this->outRangeCheck(index, "get(Index)");
 			return dataSource[index];
 		}
-		constexpr int indexOf(T& data) const override
+		constexpr size_t indexOf(T& data) const override
 		{
 			int n = 0;
 			for (auto& var : dataSource)
@@ -377,7 +377,7 @@ namespace liaoUtil
 			for (auto& var : dataSource)
 				operation(var);
 		}
-		constexpr int count(T& data)const override
+		constexpr size_t count(T& data)const override
 		{
 			return std::count(dataSource.begin(), dataSource.end(), data);
 		}
