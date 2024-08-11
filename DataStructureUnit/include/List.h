@@ -34,17 +34,17 @@ namespace liaoUtil
 			copyFrom(obj);
 		}
 	protected:
-		constexpr void emptyListCheck(const char* functionName)
+		constexpr void emptyListCheck(const char* functionName)const
 		{
 			if (isEmpty())
 				throw new EmptyContainerException(classID(), functionName);
 		}
-		constexpr void outRangeCheck(Index index, const char* functionName)
+		constexpr void outRangeCheck(Index index, const char* functionName)const
 		{
 			if (!validPos(index))
 				throw new OutOfRangeException(classID(), functionName);
 		}
-		constexpr void validIntervalCheck(Index start, Index end, const char* functionName)
+		constexpr void validIntervalCheck(Index start, Index end, const char* functionName)const
 		{
 			if (start > end)
 				throw new InvalidOperationException(classID(), functionName, "Given interval is invalid because start index is bigger than end index");
@@ -110,9 +110,9 @@ namespace liaoUtil
 		//当前容器是否为空
 		virtual bool isEmpty()const = 0;
 		//获取当前容器的第一个元素的引用
-		virtual const T& first()= 0;
+		virtual const T& first() const = 0;
 		//获取当前容器最后一个元素的引用
-		virtual const T& last()= 0;
+		virtual const T& last() const = 0;
 
 		//根据给定的右值新增一个元素，返回新元素的引用
 		virtual T& add(const T&& value) = 0;
@@ -155,9 +155,9 @@ namespace liaoUtil
 		virtual void remove(T* arr, int size) = 0;
 
 		//在指定位置插入一个元素
-		virtual T& insert(Index pos, T&& value) = 0;
+		virtual T& insert(Index pos, const T&& value) = 0;
 		//在指定位置插入一个元素
-		virtual T& insert(Index pos, T& value) = 0;
+		virtual T& insert(Index pos, const T& value) = 0;
 		//在指定位置插入一个List
 		virtual T& insert(Index pos, List& list) = 0;
 		//在指定位置插入一个vector
@@ -206,9 +206,9 @@ namespace liaoUtil
 		virtual vector toVector() const = 0;
 
 		//检查当前容器是否包含指定的值
-		virtual bool contains(T&& value)const = 0;
+		virtual bool contains(const T&& value)const = 0;
 		//检查当前容器是否包含指定的值
-		virtual bool contains(T& value)const = 0;
+		virtual bool contains(const T& value)const = 0;
 		//检查当前容器是否包含指定List内的全部元素
 		virtual bool contains(List& obj)const = 0;
 		//检查当前容器是否包含指定vector内的全部元素

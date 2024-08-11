@@ -102,12 +102,12 @@ namespace liaoUtil
 		{
 			return dataSource.empty();
 		}
-		constexpr const T& first()override
+		constexpr const T& first()const override
 		{
 			this->emptyListCheck("first()");
 			return *dataSource.begin();
 		}
-		constexpr const T& last()override
+		constexpr const T& last()const override
 		{
 			this->emptyListCheck("last()");
 			return *(--dataSource.end());
@@ -235,7 +235,7 @@ namespace liaoUtil
 			this->outRangeCheck(pos,"insert(Index,T&)");
 			return *dataSource.insert(iterate(pos), value);
 		}
-		virtual T& insert(Index pos, T&& value)override
+		virtual T& insert(Index pos, const T&& value)override
 		{
 			this->outRangeCheck(pos, "insert(Index,T&&)");
 			return *dataSource.insert(iterate(pos), value);
@@ -333,11 +333,11 @@ namespace liaoUtil
 			vector temp(dataSource.begin(), dataSource.end());
 			return temp;
 		}
-		constexpr bool contains(T&& value)const
+		constexpr bool contains(const T&& value)const
 		{
 			return std::find(dataSource.begin(), dataSource.end(), value) != dataSource.end();
 		}
-		constexpr bool contains(T& value)const
+		constexpr bool contains(const T& value)const
 		{
 			return std::find(dataSource.begin(), dataSource.end(), value) != dataSource.end();
 		}
@@ -452,6 +452,10 @@ namespace liaoUtil
 		LinkNode* temp;
 		size_t _size;
 	private:
+		void quickSort()
+		{
+
+		}
 		constexpr LinkNode* end()
 		{
 			if (head == NULL)
@@ -501,12 +505,12 @@ namespace liaoUtil
 		{
 			static int lastPos = 0;
 			char offset = 0;
-			if (temp || pos < lastPos - pos)
+			if (temp ==NULL|| pos < lastPos - pos)
 				temp = head, lastPos = 0;
 			else if (_size - pos < pos - lastPos)
 				temp = end(), lastPos = _size-1;
 			offset = pos > lastPos ? 1 : -1;
-			while(lastPos!=pos)
+			while(lastPos!=pos&&temp!=NULL)
 			{
 				temp = offset>0? &temp->next():&temp->prev();
 				lastPos += offset;
@@ -522,6 +526,20 @@ namespace liaoUtil
 					return stop;
 				stop = &stop->next();
 			} while (stop != head);
+			return NULL;
+		}
+		const LinkNode* inner_findConst(const T& value) const
+		{
+			if (head != NULL)
+			{
+				LinkNode* stop = head;
+				do
+				{
+					if (stop->value() == value)
+						return stop;
+					stop = &stop->next();
+				} while (stop != head);
+			}
 			return NULL;
 		}
 		constexpr void free()
@@ -594,10 +612,12 @@ namespace liaoUtil
 		}
 		constexpr const T& first()
 		{
+			this->emptyListCheck("first()");
 			return head->value();
 		}
 		constexpr const T& last()
 		{
+			this->emptyListCheck("last()");
 			return end()->value();
 		}
 		T& add(const T&& value)
@@ -706,11 +726,261 @@ namespace liaoUtil
 			for (int n = 0; n < size; ++n)
 				remove(arr[n]);
 		}
-		T& insert(Index pos, T&& value)
+		T& insert(Index pos, const T&& value)
 		{
-			this->outRangeCheck(pos, "insert(Index)");
-			LinkNode* newNode = iterate(pos);
-			newNode->linkPrev(value);
+			this->outRangeCheck(pos, "insert(Index,T&&)");
+			return iterate(pos)->linkPrev(value).value();
+		}
+		T& insert(Index pos, const T& value)
+		{
+			this->outRangeCheck(pos, "insert(Index,T&)");
+			return iterate(pos)->linkPrev(value).value();
+		}
+		T& insert(Index pos, List& list)
+		{
+			this->outRangeCheck(pos, "insert(Index, List&)");
+			T* firstEle;
+			for (int n = pos; n < list.size(); ++n)
+			{
+				insert(n, list[n]);
+				if (n == 0)
+					firstEle = &temp->value();
+			}
+			return *firstEle;
+		}
+		T& insert(Index pos, vector<T>& vec)
+		{
+			this->outRangeCheck(pos, "insert(Index, vector<T>&)");
+			T* firstEle = NULL;
+			for (auto& var : vec)
+			{
+				insert(pos++, var);
+				if (firstEle == NULL)
+					firstEle = &temp->value();
+			}
+			return *firstEle;
+		}
+		//在指定位置插入一个list
+		T& insert(Index pos, list<T>& list)
+		{
+			this->outRangeCheck(pos, "insert(Index, list<T>&)");
+			T* firstEle = NULL;
+			for (auto& var : list)
+			{
+				insert(pos++, var);
+				if (firstEle == NULL)
+					firstEle = &temp->value();
+			}
+			return *firstEle;
+		}
+		//在指定位置插入一个initializer
+		T& insert(Index pos, initializer_list<T>& ini)
+		{
+			this->outRangeCheck(pos, "insert(Index, list<T>&)");
+			T* firstEle = NULL;
+			for (auto& var : ini)
+			{
+				insert(pos++, var);
+				if (firstEle == NULL)
+					firstEle = &temp->value();
+			}
+			return *firstEle;
+		}
+		T& get(Index index)
+		{
+			this->emptyListCheck("get(Index)");
+			this->outRangeCheck(index, "get(Index)");
+			return iterate(index)->value();
+		}
+		size_t indexof(T& data)const 
+		{
+			this->emptyListCheck("indexOf(T&)");
+			LinkNode* localNode = head;
+			size_t pos = 0;
+			do
+			{
+				if (localNode->value() == data)
+					return pos;
+				pos++;
+			} while (localNode != head);
+			return -1;
+		}
+		void clear()
+		{
+			head->unlinkAll();
+			delete head;
+			head = NULL;
+			_size = 0;
+		}
+		bool equals(List& obj) const
+		{
+			if (_size != obj.size())
+				return false;
+			else
+			{
+				LinkNode* temp = head;
+				for (int n = 0; n < _size; ++n)
+				{
+					if (inner_findConst(obj[n]) == NULL)
+						return false;
+				}
+				return true;
+			}
+		}
+		bool equals(vector<T>& vec) const
+		{
+			if (_size != vec.size())
+				return false;
+			else
+			{
+				LinkNode* temp = head;
+				for(auto& var: vec)
+				{
+					if (inner_findConst(var) == NULL)
+						return false;
+				}
+				return true;
+			}
+		}
+		bool equals(list<T>& list)const
+		{
+			if (_size != list.size())
+				return false;
+			else
+			{
+				LinkNode* temp = head;
+				for (auto& var : list)
+				{
+					if (inner_findConst(var) == NULL)
+						return false;
+				}
+				return true;
+			}
+		}
+		bool equals(initializer_list<T>& ini)const
+		{
+			if (_size != ini.size())
+				return false;
+			else
+			{
+				LinkNode* temp = head;
+				for (auto& var : ini)
+				{
+					if (inner_findConst(var) == NULL)
+						return false;
+				}
+				return true;
+			}
+		}
+		bool equals(T* arr, int size)const
+		{
+			if (_size != size)
+				return false;
+			else
+			{
+				LinkNode* temp = head;
+				for (int n = 0; n < _size; ++n)
+				{
+					if (inner_findConst(arr[n]) == NULL)
+						return false;
+				}
+				return true;
+			}
+		}
+		vector<T> toVector()const
+		{
+			vector<T> vec;
+			LinkNode* node=  head;
+			do
+			{
+				vec.push_back(node->value());
+			} while (node != head);
+			return vec;
+		}
+		bool contains(const T&& value)const
+		{
+			return inner_findConst(value) != NULL;
+		}
+		bool contains(const T& value)const
+		{
+			return inner_findConst(value) != NULL;
+		}
+		bool contains(List& obj)const
+		{
+			for (int n = 0; n < obj.size(); ++n)
+			{
+				if (!contains(obj[n]))
+					return false;
+			}
+			return true;
+		}
+		bool contains(vector<T>& vec)const
+		{
+			for (auto& var : vec)
+			{
+				if(!contains(var))
+					return false;
+			}
+			return true;
+		}
+		bool contains(list<T>& list)const
+		{
+			for (auto& var : list)
+			{
+				if (!contains(var))
+					return false;
+			}
+			return true;
+		}
+		bool contains(initializer_list<T>& ini)const
+		{
+			for (auto& var : ini)
+			{
+				if (!contains(var))
+					return false;
+			}
+			return true;
+		}
+		void assign(vector<T>& vec)
+		{
+			this->resize(vec.size());
+			LinkNode* node = head;
+			for (auto var:vec)
+			{
+				node->assign(var);
+				node = &node->next();
+			}
+		}
+		//将list覆写到当前容器
+		void assign(list<T>& list)
+		{
+			this->resize(list.size());
+			LinkNode* node = head;
+			for (auto var : list)
+			{
+				node->assign(var);
+				node = &node->next();
+			}
+		}
+		//将initializer覆写到当前容器
+		void assign(initializer_list<T>& ini)
+		{
+			this->resize(ini.size());
+			LinkNode* node = head;
+			for (auto var : ini)
+			{
+				node->assign(var);
+				node = &node->next();
+			}
+		}
+		void sort(void(*sortFunc)(List& _this) = NULL)
+		{
+			if (sortFunc == NULL)
+			{
+
+			}
+			else
+				sortFunc(*this);
 		}
 	};
 }

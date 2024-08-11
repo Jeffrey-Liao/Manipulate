@@ -17,7 +17,7 @@ namespace liaoUtil
 		set<T> dataSource;
 		T value;
 	private:
-		void allocate(int size)
+		void allocate(size_t size)
 		{
 			//无法对set执行allocate操作;
 		}
@@ -66,31 +66,36 @@ namespace liaoUtil
 
 		//不执行操作，默认返回第一个元素
 		__declspec(deprecated("Please use add if you want to make a new element into a set.")) 
-		T& insert(Index pos, T&& value)
+		T& insert(Index pos, const T&& value)
 		{
-			return value;
+			return this->value;
 		}
 		//不执行操作，默认返回第一个元素
-		T& insert(Index pos, T& value)
+		__declspec(deprecated("Please use add if you want to make a new element into a set."))
+		T& insert(Index pos, const T& value)
 		{
-			return value;
+			return this->value;
 		}
 		//不执行操作，默认返回第一个元素
+		__declspec(deprecated("Please use add if you want to make a new element into a set."))
 		T& insert(Index pos, List& list)
 		{
 			return value;
 		}
 		//不执行操作，默认返回第一个元素
+		__declspec(deprecated("Please use add if you want to make a new element into a set."))
 		T& insert(Index pos, vector<T>& vec)
 		{
 			return value;
 		}
 		//不执行操作，默认返回第一个元素
+		__declspec(deprecated("Please use add if you want to make a new element into a set."))
 		T& insert(Index pos, list<T>& list)
 		{
 			return value;
 		}
 		//不执行操作，默认返回第一个元素
+		__declspec(deprecated("Please use add if you want to make a new element into a set."))
 		T& insert(Index pos, initializer_list<T>& ini)
 		{
 			return value;
@@ -154,18 +159,17 @@ namespace liaoUtil
 		{
 			return dataSource.size();
 		}
-		bool isEmpty()
+		bool isEmpty() const
 		{
-
 			return dataSource.empty();
 		}
-		const T& first()
+		const T& first() const
 		{
 			this->emptyListCheck("first()");
 			value = *dataSource.begin();
 			return value;
 		}
-		const T& last()
+		const T& last()const
 		{
 			this->emptyListCheck("last()");
 			value = *(--dataSource.end());
@@ -389,12 +393,12 @@ namespace liaoUtil
 			return dataSource.empty();
 		}
 		//检查当前容器是否包含指定的值
-		bool contains(T&& value)const
+		bool contains(const T&& value)const
 		{
 			return dataSource.contains(value);
 		}
 		//检查当前容器是否包含指定的值
-		bool contains(T& value)const
+		bool contains(const T& value)const
 		{
 			return dataSource.contains(value);
 		}

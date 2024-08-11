@@ -96,7 +96,7 @@ namespace liaoUtil
 		{
 			LinkNode* temp = this->_next,* del;
 			this->_next = NULL;
-			while (temp != NULL)
+			while (temp != NULL&& temp != this)
 			{
 				del = temp;
 				temp = &temp->next();
@@ -119,7 +119,7 @@ namespace liaoUtil
 			node._prev = this;
 			return *this->_next;
 		}
-		constexpr LinkNode& link(T& value)
+		constexpr LinkNode& link(const T& value)
 		{
 			this->_next = new LinkNode(this, this->_next,value);
 			return *this->_next;
@@ -140,7 +140,7 @@ namespace liaoUtil
 			node._next = this;
 			return *this->_prev;
 		}
-		constexpr LinkNode& linkPrev(T& value)
+		constexpr LinkNode& linkPrev(const T& value)
 		{
 			this->_prev = new LinkNode(this->_prev, this, value);
 			return *this->_prev;

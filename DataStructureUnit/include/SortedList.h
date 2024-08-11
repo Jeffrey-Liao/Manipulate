@@ -85,12 +85,12 @@ namespace liaoUtil
 			else
 				this->dataSource.insert(itor, value);
 		}
-		T& insert(Index pos, T& value)
+		T& insert(Index pos, const T& value)
 		{
 			*this->dataSource.insert(this->iterate(pos), value);
-			return value;
+			return this->value;
 		}
-		T& insert(Index pos, T&& value)override
+		T& insert(Index pos, const T&& value)override
 		{
 			*this->dataSource.insert(this->iterate(pos), value);
 			return this->value;

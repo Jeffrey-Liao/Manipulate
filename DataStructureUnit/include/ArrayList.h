@@ -80,12 +80,12 @@ namespace liaoUtil
 		{
 			return dataSource.empty();
 		}
-		constexpr const T& first()override
+		constexpr const T& first()const override
 		{
 			this->emptyListCheck("first()");
 			return dataSource[0];
 		}
-		constexpr const T& last() override
+		constexpr const T& last() const override
 		{
 			this->emptyListCheck("last()");
 			return dataSource[dataSource.size() - 1];
@@ -199,13 +199,13 @@ namespace liaoUtil
 				dataSource.erase(std::remove(dataSource.begin(), dataSource.end(), arr[n]));
 		}
 
-		T& insert(Index pos, T& value) throw()override
+		T& insert(Index pos, const T& value) throw()override
 		{
 			this->outRangeCheck(pos, "insert(Index,T&)");
 			dataSource.insert(dataSource.begin() + pos, value);
 			return dataSource[pos];
 		}
-		T& insert(Index pos, T&& value)throw()override
+		T& insert(Index pos, const T&& value)throw()override
 		{
 			this->outRangeCheck(pos, "insert(Index,T&&)");
 			dataSource.insert(dataSource.begin() + pos, value);
@@ -315,11 +315,11 @@ namespace liaoUtil
 		{
 			return dataSource;
 		}
-		constexpr bool contains(T&& value)const override
+		constexpr bool contains(const T&& value)const override
 		{
 			return std::find(dataSource.begin(), dataSource.end(), value) != dataSource.end();
 		}
-		constexpr bool contains(T& value)const override
+		constexpr bool contains(const T& value)const override
 		{
 			return std::find(dataSource.begin(), dataSource.end(), value) != dataSource.end();
 		}
