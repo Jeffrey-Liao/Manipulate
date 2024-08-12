@@ -70,6 +70,12 @@ namespace liaoUtil
 		{
 			return *this->_next;
 		}
+		void exchange()
+		{
+			LinkNode* temp = _next;
+			this->_next = _prev;
+			this->_prev = temp;
+		}
 		LinkNode& prev()
 		{
 			return *this->_prev;

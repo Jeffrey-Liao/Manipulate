@@ -975,12 +975,89 @@ namespace liaoUtil
 		}
 		void sort(void(*sortFunc)(List& _this) = NULL)
 		{
+			this->emptyListCheck("sort(operation)");
 			if (sortFunc == NULL)
-			{
-
-			}
+				this->quickSort();
 			else
 				sortFunc(*this);
+		}
+		void apply(void(*operation)(T& value))
+		{
+			this->emptyListCheck("apply(operation)");
+			LinkNode* temp = head;
+			do
+			{
+				operation(temp->value());
+				temp = &temp->next();
+			} while (temp != head);
+		}
+		size_t count(T& data)const
+		{
+			size_t cnt = 0;
+			LinkNode* temp = head;
+			do
+			{
+				if (temp->value() == data)
+					cnt++;
+				temp = &temp->next();
+			} while (temp != head);
+			return cnt;
+		}
+		void subList(List& destination, Index start, Index end)
+		{
+			this->validIntervalCheck(start, end, "subList(List&,Index,Index)");
+			destination.resize(start-end);
+			for (int n = start; n < end; ++n)
+			{
+				auto node=iterate(n);
+				destination.add(node->value());
+			}
+		}
+		void copyFrom(List& obj)
+		{
+			this->resize(obj.size());
+			for (int n = 0; n < obj.size(); ++n)
+			{
+				get(n) = obj[n];
+			}
+		}
+		void copyTo(List& obj)
+		{
+			obj.resize(this->size());
+			for(int n =0;n<this->size();++n)
+			{
+				get(n) = obj[n];
+			}
+		}
+		void set(Index pos, T& value)
+		{
+			this->outRangeCheck(pos, "set(Index, T&)");
+			get(pos) = value;
+		}
+		void swap(Index pos, Index pos2)
+		{
+			this->outRangeCheck(pos, "swap(Index, Index)");
+			this->outRangeCheck(pos2, "swap(Index, Index)");
+			iterate(pos)->swap(*iterate(pos2));
+		}
+		void reverse()
+		{
+			LinkNode* node = head;
+			do
+			{
+				node->exchange();
+				node = &node->next();
+			} while (node != head);
+			head = &head->next();
+		}
+		void resize(int size)
+		{
+			if (size > _size)
+				this->allocate(size - _size);
+			else
+			{
+				iterate(size)->unlinkAll();
+			}
 		}
 	};
 }
