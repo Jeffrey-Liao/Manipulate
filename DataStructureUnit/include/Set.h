@@ -11,7 +11,7 @@ namespace liaoUtil
 	引用返回值是基于List基类的实现
 	实际上修改的是临时数据字段，对Set内的元素没有任何影响
 	*/
-	class Set:public List<T>
+	class Set
 	{
 		using List = List<T>;
 		set<T> dataSource;
@@ -159,21 +159,15 @@ namespace liaoUtil
 		{
 			return dataSource.size();
 		}
-		bool isEmpty() const
-		{
-			return dataSource.empty();
-		}
 		const T& first() const
 		{
 			this->emptyListCheck("first()");
-			value = *dataSource.begin();
-			return value;
+			return *dataSource.begin();
 		}
 		const T& last()const
 		{
 			this->emptyListCheck("last()");
-			value = *(--dataSource.end());
-			return value;
+			return *(--dataSource.end());
 		}
 		T& add(const T&& value)
 		{
@@ -224,7 +218,7 @@ namespace liaoUtil
 			return value= *list.begin();
 		}
 		//添加initializer内的全部元素到当前列表，返回第一个新元素的引用
-		T& add(initializer_list<T>& ini)
+		T& add(const initializer_list<T>& ini)
 		{
 			StdToSet(ini);
 			return value= *ini.begin();

@@ -40,11 +40,15 @@ namespace liaoUtil
 		{
 			return data;
 		}
-		bool compare(Node& data)const
+		const TYPE& value() const 
+		{
+			return data;
+		}
+		constexpr bool compare(Node& data)const
 		{
 			return this->data == data.value();
 		}
-		bool compare(T& data)const
+		constexpr bool compare(T& data)const
 		{
 			return this->data == data;
 		}

@@ -11,7 +11,7 @@ namespace liaoUtil
 		using LinkList = LinkList<T>;
 		T value;
 	private:
-		static int upperDivide(int val)
+		static int upperDivide(const int val)
 		{
 			return val  == 1||val == 0 ? val : val / 2;
 		}
@@ -85,46 +85,44 @@ namespace liaoUtil
 			else
 				this->dataSource.insert(itor, value);
 		}
-		T& insert(Index pos, const T& value)
+		T& insert(const Index pos, const T& value)
 		{
-			*this->dataSource.insert(this->iterate(pos), value);
-			return this->value;
+			return add(value);
 		}
-		T& insert(Index pos, const T&& value)override
+		T& insert(const Index pos, const T&& value)override
 		{
-			*this->dataSource.insert(this->iterate(pos), value);
-			return this->value;
+			return add(value);
 		}
-		T& insert(Index pos, List& list)
+		T& insert(const Index pos, const List& list)
 		{
-			for (int n = 0; n < list.size(); ++n)
-				this->dataSource.insert(this->iterate(pos + n), list[n]);
-			return this->value;
+			return add(list);
 		}
-		T& insert(Index pos, vector<T>& vec)
+		T& insert(const Index pos, const  vector<T>& vec)
 		{
-			this->dataSource.insert(this->iterate(pos), vec.begin(), vec.end());
-			return this->value;
+			return add(vec);
 		}
-		T& insert(Index pos, list& list)
+		T& insert(const Index pos, const list& list)
 		{
-			this->dataSource.insert(this->iterate(pos), list.begin(), list.end());
-			return this->value;
+			return add(list);
 		}
-		T& insert(Index pos, initializer_list<T>& ini)
+		T& insert(const Index pos, const initializer_list<T>& ini)
 		{
-			this->dataSource.insert(this->iterate(pos), ini.begin(), ini.end());
-			return this->value;
+			return add(ini);
 		}
-		void swap(Index pos1, Index pos2)
+		void swap(const Index pos1, const  Index pos2)
 		{
 
 		}
-		void set(Index pos, T& value)
+		void set(const Index pos, const T& value)
 		{
 		}
-		void resize(Index newSize)
+		void resize(const Index newSize)
 		{
+		}
+		constexpr T& get(const Index pos)
+		{
+			this->emptyListCheck("get(Index)");
+			return value = *this->iterate(pos);
 		}
 	public:
 		SortedList()
@@ -133,20 +131,20 @@ namespace liaoUtil
 		SortedList(int size)
 			:LinkList(size)
 		{}
-		SortedList(List& obj)
+		SortedList(const List& obj)
 			:LinkList(obj)
 		{}
-		SortedList(vector<T> & obj)
+		SortedList(const vector<T> & obj)
 		{
 			for (auto& var : obj)
 				newValue(var);
 		}
-		SortedList(initializer_list<T> ini)
+		SortedList(const initializer_list<T> ini)
 		{
 			for (auto& var : ini)
 				newValue(var);
 		}
-		SortedList(list& obj)
+		SortedList(const list& obj)
 		{
 			for (auto& var : obj)
 				newValue(var);
@@ -161,33 +159,33 @@ namespace liaoUtil
 			newValue(data);
 			return value;
 		}
-		T& add(List& obj) override
+		T& add(const List& obj) override
 		{
 			this->LinkList::newValue(obj);
 			return value;
 		}
-		T& add(int number, T& value)
+		T& add(const int number, const T& value)
 		{
 			for (int n = 0; n < number; ++n)
 				newValue(value);
 			return value;
 		}
-		T& add(vector<T>& vec)
+		T& add(const vector<T>& vec)
 		{
 			this->StdToStd( vec);
 			return value;
 		}
-		T& add(list& ls)
+		T& add(const list& ls)
 		{
 			this->StdToStd( ls);
 			return value;
 		}
-		T& add(initializer_list<T>& ini)
+		T& add(const initializer_list<T>& ini)
 		{
 			this->StdToStd(ini);
 			return value;
 		}
-		T& add(T* arr, int size)
+		T& add(const T* arr, const int size)
 		{
 			for (int n = 0; n < size; ++n)
 			{
@@ -195,33 +193,33 @@ namespace liaoUtil
 			}
 			return value;
 		}
-		T& add(const T&& value)
+		T& add(T&& value)
 		{
 			newValue(value);
 			return this->value;
 		}
-		T& add(int number, T&& value) override
+		T& add(const int number, T&& value) override
 		{
 			newValue(value);
 			return this->value;
 		}
 		
-		void assign(vector<T>& vec)
+		void assign(const vector<T>& vec)
 		{
 			this->dataSource.clear();
 			this->StdToStd(vec);
 		}
-		void assign(list& list)
+		void assign(const list& list)
 		{
 			this->dataSource.clear();
 			this->StdToStd( list);
 		}
-		void assign(initializer_list<T>& ini)
+		void assign(const initializer_list<T>& ini)
 		{
 			this->dataSource.clear();
 			this->StdToStd( ini);
 		}
-		constexpr T& get(Index index)
+		constexpr const  T& get(const Index index) const
 		{
 			this->emptyListCheck("get(Index)");
 			this->value = *this->iterate(index);

@@ -3,22 +3,7 @@
 #include <forward_list>
 using namespace liaoUtil;
 using namespace std;
-class UnitTest
-{
-public:
-	static void ArrayListTest()
-	{
-		try
-		{
-			List<int>& test = *new ArrayList<int>();
-			List<int>& SetC = *new Set<int>();
-			test.remove(5);
-		}
-		catch (LiaoException* e)
-		{
-			delete e;
-		}
-	}
+
 	static bool SortedListTest()
 	{
 		std::default_random_engine generator(std::random_device{}());
@@ -45,5 +30,8 @@ public:
 
 int main()
 {
-	UnitTest::SortedListTest();
+	List<int>& obj = *new LiaoLinkList<int>();
+	obj = { 1,2,3,4 };
+	cout<<obj.equals({ 1,2,3,4 });
+	delete& obj;
 }

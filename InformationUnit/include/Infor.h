@@ -28,6 +28,7 @@ namespace liaoInfor
 		void write(const char* dir);
 		//向控制台界面输出调试信息方法
 		void display();
+		void display(string message);
 		//输出上次的调试信息到控制台
 	};
  class DebugInfor :public Infor
@@ -35,6 +36,7 @@ namespace liaoInfor
 	private:
 		DebugInfor();
 	public:
+		using Infor::update;
 		//向文件写入调试信息方法
 		void update(const string errorClass, const string errorFunc, const  string errorMessage, bool timer = false);
 		
@@ -45,6 +47,7 @@ namespace liaoInfor
 	private:
 		ErrorInfor();
 	public:
+		using Infor::update;
 		//向文件写入调试信息方法
 		void update(const string errorClass, const  string errorFunc, const string errorMessage, bool timer = false);
 		static ErrorInfor instance;
@@ -52,6 +55,7 @@ namespace liaoInfor
  class ExceptionInfor :public Infor
  {
  public:
+	 using Infor::update;
 	 ExceptionInfor();
 	 //向文件写入调试信息方法
 	 void update(const string exception, const string errorClass, const string errorFunc, const string errorMessage, bool timer = false);
@@ -61,6 +65,7 @@ class RuntimeInfor :public Infor
 	private:
 		RuntimeInfor();
 	public:
+		using Infor::update;
 		//向文件写入调试信息方法
 		void update(const string errorClass, const string errorFunc, const  string errorMessage, bool timer = false);
 		static RuntimeInfor instance;

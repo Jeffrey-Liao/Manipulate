@@ -15,13 +15,13 @@ namespace liaoUtil
 	{
 	protected:
 		//基础构造函数，什么都不做
-		explicit List()
+		explicit constexpr List()
 		{}
 		/*
 		* 基于初始大小的构造函数
 		* 调用各实际容器实现的allocate以分配初始大小的内存
 		*/
-		explicit List(size_t _size)
+		explicit constexpr List(size_t _size)
 		{
 			allocate(_size);
 		}
@@ -29,7 +29,7 @@ namespace liaoUtil
 		* 拷贝构造函数
 		* 调用各实际容器实现的copyFrom实现拷贝操作
 		*/
-		explicit List(List& obj)
+		explicit constexpr List(const List& obj)
 		{
 			copyFrom(obj);
 		}
@@ -58,7 +58,7 @@ namespace liaoUtil
 		* 容器自定义的分配方法
 		* 可以指导基类基于初始值初始化的构造方法
 		*/
-		virtual void allocate(size_t _size) = 0;
+		virtual void allocate(const size_t _size) = 0;
 		/*
 		* 根据给定值引用创建一个新元素
 		*/
@@ -94,7 +94,7 @@ namespace liaoUtil
 		* 拷贝其他std容器内的值到当前容器
 		* （尤其适用于非std内核实现的容器）
 		*/
-		void StdToStd( Container& obj)
+		void StdToStd(const Container& obj)
 		{
 			for (auto& var : obj)
 				newValue(var);
@@ -113,77 +113,95 @@ namespace liaoUtil
 		virtual const T& first() const = 0;
 		//获取当前容器最后一个元素的引用
 		virtual const T& last() const = 0;
+		//获取当前容器的第一个元素的引用
+		virtual T& first() = 0;
+		//获取当前容器最后一个元素的引用
+		virtual T& last()= 0;
 
 		//根据给定的右值新增一个元素，返回新元素的引用
-		virtual T& add(const T&& value) = 0;
+		virtual T& add(T&& value) = 0;
 		//根据给定的左值新增一个元素，返回新元素的引用
 		virtual T& add(const T& value) = 0;
 		//根据给定的List抽象对象新增多个元素，返回第一个新元素的引用
-		virtual T& add(List& obj) = 0;
+		virtual T& add(const List& obj) = 0;
 		//基于给定的右值填充number个新元素，返回第一个新元素的引用
-		virtual T& add(int number, T&& value) = 0;
+		virtual T& add(const int number, T&& value) = 0;
 		//基于给定的左值填充number个新元素，返回第一个新元素的引用
-		virtual T& add(int number, T& value) = 0;
+		virtual T& add(const int number,const  T& value) = 0;
 		//添加vector内的全部元素到当前列表，返回第一个新元素的引用
-		virtual T& add(vector& vec) = 0;
+		virtual T& add(const vector& vec) = 0;
 		//添加list内的全部元素到当前列表，返回第一个新元素的引用
-		virtual T& add(list& list) = 0;
+		virtual T& add(const list& list) = 0;
 		//添加initializer内的全部元素到当前列表，返回第一个新元素的引用
-		virtual T& add(initializer_list& ini) = 0;
+		virtual T& add(const initializer_list& ini) = 0;
 		//添加数组内的全部元素到当前列表，返回第一个新元素的引用（该函数默认给定的size是合法的）
-		virtual T& add(T* arr, int size) = 0;
-		
+		virtual T& add(const T* arr, const int size) = 0;
+		//User promise the given container had operator[] and size function to take size of container.
+		template<class Container>
+		T& add(const Container& obj)
+		{
+			T* result = NULL;
+			for (int n = 0; n < obj.size(); ++n)
+			{
+				if (n == 0)
+					result = this->add(obj[n]);
+				else
+					this->add(obj[n]);
+			}
+			return *result;
+		}
 		//移除指定位置的元素
-		virtual void remove(Index pos) = 0;
+		virtual void remove(const Index pos) = 0;
 		//移除指定区间的元素
-		virtual void remove(Index start,Index end) = 0;
+		virtual void remove(const Index start, const Index end) = 0;
 		//移除第一个指定的元素
-		virtual void remove(T& data) = 0;
+		virtual void remove(const T& data) = 0;
 		//移除第一个指定的元素
 		virtual void remove(T&& data) = 0;
 		//移除所有指定的元素
-		virtual void removeAll(T& data) = 0;
+		virtual void removeAll(const T& data) = 0;
 		//移除第一个存在于initializer中的元素
-		virtual void remove(initializer_list& ini) = 0;
+		virtual void remove(const initializer_list& ini) = 0;
 		//移除第一个存在于List中的元素
-		virtual void remove(List& obj) = 0;
+		virtual void remove(const List& obj) = 0;
 		//移除第一个存在于vector中的元素
-		virtual void remove(vector& vec) = 0;
+		virtual void remove(const vector& vec) = 0;
 		//移除第一个存在于list中的元素
-		virtual void remove(list& ls) = 0;
+		virtual void remove(const	list& ls) = 0;
 		//移除第一个存在于数组中的元素
-		virtual void remove(T* arr, int size) = 0;
+		virtual void remove(const T* arr, const int size) = 0;
 
 		//在指定位置插入一个元素
-		virtual T& insert(Index pos, const T&& value) = 0;
+		virtual T& insert(const Index pos, T&& value) = 0;
 		//在指定位置插入一个元素
-		virtual T& insert(Index pos, const T& value) = 0;
+		virtual T& insert(const Index pos, const T& value) = 0;
 		//在指定位置插入一个List
-		virtual T& insert(Index pos, List& list) = 0;
+		virtual T& insert(const Index pos, const List& list) = 0;
 		//在指定位置插入一个vector
-		virtual T& insert(Index pos, vector& vec) = 0;
+		virtual T& insert(const Index pos,const vector& vec) = 0;
 		//在指定位置插入一个list
-		virtual T& insert(Index pos, list& list) = 0;
+		virtual T& insert(const Index pos, const list& list) = 0;
 		//在指定位置插入一个initializer
-		virtual T& insert(Index pos, initializer_list& ini) = 0;
+		virtual T& insert(const Index pos, const initializer_list& ini) = 0;
 
 		//获取指定位置的元素引用
-		virtual T& get(Index index) = 0;
+		virtual T& get(const Index index) = 0;
+		virtual const T& get(const Index index) const = 0;
 		//获取指定元素的索引
-		virtual size_t indexOf(T& data) const = 0;
+		virtual size_t indexOf(const T& data) const = 0;
 		//清空容器
 		virtual void clear() = 0;
 
 		//比较容器
-		virtual bool equals(List& obj) const = 0;
+		virtual bool equals(const List& obj) const = 0;
 		//比较容器
-		virtual bool equals(vector& vec) const = 0;
+		virtual bool equals(const vector& vec) const = 0;
 		//比较容器
-		virtual bool equals(list& list)const = 0;
+		virtual bool equals(const list& list)const = 0;
 		//比较容器
-		virtual bool equals(initializer_list& ini)const = 0;
+		virtual bool equals(const initializer_list& ini)const = 0;
 		//比较容器
-		virtual bool equals(T* arr, int size)const = 0;
+		virtual bool equals(const T* arr, const  int size)const = 0;
 
 		//将当前数组转为[value1,value2,...]格式的字符串，如果为空则为[]
 		string toString()
@@ -210,69 +228,73 @@ namespace liaoUtil
 		//检查当前容器是否包含指定的值
 		virtual bool contains(const T& value)const = 0;
 		//检查当前容器是否包含指定List内的全部元素
-		virtual bool contains(List& obj)const = 0;
+		virtual bool contains(const List& obj)const = 0;
 		//检查当前容器是否包含指定vector内的全部元素
-		virtual bool contains(vector& vec)const = 0;
+		virtual bool contains(const vector& vec)const = 0;
 		//检查当前容器是否包含指定list内的全部元素
-		virtual bool contains(list& list)const = 0;
+		virtual bool contains(const list& list)const = 0;
 		//检查当前容器是否包含指定initializer内的全部元素
-		virtual bool contains(initializer_list& ini)const = 0;
+		virtual bool contains(const initializer_list& ini)const = 0;
 
 		//将vector覆写到当前容器
-		virtual void assign(vector& vec) = 0;
+		virtual void assign(const vector& vec) = 0;
 		//将list覆写到当前容器
-		virtual void assign(list& list) = 0;
+		virtual void assign(const list& list) = 0;
 		//将initializer覆写到当前容器
-		virtual void assign(initializer_list& ini) = 0;
+		virtual void assign(const initializer_list& ini) = 0;
 		virtual void sort(void(*sortFunc)(List& _this) = NULL) = 0;
 		virtual void apply(void(*operation)(T& value)) = 0;
-		virtual size_t count(T& data)const = 0;
+		virtual size_t count(const T& data)const = 0;
 
-		virtual void subList(List& destination, Index start, Index end) = 0;
-		virtual void copyFrom(List& obj) = 0;
+		virtual void subList(List& destination,const Index start,const Index end) = 0;
+		virtual void copyFrom(const List& obj) = 0;
 		virtual void copyTo(List& obj) = 0;
-		virtual void set(Index pos, T& value) = 0;
-		virtual void swap(Index pos1, Index pos2) = 0;
+		virtual void set(const Index pos,const T& value) = 0;
+		virtual void swap(const Index pos1, const  Index pos2) = 0;
 		virtual void reverse() = 0;
 
-		virtual void resize(Index newSize) = 0;
-		T& operator[](int index)
+		virtual void resize(const Index newSize) = 0;
+		T& operator[](const Index index)
 		{
 			return this->get(index);
 		}
-		void operator()(List& target, int start, int end)
+		T& operator[](const Index index) const
+		{
+			return this->get(index);
+		}
+		void operator()(List& target, const Index start, const  Index end)
 		{
 			this->subList(target, start, end);
 		}
-		T& operator+(T& data)
+		T& operator+(const T& data)
 		{
 			return this->add(data);
 		}
-		void operator-(T& data)
+		void operator-(const T& data)
 		{
 			this->remove(data);
 		}
-		bool operator==(List& obj)
+		bool operator==(const List& obj)
 		{
 			return this->equals(obj);
 		}
-		void operator=(int size)
+		void operator=(const size_t size)
 		{
 			resize(size);
 		}
-		void operator=(List& obj)
+		void operator=(const List& obj)
 		{
 			copyFrom(obj);
 		}
-		void operator=(initializer_list& ini)
+		void operator=(const initializer_list& ini)
 		{
 			assign(ini);
 		}
-		void operator=(list& ls)
+		void operator=(const list& ls)
 		{
 			assign(ls);
 		}
-		void operator=(vector vec)
+		void operator=(const vector vec)
 		{
 			assign(vec);
 		}

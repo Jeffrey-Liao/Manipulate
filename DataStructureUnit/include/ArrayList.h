@@ -37,7 +37,7 @@ namespace liaoUtil
 			}
 			return -1;
 		}
-		bool validPos(Index pos)const override
+		bool validPos(const Index pos)const override
 		{
 			return pos < dataSource.size()&& pos >=0;
 		}
@@ -49,21 +49,21 @@ namespace liaoUtil
 		ArrayList()
 			:List()
 		{}
-		ArrayList(size_t size)
+		ArrayList(const size_t size)
 			:List(size)
 		{}
-		ArrayList(List& obj)
+		ArrayList(const List& obj)
 			:List(obj)
 		{}
-		ArrayList(vector<T>& obj)
+		ArrayList(const vector<T>& obj)
 		{
 			dataSource = obj;
 		}
-		ArrayList(initializer_list<T> ini)
+		ArrayList(const initializer_list<T> ini)
 		{
 			this->StdToStd(ini);
 		}
-		ArrayList(list<T>& obj)
+		ArrayList(const list<T>& obj)
 		{
 			this->StdToStd(obj);
 		}
@@ -95,123 +95,123 @@ namespace liaoUtil
 			dataSource.push_back(data);
 			return dataSource[dataSource.size() - 1];
 		}
-		T& add(List& obj)override
+		T& add(const List& obj)override
 		{
 			newValue(obj);
 			int index = dataSource.size() - obj.size() - 1;
 			return dataSource[index];
 		}
-		T& add(int number, T& value)override
+		T& add(const int number, const T& value)override
 		{
 			for (int n = 0; n < number; ++n)
 				dataSource.push_back(value);
 			int index = dataSource.size() - number - 1;
 			return dataSource[index];
 		}
-		T& add(int number, T&& value) override
+		T& add(const int number, T&& value) override
 		{
 			return dataSource.emplace_back(value);
 		}
-		T& add(vector<T>& vec)override
+		T& add(const vector<T>& vec)override
 		{
 			this->StdToStd( vec);
 			int index = dataSource.size() - vec.size() - 1;
 			return dataSource[index];
 		}
-		T& add(list<T>& ls)override
+		T& add(const list<T>& ls)override
 		{
 			this->StdToStd( ls);
 			int index = dataSource.size() - ls.size() - 1;
 			return dataSource[index];
 		}
-		T& add(initializer_list<T>& ini)override
+		T& add(const initializer_list<T>& ini)override
 		{
 			this->StdToStd( ini);
 			int index = dataSource.size() - ini.size() - 1;
 			return dataSource[index];
 		}
-		T& add(T* arr, int size)override
+		T& add(const T* arr, const int size)override
 		{
 			for (int n = 0; n < size; ++n)
 				dataSource.push_back(arr[n]);
 			int index = dataSource.size() - size - 1;
 			return dataSource[index];
 		}
-		T& add(const T&& value)
+		T& add(T&& value)
 		{
 			return dataSource.emplace_back(value);
 		}
-		void remove(Index pos) throw() override
+		void remove(const Index pos) throw() override
 		{
 			this->emptyListCheck("remove(Index)");
 			this->outRangeCheck(pos,"remove(Index)");
 			dataSource.erase(dataSource.begin() + pos);
 		}
-		void remove(Index start, Index end)throw()override
+		void remove(const Index start, const Index end)throw()override
 		{
 			this->emptyListCheck("remove(Index,Index)");
 			this->validIntervalCheck(start, end,"remove(Index,Index)");
 			dataSource.erase(dataSource.begin() + start, dataSource.begin() + end);
 		}
-		void remove(T& value)override
+		void remove(const T& value)override
 		{
 			this->emptyListCheck("remove(T&)");
 			dataSource.erase(std::remove(dataSource.begin(),dataSource.end(),value));
 		}
-		void remove(T&& value)override
+		void remove( T&& value)override
 		{
 			this->emptyListCheck("remove(T&&)");
 			dataSource.erase(std::remove(dataSource.begin(), dataSource.end(), value));
 		}
-		void removeAll(T& data)override
+		void removeAll(const T& data)override
 		{
 			this->emptyListCheck("removeAll(T&)");
 			for (auto itor = std::remove(dataSource.begin(), dataSource.end(), data); itor != dataSource.end();dataSource.erase(itor));
 		}
-		void remove(initializer_list<T>& ini)override
+		void remove(const initializer_list<T>& ini)override
 		{
 			this->emptyListCheck("remove(initializer_list<T>&)");
 			for (auto& var : ini)
 				dataSource.erase(std::remove(dataSource.begin(), dataSource.end(), var));
 		}
-		void remove(List& obj)
+		void remove(const List& obj)
 		{
 			this->emptyListCheck("remove(List&)");
 			for (int n = 0; n < obj.size(); ++n)
 				dataSource.erase(std::remove(dataSource.begin(), dataSource.end(), obj[n]));
 		}
-		void remove(vector<T>& vec)override
+		void remove(const vector<T>& vec)override
 		{
 			this->emptyListCheck("remove(vector<T>&)");
 			for (auto& var : vec)
 				dataSource.erase(std::remove(dataSource.begin(), dataSource.end(), var));
 		}
-		void remove(list<T>& ls)override
+		void remove(const list<T>& ls)override
 		{
 			this->emptyListCheck("remove(list<T>&)");
 			for (auto& var : ls)
 				dataSource.erase(std::remove(dataSource.begin(), dataSource.end(), var));
 		}
-		void remove(T* arr, int size)override
+		void remove(const T* arr, const int size)override
 		{
 			this->emptyListCheck("remove(T*,int)");
 			for (int n = 0; n < size; ++n)
 				dataSource.erase(std::remove(dataSource.begin(), dataSource.end(), arr[n]));
 		}
 
-		T& insert(Index pos, const T& value) throw()override
+		T& insert(const Index pos, const T& value) throw()override
 		{
 			this->outRangeCheck(pos, "insert(Index,T&)");
 			dataSource.insert(dataSource.begin() + pos, value);
 			return dataSource[pos];
 		}
-		T& insert(Index pos, const T&& value)throw()override
+		T& insert(const Index pos, T&& value)throw()override
 		{
 			this->outRangeCheck(pos, "insert(Index,T&&)");
 			dataSource.insert(dataSource.begin() + pos, value);
 			return dataSource[pos];	
 		}
-		T& insert(Index pos, List& list)throw()override
+		T& insert(const Index pos, const List& list)throw()override
 		{
 			this->outRangeCheck(pos, "insert(Index,List&)");
 			dataSource.reserve(list.size());
@@ -219,34 +219,34 @@ namespace liaoUtil
 				dataSource.insert(dataSource.begin() + pos, list[n]);
 			return dataSource[pos];
 		}
-		T& insert(Index pos, vector<T>& vec)throw()override
+		T& insert(const Index pos, const vector<T>& vec)throw()override
 		{
 			this->outRangeCheck(pos, "insert(Index,vector&)");
 			dataSource.reserve(vec.size());
 			dataSource.insert(dataSource.begin() + pos, vec.begin(), vec.end());
 			return dataSource[pos];
 		}
-		T& insert(Index pos, list<T>& list)throw()override
+		T& insert(const Index pos, const list<T>& list)throw()override
 		{
 				this->outRangeCheck(pos, "insert(Index,list&)");
 				dataSource.reserve(list.size());
 				dataSource.insert(dataSource.begin() + pos, list.begin(), list.end());
 				return dataSource[pos];
 		}
-		T& insert(Index pos, initializer_list<T>& ini)throw()override
+		T& insert(const Index pos, const initializer_list<T>& ini)throw()override
 		{
 				this->outRangeCheck(pos, "insert(Index,initializer_list&)");
 				dataSource.reserve(ini.size());
 				dataSource.insert(dataSource.begin() + pos, ini.begin(), ini.end());
 				return dataSource[pos];
 		}
-		constexpr T& get(Index index)throw()override
+		constexpr T& get(const Index index)throw()override
 		{
 			this->emptyListCheck("get(Index)");
 			this->outRangeCheck(index, "get(Index)");
 			return dataSource[index];
 		}
-		constexpr size_t indexOf(T& data) const override
+		constexpr size_t indexOf(const T& data) const override
 		{
 			int n = 0;
 			for (auto& var : dataSource)
@@ -261,7 +261,7 @@ namespace liaoUtil
 		{
 			dataSource.clear();
 		}
-		constexpr bool equals(List& obj) const override
+		constexpr bool equals(const List& obj) const override
 		{
 			if (dataSource.size() != obj.size())
 				return false;
@@ -273,19 +273,19 @@ namespace liaoUtil
 				return true;
 			}
 		}
-		constexpr bool equals(vector<T>& vec) const override
+		constexpr bool equals(const vector<T>& vec) const override
 		{
 			return dataSource == vec;
 		}
-		constexpr bool equals(list<T>& list)const override
+		constexpr bool equals(const list<T>& list)const override
 		{
 			return std::equal(dataSource.begin(),dataSource.end(), list.begin());
 		}
-		constexpr bool equals(initializer_list<T>& ini)const override
+		constexpr bool equals(const initializer_list<T>& ini)const override
 		{
 			return std::equal(dataSource.begin(), dataSource.end(), ini.begin());
 		}
-		constexpr bool equals(T* arr, int size)const override
+		constexpr bool equals(const T* arr, const int size)const override
 		{
 			if (dataSource.size() != size)
 				return false;
@@ -297,16 +297,16 @@ namespace liaoUtil
 				return true;
 			}
 		}
-		constexpr void assign(vector<T>& vec)
+		constexpr void assign(const vector<T>& vec)
 		{
 			dataSource = vec;
 		}
-		constexpr void assign(list<T>& list)
+		constexpr void assign(const list<T>& list)
 		{
 			dataSource.resize(list.size());
 			std::copy(list.begin(), list.end(), dataSource.begin());
 		}
-		constexpr void assign(initializer_list<T>& ini)
+		constexpr void assign(const initializer_list<T>& ini)
 		{
 			dataSource.resize(ini.size());
 			std::copy(ini.begin(), ini.end(), dataSource.begin());
@@ -315,7 +315,7 @@ namespace liaoUtil
 		{
 			return dataSource;
 		}
-		constexpr bool contains(const T&& value)const override
+		constexpr bool contains(T&& value)const override
 		{
 			return std::find(dataSource.begin(), dataSource.end(), value) != dataSource.end();
 		}
@@ -323,7 +323,7 @@ namespace liaoUtil
 		{
 			return std::find(dataSource.begin(), dataSource.end(), value) != dataSource.end();
 		}
-		constexpr bool contains(List& obj)const override
+		constexpr bool contains(const List& obj)const override
 		{
 			for (int n = 0; n < obj.size(); ++n)
 			{
@@ -333,7 +333,7 @@ namespace liaoUtil
 			}
 			return true;
 		}
-		constexpr bool contains(vector<T>& vec)const override
+		constexpr bool contains(const vector<T>& vec)const override
 		{
 			for (int n = 0; n < vec.size(); ++n)
 			{
@@ -343,7 +343,7 @@ namespace liaoUtil
 			}
 			return true;
 		}
-		constexpr bool contains(list<T>& list)const override
+		constexpr bool contains(const list<T>& list)const override
 		{
 			for (auto& var2: list)
 			{
@@ -353,7 +353,7 @@ namespace liaoUtil
 			}
 			return true;
 		}
-		constexpr bool contains(initializer_list<T>& ini)const override
+		constexpr bool contains(const initializer_list<T>& ini)const override
 		{
 			for (auto& var2 : ini)
 			{
@@ -377,17 +377,17 @@ namespace liaoUtil
 			for (auto& var : dataSource)
 				operation(var);
 		}
-		constexpr size_t count(T& data)const override
+		constexpr size_t count(const T& data)const override
 		{
 			return std::count(dataSource.begin(), dataSource.end(), data);
 		}
-		void subList(List& destination,Index start, Index end)throw() override
+		void subList(List& destination, const Index start, const Index end)throw() override
 		{
 			this->validIntervalCheck(start, end, "subList(List&,Index,Index)");
 			for (int n = start; n <= end; ++n)
 				destination.add(dataSource[n]);
 		}
-		constexpr void copyFrom(List& obj) override
+		constexpr void copyFrom(const List& obj) override
 		{
 			if (obj.size() > size())
 				dataSource.resize(obj.size());
@@ -402,12 +402,12 @@ namespace liaoUtil
 			for (int n = 0; n < size(); ++n)
 				obj[n] = dataSource[n];
 		}
-		constexpr void set(Index pos, T& value)throw()override
+		constexpr void set(const Index pos, const T& value)throw()override
 		{
 			this->outRangeCheck(pos, "set(Index,T&)");
 			dataSource[pos] = value;
 		}
-		constexpr void swap(Index pos1, Index pos2) throw()override
+		constexpr void swap(const Index pos1, const Index pos2) throw()override
 		{
 			this->outRangeCheck(pos1,"swap");
 			this->outRangeCheck(pos2, "swap");
@@ -418,7 +418,7 @@ namespace liaoUtil
 			this->emptyListCheck("reverse()");
 			std::reverse(dataSource.begin(), dataSource.end());
 		}
-		constexpr void resize(Index newSize)override
+		constexpr void resize(const Index newSize)override
 		{
 			dataSource.resize(newSize);
 		}

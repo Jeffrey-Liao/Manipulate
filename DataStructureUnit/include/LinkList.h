@@ -15,26 +15,26 @@ namespace liaoUtil
 		LinkList()
 			:List()
 		{}
-		LinkList(size_t _size)
+		constexpr LinkList(size_t _size)
 			:List(_size)
 		{}
-		LinkList(List& obj)
+		constexpr LinkList(const List& obj)
 			:List(obj)
 		{}
-		LinkList(vector<T>& obj)
+		constexpr LinkList(const vector<T>& obj)
 		{
 			this->StdToStd(obj);
 		}
-		LinkList(initializer_list<T> ini)
+		constexpr LinkList(const initializer_list<T> ini)
 		{
 			this->StdToStd( ini);
 		}
-		LinkList(list<T>& obj)
+		constexpr LinkList(const list<T>& obj)
 		{
 			dataSource = obj;
 		}
 	protected:
-		void allocate(size_t _size) override
+		void allocate(const size_t _size) override
 		{
 			dataSource.resize(dataSource.size() + _size);
 		}
@@ -46,7 +46,7 @@ namespace liaoUtil
 		{
 			dataSource.push_back(value);
 		}
-		void newValue(List& obj)
+		void newValue(const List& obj)
 		{
 			for (int n = 0; n < obj.size(); ++n)
 				newValue(obj[n]);
@@ -90,7 +90,7 @@ namespace liaoUtil
 			dataSource.clear();
 		}
 	public:
-		virtual string classID() const override
+		constexpr virtual string classID() const noexcept
 		{
 			return "LinkList";
 		}
@@ -102,10 +102,20 @@ namespace liaoUtil
 		{
 			return dataSource.empty();
 		}
+		constexpr T& first()
+		{
+			this->emptyListCheck("first()");
+			return *dataSource.begin();
+		}
 		constexpr const T& first()const override
 		{
 			this->emptyListCheck("first()");
 			return *dataSource.begin();
+		}
+		constexpr T& last() override
+		{
+			this->emptyListCheck("last()");
+			return *(--dataSource.end());
 		}
 		constexpr const T& last()const override
 		{
@@ -118,7 +128,7 @@ namespace liaoUtil
 			newValue(data);
 			return *(--dataSource.end());
 		}
-		virtual T& add(List& obj) override
+		virtual T& add(const List& obj) override
 		{
 			newValue(obj);
 			return *iterate(dataSource.size()-obj.size());
@@ -129,22 +139,22 @@ namespace liaoUtil
 				newValue(value);
 			return *iterate(dataSource.size()-number);
 		}
-		virtual T& add(vector<T>& vec)
+		virtual T& add(const vector<T>& vec)
 		{
 			this->StdToStd(vec);
 			return *iterate(dataSource.size() - vec.size());
 		}
-		virtual T& add(list<T>& ls)
+		virtual T& add(const list<T>& ls)
 		{
 			this->StdToStd( ls);
 			return *iterate(dataSource.size() - ls.size());
 		}
-		virtual T& add(initializer_list<T>& ini)
+		virtual T& add(const initializer_list<T>& ini)
 		{
 			this->StdToStd(ini);
 			return* iterate(dataSource.size() - ini.size());
 		}
-		virtual T& add(T* arr, int size)
+		virtual T& add(const T* arr, const int size)
 		{
 			for (int n = 0; n < size; ++n)
 			{
@@ -152,23 +162,23 @@ namespace liaoUtil
 			}
 			return *iterate(dataSource.size() - size );
 		}
-		virtual T& add(const T&& value)
+		virtual T& add(T&& value)
 		{
 			newValue(value);
 			return *(--dataSource.end());
 		}
-		virtual T& add(int number, T&& value) override
+		virtual T& add(const int number, T&& value) override
 		{
 			newValue(value);
 			return * (--dataSource.end());
 		}
-		void remove(Index pos)throw()
+		void remove(const Index pos)
 		{
 			this->emptyListCheck("remove(Index)");
 			this->outRangeCheck(pos,"remove(Index)");
 			dataSource.erase(iterate(pos));
 		}
-		void remove(Index start, Index end)throw()
+		void remove(const Index start, const Index end)
 		{
 			this->emptyListCheck("remove(Index,Index)");
 			this->validIntervalCheck(start, end,"remove(Index,Index)");
@@ -185,92 +195,92 @@ namespace liaoUtil
 			}
 			dataSource.erase(itor1, itor2);
 		}
-		void remove(T& data)throw()
+		void remove(const T& data)
 		{
 			this->emptyListCheck("remove(T&)");
 			dataSource.erase(std::remove(dataSource.begin(), dataSource.end(), data));
 		}
-		void remove(T&& value)throw()override
+		void remove(T&& value)override
 		{
 			this->emptyListCheck("remove(T&&)");
 			dataSource.erase(std::remove(dataSource.begin(), dataSource.end(), value));
 		}
-		void removeAll(T& data)throw()
+		void removeAll(const T& data)
 		{
 			this->emptyListCheck("removeAll(T&)");
 			dataSource.remove(data);
 		}
-		void remove(initializer_list<T>& ini)
+		void remove(const initializer_list<T>& ini)
 		{
 			this->emptyListCheck("removeAll(initializer_list<T>&)");
 			for (auto& var : ini)
 				dataSource.erase(std::remove(dataSource.begin(), dataSource.end(), var));
 		}
-		void remove(List& obj)
+		void remove(const List& obj)
 		{
 			this->emptyListCheck("removeAll(List&)");
 			for(int n =0;n<obj.size();++n)
 				dataSource.erase(std::remove(dataSource.begin(), dataSource.end(), obj[n]));
 		}
-		void remove(vector<T>& vec)
+		void remove(const vector<T>& vec)
 		{
 			this->emptyListCheck("removeAll(vector<T>&)");
 			for (auto& var : vec)
 				dataSource.erase(std::remove(dataSource.begin(), dataSource.end(), var));
 		}
-		void remove(list<T>& ls) 
+		void remove(const list<T>& ls) 
 		{
 			this->emptyListCheck("removeAll(list<T>&)");
 			for (auto& var : ls)
 				dataSource.erase(std::remove(dataSource.begin(), dataSource.end(), var));
 		}
-		void remove(T* arr, int size)
+		void remove(const T* arr, const int size)
 		{
 			this->emptyListCheck("removeAll(T*,int)");
 			for (int n = 0; n < size; ++n)
 				dataSource.erase(std::remove(dataSource.begin(), dataSource.end(), arr[n]));
 		}
-		virtual T& insert(Index pos, T& value)
+		virtual T& insert(const Index pos, const T& value)
 		{
 			this->outRangeCheck(pos,"insert(Index,T&)");
 			return *dataSource.insert(iterate(pos), value);
 		}
-		virtual T& insert(Index pos, const T&& value)override
+		virtual T& insert(const Index pos, T&& value)override
 		{
 			this->outRangeCheck(pos, "insert(Index,T&&)");
 			return *dataSource.insert(iterate(pos), value);
 		}
-		virtual T& insert(Index pos, List& list)
+		virtual T& insert(const Index pos, const List& list)
 		{
 			this->outRangeCheck(pos, "insert(Index,List&)");
 			for (int n = 0; n < list.size(); ++n)
 				dataSource.insert(iterate(pos+n), list[n]);
 			return *iterate(pos);
 		}
-		virtual T& insert(Index pos, vector<T>& vec)
+		virtual T& insert(const Index pos, const vector<T>& vec)
 		{
 			this->outRangeCheck(pos, "insert(Index,vector<T>&)");
 			dataSource.insert(iterate(pos), vec.begin(), vec.end());
 			return *iterate(pos);
 		}
-		virtual T& insert(Index pos, list<T>& list)
+		virtual T& insert(const Index pos, const list<T>& list)
 		{
 			this->outRangeCheck(pos, "insert(Index,vector<T>&)");
 			dataSource.insert(iterate(pos), list.begin(), list.end());
 			return *iterate(pos);
 		}
-		virtual T& insert(Index pos, initializer_list<T>& ini)
+		virtual T& insert(const Index pos, const initializer_list<T>& ini)
 		{
 			this->outRangeCheck(pos, "insert(Index,vector<T>&)");
 			dataSource.insert(iterate(pos),ini.begin(), ini.end());
 			return *iterate(pos);
 		}
-		constexpr T& get(Index index)
+		constexpr T& get(const Index index)
 		{
 			this->outRangeCheck(index,"get(Index)");
 			return *iterate(index);
 		}
-		size_t indexOf(T& data) const override
+		size_t indexOf(const T& data)const override
 		{
 			return inner_findIndex(data);
 		}
@@ -278,7 +288,7 @@ namespace liaoUtil
 		{
 			dataSource.clear();
 		}
-		constexpr bool equals(List& obj) const
+		constexpr bool equals(const List& obj) const
 		{
 			if (obj.size() != dataSource.size())
 				return false;
@@ -290,19 +300,19 @@ namespace liaoUtil
 			}
 			return true;
 		}
-		constexpr bool equals(vector<T>& vec) const
+		constexpr bool equals(const vector<T>& vec) const
 		{
 			return std::equal(dataSource.begin(), dataSource.end(), vec.begin());
 		}
-		constexpr bool equals(list<T>& list)const
+		constexpr bool equals(const list<T>& list)const
 		{
 			return dataSource == list;
 		}
-		constexpr bool equals(initializer_list<T>& ini)const
+		constexpr bool equals(const initializer_list<T>& ini)const
 		{
 			return std::equal(dataSource.begin(), dataSource.end(), ini.begin());
 		}
-		constexpr bool equals(T* arr, int size)const
+		constexpr bool equals(const T* arr, const int size)const
 		{
 			if (dataSource.size() != size)
 				return false;
@@ -314,16 +324,16 @@ namespace liaoUtil
 			}
 			return true;
 		}
-		constexpr virtual void assign(vector<T>& vec)
+		constexpr virtual void assign(const vector<T>& vec)
 		{
 			dataSource.resize(vec.size());
 			std::copy(vec.begin(), vec.end(), dataSource.begin());
 		}
-		constexpr virtual void assign(list<T>& list)
+		constexpr virtual void assign(const list<T>& list)
 		{
 			dataSource = list;
 		}
-		constexpr virtual void assign(initializer_list<T>& ini)
+		constexpr virtual void assign(const initializer_list<T>& ini)
 		{
 			dataSource.resize(ini.size());
 			std::copy(ini.begin(), ini.end(), dataSource.begin());
@@ -331,7 +341,7 @@ namespace liaoUtil
 		vector<T> toVector() const
 		{
 			vector temp(dataSource.begin(), dataSource.end());
-			return temp;
+			return std::move(temp);
 		}
 		constexpr bool contains(const T&& value)const
 		{
@@ -341,7 +351,7 @@ namespace liaoUtil
 		{
 			return std::find(dataSource.begin(), dataSource.end(), value) != dataSource.end();
 		}
-		constexpr bool contains(List& obj)const
+		constexpr bool contains(const List& obj)const
 		{
 			for (int n = 0; n < obj.size(); ++n)
 			{
@@ -351,7 +361,7 @@ namespace liaoUtil
 			}
 			return true;
 		}
-		constexpr bool contains(vector<T>& vec)const
+		constexpr bool contains(const vector<T>& vec)const
 		{
 			for (int n = 0; n < vec.size(); ++n)
 			{
@@ -361,7 +371,7 @@ namespace liaoUtil
 			}
 			return true;
 		}
-		constexpr bool contains(list<T>& list)const
+		constexpr bool contains(const list<T>& list)const
 		{
 			for (auto& var2 : list)
 			{
@@ -371,7 +381,7 @@ namespace liaoUtil
 			}
 			return true;
 		}
-		constexpr bool contains(initializer_list<T>& ini)const
+		constexpr bool contains(const initializer_list<T>& ini)const
 		{
 			for (auto& var2 : ini)
 			{
@@ -395,18 +405,18 @@ namespace liaoUtil
 			for (auto& var : dataSource)
 				operation(var);
 		}
-		constexpr size_t count(T& data)const override
+		constexpr size_t count(const T& data)const override
 		{
 			return std::count(dataSource.begin(), dataSource.end(), data);
 		}
-		void subList(List& destination, Index start, Index end) override
+		void subList(List& destination, const  Index start, const Index end) override
 		{
 			this->emptyListCheck("subList(List&)");
 			this->validIntervalCheck(start, end, "subList(List&)");
 			for (int n = start; n <= end; ++n)
 				destination.add(*iterate(n));
 		}
-		constexpr void copyFrom(List& obj) override
+		constexpr void copyFrom(const List& obj) override
 		{
 			dataSource.resize(obj.size());
 			for (int n = 0; n < size(); ++n)
@@ -418,12 +428,12 @@ namespace liaoUtil
 			for (int n = 0; n < size(); ++n)
 				obj[n] = *iterate(n);
 		}
-		constexpr virtual void set(Index pos, T& value)
+		constexpr virtual void set(const Index pos, const T& value)
 		{
 			this->outRangeCheck(pos, "set(Index,T&)");
 			*iterate(pos) = value;
 		}
-		constexpr virtual void swap(Index pos1, Index pos2)
+		constexpr virtual void swap(const Index pos1, const Index pos2)
 		{
 			this->outRangeCheck(pos1, "swap(Index,Index)");
 			this->outRangeCheck(pos2, "swap(Index,Index)");
@@ -433,7 +443,7 @@ namespace liaoUtil
 		{
 			std::reverse(dataSource.begin(), dataSource.end());
 		}
-		constexpr virtual void resize(Index newSize)
+		constexpr virtual void resize(const Index newSize)
 		{
 			allocate(newSize);
 		}
@@ -474,7 +484,7 @@ namespace liaoUtil
 			else
 				head = new LinkNode(value),head->link(*head);
 		}
-		void newValue(const T&& value)
+		void newValue(T&& value)
 		{
 			++_size;
 			LinkNode* ptr = end();
@@ -492,7 +502,7 @@ namespace liaoUtil
 			else
 				head = new LinkNode();
 		}
-		constexpr void allocate(int size)
+		constexpr void allocate(const size_t size)override
 		{
 			for (int n = 0; n < size; ++n)
 				newValue();
@@ -517,7 +527,16 @@ namespace liaoUtil
 			}
 			return temp;
 		}
-		LinkNode* inner_find(T& value)
+		const LinkNode* iterate(int pos) const 
+		{
+			static int lastPos = 0;
+			char offset = 0;
+			LinkNode* tempLocal = head;
+			if (temp != NULL)
+				tempLocal = temp;
+			
+		}
+		LinkNode* inner_find(const T& value)
 		{
 			LinkNode* stop = head;
 			do
@@ -544,26 +563,40 @@ namespace liaoUtil
 		}
 		constexpr void free()
 		{
-			LinkNode* del = head;
-			for (int n = 0; n < _size; ++n)
+			if (!isEmpty())
 			{
-				head = &head->next();
-				delete del;
-				del = head;
+				LinkNode* del = head;
+				for (int n = 0; n < _size; ++n)
+				{
+					head = &head->next();
+					delete del;
+					del = head;
+				}
+				head = NULL;
+				_size = 0;
 			}
-			head = NULL;
-			_size = 0;
 		}
 		template<class Container>
 		LinkNode* addContainer(LinkNode* pos, Container& obj)
 		{
-			LinkNode* temp;
+			LinkNode* temp=end();
 			for (int n = 0; n < obj.size(); ++n)
 			{
 				newValue(obj[n]);
 				if (n == 0)
 					temp = end();
 			}
+			return temp;
+		}
+		template<class Container>
+		LinkNode* addStdContainer(LinkNode* pos, Container& obj)
+		{
+			LinkNode* temp;
+			for (auto& data:obj)
+			{
+				newValue(data);
+			}
+			temp = iterate(_size-obj.size());
 			return temp;
 		}
 		template<class Container>
@@ -581,7 +614,7 @@ namespace liaoUtil
 		LiaoLinkList(size_t size)
 			:List(size),head(NULL), _size{size}, temp(NULL)
 		{}
-		LiaoLinkList(List& obj)
+		LiaoLinkList(const List& obj)
 			:List(obj),head(NULL), _size{}, temp(NULL)
 		{}
 		LiaoLinkList(vector<T>& vec)
@@ -610,17 +643,27 @@ namespace liaoUtil
 		{
 			return _size == 0 || head == NULL;
 		}
-		constexpr const T& first()
+		constexpr T& first()
 		{
 			this->emptyListCheck("first()");
 			return head->value();
 		}
-		constexpr const T& last()
+		constexpr T& last()
 		{
 			this->emptyListCheck("last()");
-			return end()->value();
+			return head->prev().value();
 		}
-		T& add(const T&& value)
+		constexpr const T& first()const 
+		{
+			this->emptyListCheck("first()");
+			return head->value();
+		}
+		constexpr const T& last()const 
+		{
+			this->emptyListCheck("last()");
+			return head->prev().value();
+		}
+		T& add(T&& value)
 		{
 			newValue(value);
 			return end()->value();
@@ -630,13 +673,13 @@ namespace liaoUtil
 			newValue(value);
 			return end()->value();
 		}
-		T& add(List& obj)
+		T& add(const List& obj)
 		{
 			return addContainer(end(), obj)->value();
 		}
 		T& add(int number, T&& value)
 		{
-			LinkNode* temp;
+			LinkNode* temp=end();
 			for (int n = 0; n < number; ++n)
 			{
 				newValue(value);
@@ -647,7 +690,7 @@ namespace liaoUtil
 		}
 		T& add(int number, T& value)
 		{
-			LinkNode* temp;
+			LinkNode* temp=end();
 			for (int n = 0; n < number; ++n)
 			{
 				newValue(value);
@@ -656,21 +699,23 @@ namespace liaoUtil
 			}
 			return temp->value();
 		}
-		T& add(vector<T>& vec)
+		T& add(const vector<T>& vec)
 		{
-			return addContainer(end(), vec)->value();
+			return addStdContainer(end(), vec)->value();
 		}
-		T& add(list<T>& ls)
+		T& add(const list<T>& ls)
 		{
-			return addContainer(end(), ls)->value();
+			return addStdContainer(end(), ls)->value();
 		}
-		T& add(initializer_list<T>& ini)
+		T& add(const initializer_list<T>& ini)
 		{
-			return addContainer(end(), ini)->value();
+			return addStdContainer(end(), ini)->value();
 		}
-		T& add(T* arr, int size)
+		T& add(const T* arr, int size)
 		{
-			LinkNode* temp;
+			if (size == 0)
+				return end()->value();
+			LinkNode* temp=NULL;
 			for (int n = 0; n < size; ++n)
 			{
 				newValue(arr[n]);
@@ -679,43 +724,48 @@ namespace liaoUtil
 			}
 			return temp->value();
 		}
-		void remove(Index pos)
+		void remove(const Index pos)
 		{
 			this->emptyListCheck("remove(Index)");
 			this->outRangeCheck(pos, "remove(Index)");
 			delete iterate(pos);
 		}
-		void remove(Index start, Index end)
+		void remove(const Index start, const Index end)
 		{
 			this->emptyListCheck("remove(Index,Index)");
 			this->validIntervalCheck(start, end, "remove(Index,Index)");
 			for (Index n = start; n <= end; n++)
 				remove(n);
 		}
-		void remove(T& data)
+		void remove(const T& data)
 		{
-			this->emptyListCheck("remove(Index,Index)");
+			this->emptyListCheck("remove(T&)");
 			LinkNode* local = inner_find(data);
 			if (local)
 				delete local;
 		}
-		void remove(List& obj)
+		void remove(T&& data)
+		{
+			this->emptyListCheck("remove(T&&)");
+			remove(data);
+		}
+		void remove(const List& obj)
 		{
 			this->emptyListCheck("remove(List&)");
 			for (int n = 0; n < obj.size(); ++n)
 				remove(obj[n]);
 		}
-		void remove(initializer_list<T>& ini)
+		void remove(const initializer_list<T>& ini)
 		{
 			this->emptyListCheck("remove(initializer_list<T>&)");
 			removeStd(ini);
 		}
-		void remove(vector<T>& ini)
+		void remove(const vector<T>& ini)
 		{
 			this->emptyListCheck("remove(vector<T>&)");
 			removeStd(ini);
 		}
-		void remove(list<T>& ini)
+		void remove(const list<T>& ini)
 		{
 			this->emptyListCheck("remove(list<T>&)");
 			removeStd(ini);
@@ -726,7 +776,17 @@ namespace liaoUtil
 			for (int n = 0; n < size; ++n)
 				remove(arr[n]);
 		}
-		T& insert(Index pos, const T&& value)
+		void removeAll(const T& value)
+		{
+			LinkNode* node = head;
+			do
+			{
+				node = &node->next();
+				if (node->prev().value() == value)
+					delete &node->prev();
+			} while(node != head);
+		}
+		T& insert(Index pos, T&& value)
 		{
 			this->outRangeCheck(pos, "insert(Index,T&&)");
 			return iterate(pos)->linkPrev(value).value();
@@ -736,10 +796,10 @@ namespace liaoUtil
 			this->outRangeCheck(pos, "insert(Index,T&)");
 			return iterate(pos)->linkPrev(value).value();
 		}
-		T& insert(Index pos, List& list)
+		T& insert(Index pos, const List& list)
 		{
 			this->outRangeCheck(pos, "insert(Index, List&)");
-			T* firstEle;
+			T* firstEle = &end()->value();
 			for (int n = pos; n < list.size(); ++n)
 			{
 				insert(n, list[n]);
@@ -748,7 +808,7 @@ namespace liaoUtil
 			}
 			return *firstEle;
 		}
-		T& insert(Index pos, vector<T>& vec)
+		T& insert(Index pos, const vector<T>& vec)
 		{
 			this->outRangeCheck(pos, "insert(Index, vector<T>&)");
 			T* firstEle = NULL;
@@ -761,7 +821,7 @@ namespace liaoUtil
 			return *firstEle;
 		}
 		//在指定位置插入一个list
-		T& insert(Index pos, list<T>& list)
+		T& insert(Index pos, const list<T>& list)
 		{
 			this->outRangeCheck(pos, "insert(Index, list<T>&)");
 			T* firstEle = NULL;
@@ -774,7 +834,7 @@ namespace liaoUtil
 			return *firstEle;
 		}
 		//在指定位置插入一个initializer
-		T& insert(Index pos, initializer_list<T>& ini)
+		T& insert(Index pos, const initializer_list<T>& ini)
 		{
 			this->outRangeCheck(pos, "insert(Index, list<T>&)");
 			T* firstEle = NULL;
@@ -792,7 +852,13 @@ namespace liaoUtil
 			this->outRangeCheck(index, "get(Index)");
 			return iterate(index)->value();
 		}
-		size_t indexof(T& data)const 
+		const T& get(Index index) const 
+		{
+			this->emptyListCheck("get(Index)");
+			this->outRangeCheck(index, "get(Index)");
+			return iterate(index)->value();
+		}
+		size_t indexOf(const T& data)const 
 		{
 			this->emptyListCheck("indexOf(T&)");
 			LinkNode* localNode = head;
@@ -812,7 +878,7 @@ namespace liaoUtil
 			head = NULL;
 			_size = 0;
 		}
-		bool equals(List& obj) const
+		bool equals(const List& obj) const
 		{
 			if (_size != obj.size())
 				return false;
@@ -827,7 +893,7 @@ namespace liaoUtil
 				return true;
 			}
 		}
-		bool equals(vector<T>& vec) const
+		bool equals(const vector<T>& vec) const
 		{
 			if (_size != vec.size())
 				return false;
@@ -842,7 +908,7 @@ namespace liaoUtil
 				return true;
 			}
 		}
-		bool equals(list<T>& list)const
+		bool equals(const list<T>& list)const
 		{
 			if (_size != list.size())
 				return false;
@@ -857,7 +923,7 @@ namespace liaoUtil
 				return true;
 			}
 		}
-		bool equals(initializer_list<T>& ini)const
+		bool equals(const initializer_list<T>& ini)const
 		{
 			if (_size != ini.size())
 				return false;
@@ -905,7 +971,7 @@ namespace liaoUtil
 		{
 			return inner_findConst(value) != NULL;
 		}
-		bool contains(List& obj)const
+		bool contains(const List& obj)const
 		{
 			for (int n = 0; n < obj.size(); ++n)
 			{
@@ -914,7 +980,7 @@ namespace liaoUtil
 			}
 			return true;
 		}
-		bool contains(vector<T>& vec)const
+		bool contains(const vector<T>& vec)const
 		{
 			for (auto& var : vec)
 			{
@@ -923,7 +989,7 @@ namespace liaoUtil
 			}
 			return true;
 		}
-		bool contains(list<T>& list)const
+		bool contains(const list<T>& list)const
 		{
 			for (auto& var : list)
 			{
@@ -932,7 +998,7 @@ namespace liaoUtil
 			}
 			return true;
 		}
-		bool contains(initializer_list<T>& ini)const
+		bool contains(const initializer_list<T>& ini)const
 		{
 			for (auto& var : ini)
 			{
@@ -941,7 +1007,7 @@ namespace liaoUtil
 			}
 			return true;
 		}
-		void assign(vector<T>& vec)
+		void assign(const vector<T>& vec)
 		{
 			this->resize(vec.size());
 			LinkNode* node = head;
@@ -952,7 +1018,7 @@ namespace liaoUtil
 			}
 		}
 		//将list覆写到当前容器
-		void assign(list<T>& list)
+		void assign(const list<T>& list)
 		{
 			this->resize(list.size());
 			LinkNode* node = head;
@@ -963,7 +1029,7 @@ namespace liaoUtil
 			}
 		}
 		//将initializer覆写到当前容器
-		void assign(initializer_list<T>& ini)
+		void assign(const initializer_list<T>& ini)
 		{
 			this->resize(ini.size());
 			LinkNode* node = head;
@@ -991,7 +1057,7 @@ namespace liaoUtil
 				temp = &temp->next();
 			} while (temp != head);
 		}
-		size_t count(T& data)const
+		size_t count(const T& data)const
 		{
 			size_t cnt = 0;
 			LinkNode* temp = head;
@@ -1003,7 +1069,7 @@ namespace liaoUtil
 			} while (temp != head);
 			return cnt;
 		}
-		void subList(List& destination, Index start, Index end)
+		void subList(List& destination, const Index start, const Index end)
 		{
 			this->validIntervalCheck(start, end, "subList(List&,Index,Index)");
 			destination.resize(start-end);
@@ -1013,7 +1079,7 @@ namespace liaoUtil
 				destination.add(node->value());
 			}
 		}
-		void copyFrom(List& obj)
+		void copyFrom(const List& obj)
 		{
 			this->resize(obj.size());
 			for (int n = 0; n < obj.size(); ++n)
@@ -1029,7 +1095,7 @@ namespace liaoUtil
 				get(n) = obj[n];
 			}
 		}
-		void set(Index pos, T& value)
+		void set(const Index pos, const T& value)
 		{
 			this->outRangeCheck(pos, "set(Index, T&)");
 			get(pos) = value;
@@ -1040,7 +1106,7 @@ namespace liaoUtil
 			this->outRangeCheck(pos2, "swap(Index, Index)");
 			iterate(pos)->swap(*iterate(pos2));
 		}
-		void reverse()
+		constexpr void reverse()
 		{
 			LinkNode* node = head;
 			do
@@ -1050,14 +1116,19 @@ namespace liaoUtil
 			} while (node != head);
 			head = &head->next();
 		}
-		void resize(int size)
+		void resize(const size_t size)
 		{
-			if (size > _size)
-				this->allocate(size - _size);
-			else
+			if (size != 0)
 			{
-				iterate(size)->unlinkAll();
+				if (size > _size)
+					this->allocate(size - _size);
+				else
+					iterate(size - 1)->unlinkAll();
 			}
+		}
+		~LiaoLinkList()
+		{
+			free();
 		}
 	};
 }

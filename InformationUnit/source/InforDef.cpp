@@ -58,16 +58,19 @@ namespace liaoInfor
 		file << outMessage<<"\n";
 		file.close();
 	}
+	void Infor::display(string message)
+	{
+		this->update(message);
+		this->display();
+	}
 	void Infor::update(const char* label, const  string errorClass, const string errorFunc, const string errorMessage, bool timer)
 	{
-
 		message.clear();
 		if (timer)
 		{
 			const string time = Timer();
 			message = std::format("[{}] :: There is a(n) {} detected in class:({}) function:[{}]: {}", time, label, errorClass, errorFunc, errorMessage);
 		}
-			
 		else
 			message = std::format("There is a(n) {} detected in class: ({}) function: [{}]: {}", label, errorClass, errorFunc, errorMessage);
 	}
